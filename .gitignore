@@ -1,0 +1,26 @@
+# VS code
+.vscode/
+
+# General files
+*.dat
+*.pyc
+*.pdf
+*.msh
+*.json
+*.anh
+*.FEH
+*.pre
+*.pos
+*.res
+*.geo_unrolled
+*.db
+*.sqlite3
+
+# Folders
+.idea/
+*/__pycache__/
+gpgit/
+build/
+dist/
+.eggs/
+
