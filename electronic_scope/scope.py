@@ -3,19 +3,18 @@ import copy
 import os.path
 
 import numpy as np
-import numpy.typing as npt
 import warnings
 from matplotlib import pyplot as plt
-from typing import Union, List, Tuple, Optional
+from typing import Union, List, Tuple, Optional, Any
 import electronic_scope.functions as functions
 
 
 class Scope:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
-    def __init__(self, channel_time: Union[List, npt.ArrayLike], channel_data: Union[List, npt.ArrayLike],
-                 channel_label: str = None, channel_unit: str = None, channel_color: str = None,
-                 channel_source: str = None, channel_linestyle: str = None) -> None:
+    def __init__(self, channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
+                 channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+                 channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> None:
         if isinstance(channel_time, List):
             self.channel_time = np.array(channel_time)
         elif isinstance(channel_time, np.ndarray):
@@ -34,12 +33,12 @@ class Scope:
         self.channel_source = channel_source
         self.channel_linestyle = channel_linestyle
 
-    def modify(self, channel_data_factor: float = None, channel_data_offset: float = None,
-               channel_label: str = None, channel_unit: str = None, channel_color: str = None,
-               channel_source: str = None, channel_time_shift: float = None,
-               channel_time_shift_rotate: float = None,
-               channel_time_cut_min: float = None, channel_time_cut_max: float = None,
-               channel_linestyle: str = None) -> None:
+    def modify(self, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
+               channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+               channel_source: Optional[str] = None, channel_time_shift: Optional[float] = None,
+               channel_time_shift_rotate: Optional[float] = None,
+               channel_time_cut_min: Optional[float] = None, channel_time_cut_max: Optional[float] = None,
+               channel_linestyle: Optional[str] = None) -> None:
         """
         Modify channel data like metadata or add a factor or offset to channel data.
 
@@ -142,7 +141,7 @@ class Scope:
         """
         channel_source = 'Tektronix scope'
 
-        file = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=15)
+        file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=15)
         channel_counts = file.shape[1] - 1
         time = file[:, 0]
 
@@ -175,7 +174,7 @@ class Scope:
 
         tektronix_channels = []
         for csv_file in csv_files:
-            file = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=24)
+            file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=24)
             time = file[:, 0]
             ch1_data = file[:, 1]
 
@@ -208,7 +207,7 @@ class Scope:
 
         lecroy_channel = []
         for csv_file in csv_files:
-            file = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=5)
+            file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=5)
             time = file[:, 0]
             ch1_data = file[:, 1]
 
@@ -218,7 +217,7 @@ class Scope:
         return lecroy_channel
 
     @classmethod
-    def from_numpy(cls, period_vector_t_i: npt.ArrayLike, mode: str = 'rad', f0: Union[float, None] = None,
+    def from_numpy(cls, period_vector_t_i: np.ndarray, mode: str = 'rad', f0: Union[float, None] = None,
                    channel_label=None, channel_unit=None) -> 'Scope':
         """
         Bring a numpy or list array to an instance of Channel.
@@ -243,7 +242,7 @@ class Scope:
         # [[0, 90, 180, 270, 360], [1, -1, 1, -1, 1]], with degree-mode, there are only integers inside.
         # when re-assigning the vector by switching from degree to time, the floats will be changed to an integers,
         # what is for most high frequency signals a time-vector consisting with only zeros.
-        period_vector_t_i = period_vector_t_i.astype(np.float)
+        period_vector_t_i = period_vector_t_i.astype(float)
 
         # check for correct input parameter
         if (mode == 'rad' or mode == 'deg') and f0 is None:
@@ -253,11 +252,10 @@ class Scope:
             period_vector_t_i = np.array(period_vector_t_i)
 
         # mode pre-calculation
-        if mode == 'rad':
+        if mode == 'rad' and f0 is not None:
             period_vector_t_i[0] = period_vector_t_i[0] / (2 * np.pi * f0)
-        elif mode == 'deg':
+        elif mode == 'deg' and f0 is not None:
             period_vector_t_i[0] = period_vector_t_i[0] / (360 * f0)
-
         elif mode != 'time':
             raise ValueError("Mode not available. Choose: 'rad', 'deg', 'time'")
 
@@ -267,7 +265,7 @@ class Scope:
         return single_dataset_channel
 
     @classmethod
-    def from_geckocircuits(cls, txt_datafile: str, f0: float = None) -> List['Scope']:
+    def from_geckocircuits(cls, txt_datafile: str, f0: Optional[float] = None) -> List['Scope']:
         """
         Convert a gecko simulation file to Channel.
 
@@ -310,7 +308,7 @@ class Scope:
         return list_return_dataset
 
     @classmethod
-    def power(cls, channel_voltage: 'Scope', channel_current: 'Scope', channel_label: str = None) -> 'Scope':
+    def power(cls, channel_voltage: 'Scope', channel_current: 'Scope', channel_label: Optional[str] = None) -> 'Scope':
         """
         calculate the power of two datasets.
 
@@ -373,13 +371,13 @@ class Scope:
         if len(channels) < 2:
             raise ValueError("Minimum two channel inputs necessary!")
 
-        channel_data_result = 0
+        channel_data_result = np.zeros_like(channels[0].channel_data)
         channel_label_result = ''
         for channel in channels:
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
             channel_data_result += channel.channel_data
-            channel_label_result += channel.channel_label + ' + '
+            channel_label_result += channel.channel_label + ' + ' if channel.channel_label is not None else ""
         channel_label_result = channel_label_result[:-3]
 
         return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
@@ -398,7 +396,7 @@ class Scope:
         if len(channels) < 2:
             raise ValueError("Minimum two channel inputs necessary!")
 
-        channel_data_result = 0
+        channel_data_result = np.zeros_like(channels[0].channel_data)
         channel_label_result = ''
         for channel_count, channel in enumerate(channels):
             if channel.channel_time.all() != channels[0].channel_time.all():
@@ -407,7 +405,7 @@ class Scope:
                 channel_data_result += channel.channel_data
             else:
                 channel_data_result -= channel.channel_data
-            channel_label_result += channel.channel_label + ' - '
+            channel_label_result += channel.channel_label + ' - ' if channel.channel_label is not None else ""
         channel_label_result = channel_label_result[:-3]
 
         return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
@@ -422,7 +420,7 @@ class Scope:
         Examples:
         >>> import electronic_scope as sp
         >>> ch1, ch2, ch3, ch4 = sp.Scope.from_tektronix('tektronix_csv_file.csv')
-        >>> lpt.Scope.plot_channels([ch1, ch2, ch3],[ch4])
+        >>> sp.Scope.plot_channels([ch1, ch2, ch3],[ch4])
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4
 
         :param channel: list of datasets
@@ -438,7 +436,7 @@ class Scope:
         :rtype: None
         """
         if timebase.lower() == 's':
-            time_factor = 1
+            time_factor = 1.0
         elif timebase.lower() == 'ms':
             time_factor = 1e-3
         elif timebase.lower() == 'µs' or timebase.lower() == 'us':
@@ -497,7 +495,7 @@ class Scope:
 
     @classmethod
     def scope2plot(cls, csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's',
-                   channel_units: List[str] = None, channel_labels: List[str] = None):
+                   channel_units: Optional[List[str]] = None, channel_labels: Optional[List[str]] = None):
         """
         Plot the scope signal.
 
@@ -537,8 +535,8 @@ class Scope:
                                 timebase=timebase)
 
     @classmethod
-    def compare_channels(cls, *channel_datasets: 'Scope', shift: List[Union[None, float]] = None,
-                         scale: List[Union[None, float]] = None, offset: List[Union[None, float]] = None,
+    def compare_channels(cls, *channel_datasets: 'Scope', shift: Optional[List[Union[None, float]]] = None,
+                         scale: Optional[List[Union[None, float]]] = None, offset: Optional[List[Union[None, float]]] = None,
                          timebase: str = 's'):
         """
         Graphical comparison for datasets. Note: Datasets need to be type Channel.
@@ -555,7 +553,7 @@ class Scope:
         :type timebase: str
         """
         if timebase.lower() == 's':
-            time_factor = 1
+            time_factor = 1.0
         elif timebase.lower() == 'ms':
             time_factor = 1e-3
         elif timebase.lower() == 'µs' or timebase.lower() == 'us':
@@ -583,12 +581,13 @@ class Scope:
             plt.plot(modified_time/time_factor, modified_data, label=channel_dataset.channel_label,
                      color=channel_dataset.channel_color, linestyle=channel_dataset.channel_linestyle)
         plt.xlabel(f"time in {timebase}")
-        if channel_datasets[0].channel_unit.lower() == 'a':
-            plt.ylabel('Current in A')
-        elif channel_datasets[0].channel_unit.lower() == 'u':
-            plt.ylabel('Voltage in V')
-        elif channel_datasets[0].channel_unit.lower() == 'w':
-            plt.ylabel('Power in W')
+        if channel_datasets[0].channel_unit is not None:
+            if channel_datasets[0].channel_unit.lower() == 'a':
+                plt.ylabel('Current in A')
+            elif channel_datasets[0].channel_unit.lower() == 'u':
+                plt.ylabel('Voltage in V')
+            elif channel_datasets[0].channel_unit.lower() == 'w':
+                plt.ylabel('Power in W')
         plt.legend()
         plt.grid()
         plt.show()
@@ -609,7 +608,7 @@ class Scope:
         >>> channel = sp.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         >>> channel.fft()
         """
-        period_vector = [self.channel_time, self.channel_data]
+        period_vector = np.array([self.channel_time, self.channel_data])
 
         return functions.fft(period_vector, mode='time', plot=plot)
 
@@ -636,7 +635,7 @@ class Scope:
             end_time = start_time + 1/f0
         self.modify(channel_time_cut_min=start_time, channel_time_cut_max=end_time)
 
-    def plot(self, timebase: str = 's', figure_size: Tuple = Optional[None], figure_directory: Optional[str] = None):
+    def plot(self, timebase: str = 's', figure_size: Optional[Tuple] = None, figure_directory: Optional[str] = None):
         """
         Plot a single scope channel.
 
@@ -654,7 +653,7 @@ class Scope:
         """
         self.plot_channels([self], timebase=timebase, figure_size=figure_size, figure_directory=figure_directory)
 
-    def rms(self) -> float:
+    def rms(self) -> Any:
         """
         Calculate the RMS of a given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
@@ -662,7 +661,7 @@ class Scope:
         """
         return np.sqrt(np.mean(self.channel_data ** 2))
 
-    def mean(self) -> np.ndarray:
+    def mean(self) -> Any:
         """
         Calculate the mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
@@ -670,7 +669,7 @@ class Scope:
         """
         return np.mean(self.channel_data)
 
-    def absmean(self) -> np.ndarray:
+    def absmean(self) -> Any:
         """
         Calculate the absolute mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
@@ -678,23 +677,25 @@ class Scope:
         """
         return np.mean(np.abs(self.channel_data))
 
-    def abs(self):
+    def abs(self) -> None:
         """
         Modify the existing scope channel so that the signal is rectified.
 
         Returns: abs(self.channel_data).
         """
         self.channel_data = np.abs(self.channel_data)
-        self.channel_label = '|' + self.channel_label + '|'
+        if self.channel_label is not None:
+            self.channel_label = '|' + self.channel_label + '|'
 
-    def square(self):
+    def square(self) -> None:
         """
         Modify the existing scope channel so that the signal is squared.
 
         Returns: self.channel_data ** 2.
         """
         self.channel_data = self.channel_data ** 2
-        self.channel_label = self.channel_label + '²'
+        if self.channel_label is not None:
+            self.channel_label = self.channel_label + '²'
 
 
 if __name__ == '__main__':

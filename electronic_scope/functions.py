@@ -1,14 +1,13 @@
 """Functions uses by the scope, e.g. the fft-function."""
 from matplotlib import pyplot as plt
-from typing import Union, Tuple, Optional
+from typing import Union, Tuple, Optional, List
 import numpy as np
-import numpy.typing as npt
 
 
-def fft(period_vector_t_i: npt.ArrayLike, sample_factor: int = 1000, plot: bool = True, mode: str = 'rad',
+def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: int = 1000, plot: bool = True, mode: str = 'rad',
         f0: Optional[float] = None, title: str = 'ffT', filter_type: str = 'factor',
         filter_value_factor: float = 0.01, filter_value_harmonic: int = 100,
-        figure_size: Optional[Tuple] = None, figure_directory: Optional[str] = None) -> npt.NDArray[list]:
+        figure_size: Optional[Tuple] = None, figure_directory: Optional[str] = None) -> List[List]:
     """
     Calculate the FFT for a given input signal. Input signal is in vector format and should include one period.
 
@@ -59,12 +58,12 @@ def fft(period_vector_t_i: npt.ArrayLike, sample_factor: int = 1000, plot: bool 
         period_vector_t_i = np.array(period_vector_t_i)
 
     # mode pre-calculation
-    if mode == 'rad':
+    if mode == 'rad' and f0 is not None:
         period_vector_t_i[0] = period_vector_t_i[0] / (2 * np.pi * f0)
-    elif mode == 'deg':
+    elif mode == 'deg' and f0 is not None:
         period_vector_t_i[0] = period_vector_t_i[0] / (360 * f0)
     elif mode != 'time':
-        raise ValueError("Mode not available. Choose: 'rad', 'deg', 'time'")
+        raise ValueError("Mode not available. Choose: 'rad', 'deg', 'time'.")
 
     t = period_vector_t_i[0]
     i = period_vector_t_i[1]
@@ -72,9 +71,9 @@ def fft(period_vector_t_i: npt.ArrayLike, sample_factor: int = 1000, plot: bool 
     # fft-function works per default in time domain
     t_interp = np.linspace(0, t[-1], sample_factor)
     i_interp = np.interp(t_interp, t, i)
-
-    f0 = round(1 / t[-1])
-    Fs = f0 * sample_factor
+    if f0 is None:
+        f0 = round(1 / t[-1])
+        Fs = f0 * sample_factor
 
     # frequency domain
     f = np.linspace(0, (sample_factor - 1) * f0, sample_factor)
@@ -82,12 +81,12 @@ def fft(period_vector_t_i: npt.ArrayLike, sample_factor: int = 1000, plot: bool 
     x_mag = np.abs(x) / sample_factor
     phi_rad = np.angle(x)
 
-    f_corrected = f[0:int(sample_factor / 2 + 1)]
-    x_mag_corrected = 2 * x_mag[0:int(sample_factor / 2 + 1)]
+    f_corrected = list(f[0:int(sample_factor / 2 + 1)])
+    x_mag_corrected = list(2 * x_mag[0:int(sample_factor / 2 + 1)])
     x_mag_corrected[0] = x_mag_corrected[0] / 2
-    phi_rad_corrected = phi_rad[0:int(sample_factor / 2 + 1)]
+    phi_rad_corrected = list(phi_rad[0:int(sample_factor / 2 + 1)])
 
-    f_out = []
+    f_out: List[float] = []
     x_out = []
     phi_rad_out = []
     if filter_type.lower() == 'factor':
@@ -150,4 +149,4 @@ def fft(period_vector_t_i: npt.ArrayLike, sample_factor: int = 1000, plot: bool 
             plt.savefig(figure_directory, bbox_inches="tight")
         plt.show()
 
-    return np.array([f_out, x_out, phi_rad_out])
+    return [f_out, x_out, phi_rad_out]
