@@ -1,0 +1,88 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "electronic_scope"
+version = "0.1.0"
+authors = [
+  { name="LEA - Paderborn University", email="upblea@mail.upb.de" },
+]
+description = "View, edit and calculate scope results from simulations or real measurements."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = ["numpy",
+                "matplotlib"]
+
+[project.urls]
+Homepage = "https://github.com/upb-lea/electronic_scope"
+Issues = "https://github.com/upb-lea/electronic_scope/issues"
+
+
+
+
+[tool.ruff]
+exclude = [
+    ".eggs",
+    ".git",
+    ".venv",
+    "venv"]
+
+line-length = 88
+indent-width = 4
+
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B", "D", "D417"]
+# extend-select = ["D417"] deactivated by default in case of pep257 codestyle.
+# see also: https://docs.astral.sh/ruff/rules/undocumented-param/
+ignore = ["B008", "D107", "D203", "D212", "D213", "D402", "D413", "D415", "D416", "E722", "E731", "F403", "F405", "F841",]
+fixable = ["ALL"]
+unfixable = []
+# ignore list in docstring according to numpy codestyles for Dxxx.
+# http://www.pydocstyle.org/en/5.0.1/error_codes.html#default-conventions
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+
+
+# mypy global options:
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+exclude = [
+    '^file1\.py$',  # TOML literal string (single-quotes, no escaping necessary)
+    "^file2\\.py$",  # TOML basic string (double-quotes, backslash and other characters need escaping)
+]
+
+# mypy per-module options:
+
+[[tool.mypy.overrides]]
+module = "mycode.foo.*"
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "mycode.bar"
+warn_return_any = false
+
+[[tool.mypy.overrides]]
+module = [
+    "somelibrary",
+    "some_other_library"
+]
+ignore_missing_imports = true
+
