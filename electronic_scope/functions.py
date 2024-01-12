@@ -18,7 +18,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
     >>> import electronic_scope as sp
     >>> import numpy as np
     >>> example_waveform = np.array([[0, 1.34, 3.14, 4.48, 6.28],[-175.69, 103.47, 175.69, -103.47,-175.69]])
-    >>> out = sp.fft(example_waveform, plot='yes', mode='rad', f0=25000, title='ffT input current')
+    >>> out = sp.fft(example_waveform, plot=True, mode='rad', f0=25000, title='ffT input current')
 
     :param period_vector_t_i: numpy-array [[time-vector[,[current-vector]]. One period only
     :type period_vector_t_i: np.array
@@ -57,6 +57,10 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
             print("Input is list, convert to np.array()")
         period_vector_t_i = np.array(period_vector_t_i)
 
+    # first value of time vector must be zero
+    if period_vector_t_i[0][0] != 0:
+        raise ValueError("Period vector must start with 0 seconds!")
+
     # mode pre-calculation
     if mode == 'rad' and f0 is not None:
         period_vector_t_i[0] = period_vector_t_i[0] / (2 * np.pi * f0)
@@ -79,6 +83,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
     f = np.linspace(0, (sample_factor - 1) * f0, sample_factor)
     x = np.fft.fft(i_interp)
     x_mag = np.abs(x) / sample_factor
+    print(f"{x_mag = }")
     phi_rad = np.angle(x)
 
     f_corrected = list(f[0:int(sample_factor / 2 + 1)])
@@ -109,7 +114,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
         raise ValueError(
             f"filter_type '{filter_value_harmonic}' not available: Must be 'factor','harmonic' or 'disabled ")
 
-    if plot != 'no' and plot is not False:
+    if plot:
         print(f"{title = }")
         print(f"{t[-1] = }")
         print(f"{f0 = }")

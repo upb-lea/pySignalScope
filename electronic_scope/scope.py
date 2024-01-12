@@ -450,8 +450,8 @@ class Scope:
             time_factor = 1
             timebase = 's'
 
-        plt.figure(figsize=(4, 3), dpi=80)
         if len(channel) == 1:  # This is for a single plot with multiple graphs
+            plt.figure(figsize=(4, 3), dpi=80)
             for plot_list in channel:
                 for channel_dataset in plot_list:
                     plt.plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
@@ -492,6 +492,7 @@ class Scope:
         if figure_directory is not None:
             plt.savefig(figure_directory, bbox_inches="tight")
         plt.show()
+        return fig
 
     @classmethod
     def scope2plot(cls, csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's',
@@ -696,6 +697,13 @@ class Scope:
         self.channel_data = self.channel_data ** 2
         if self.channel_label is not None:
             self.channel_label = self.channel_label + '²'
+
+    @staticmethod
+    def save(figure: plt.figure, width_mm: float = 160, height_mm: float = 80):
+        #figure.set_size_inches(w = width_mm / 25.4, h=height_mm / 25.4, forward=True)
+        figure.savefig("test.pdf")
+
+
 
 
 if __name__ == '__main__':
