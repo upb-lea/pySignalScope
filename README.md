@@ -13,7 +13,7 @@ Bring measurements from the oscilloscope and the circuit simulator into a standa
 It is currently only possible to obtain the current development version:
 ```
 cd /Documents/Folder/of/Interest   
-git clone git@github.com:upb-lea/Inkscape_electric_Symbols.git
+git clone git@github.com:upb-lea/electronic_scope.git
 ```
 Install this repository into your virtual environment (venv) or jupyter notebook:
 ```
