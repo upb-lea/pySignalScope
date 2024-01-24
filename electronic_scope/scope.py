@@ -183,6 +183,34 @@ class Scope:
 
         return tektronix_channels
 
+
+    @staticmethod
+    def from_tektronix_mso58_multichannel(csv_file: str) -> List['Scope']:
+        """
+        Translate tektronix csv-files to a list of Channel class objects.
+
+        Note: insert multiple .csv-files to get a list of all channels.
+        :param csv_file: csv-file from tektronix scope
+        :type csv_file: str
+        :return Channel
+        :rtype Channel
+
+        :Example multiple channel csv-file:
+        >>> import electronic_scope as sp
+        >>> [current_prim, current_sec] = sp.Scope.from_tektronix_mso58_multichannel('/path/to/lecroy/files/currents.csv')
+        """
+        channel_source = 'Tektronix scope MSO58'
+
+        file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=24)
+        channel_counts = file.shape[1] - 1
+        time = file[:, 0]
+
+        channel_list = []
+        for channel_count in range(1, channel_counts + 1):
+            channel_list.append(Scope(time, file[:, channel_count], channel_source=channel_source))
+
+        return channel_list
+
     @classmethod
     def from_lecroy(cls, *csv_files: str) -> List['Scope']:
         """
@@ -352,7 +380,7 @@ class Scope:
                 channel_energy = np.append(channel_energy, 0)
             else:
                 # using euler method
-                energy = (channel_power.channel_data[count] + channel_power.channel_data[count-1]) / 2 * timestep
+                energy = (np.nan_to_num(channel_power.channel_data[count]) + np.nan_to_num(channel_power.channel_data[count-1])) / 2 * timestep
                 channel_energy = np.append(channel_energy, channel_energy[-1] + energy)
         if channel_label is None:
             channel_label = "Energy"
