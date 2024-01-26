@@ -449,7 +449,11 @@ class Scope:
         >>> import electronic_scope as sp
         >>> ch1, ch2, ch3, ch4 = sp.Scope.from_tektronix('tektronix_csv_file.csv')
         >>> sp.Scope.plot_channels([ch1, ch2, ch3],[ch4])
-        Plots two subplots. First one has ch1, ch2, ch3, second one has ch4
+        Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
+
+        Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
+        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_\mathrm{T}$ in A".
+        Note, that the 'r' before the string gives the command to accept LaTeX formulas, like $$.
 
         :param channel: list of datasets
         :type channel: list[Scope]
@@ -496,6 +500,8 @@ class Scope:
                     plt.ylabel(f"Current in {channel_dataset.channel_unit}")
                 elif channel_dataset.channel_unit.lower() == 'w':
                     plt.ylabel(f"Power in {channel_dataset.channel_unit}")
+                else:
+                    plt.ylabel(channel_dataset.channel_unit)
         else:  # This is for multiple plots with multiple graphs
             fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=figure_size)
             for plot_count, plot_list in enumerate(channel):
@@ -505,7 +511,7 @@ class Scope:
                                          linestyle=channel_dataset.channel_linestyle)
                 axs[plot_count].grid()
                 axs[plot_count].legend()
-                axs[plot_count].set_xlabel(f'time in {timebase}')
+                axs[plot_count].set_xlabel(f'Time in {timebase}')
                 if channel_dataset.channel_unit is None:
                     pass
                 elif channel_dataset.channel_unit.lower() == 'v':
@@ -516,6 +522,8 @@ class Scope:
                     axs[plot_count].set_ylabel(f"Power in {channel_dataset.channel_unit}")
                 elif channel_dataset.channel_unit.lower() == 'j':
                     axs[plot_count].set_ylabel(f"Energy in {channel_dataset.channel_unit}")
+                else:
+                    axs[plot_count].set_ylabel(channel_dataset.channel_unit)
         plt.tight_layout()
         if figure_directory is not None:
             plt.savefig(figure_directory, bbox_inches="tight")
