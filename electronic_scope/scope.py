@@ -459,7 +459,7 @@ class Scope:
         :type channel: list[Scope]
         :param timebase: timebase, can be 's', 'ms', 'us', 'ns' or 'ps'
         :type timebase: str
-        :param figure_size: None for auto-fit; fig_size for matplotlib (width, length)
+        :param figure_size: None for auto-fit; fig_size for matplotlib (width, length in mm)
         :type figure_size: Tuple
         :param figure_directory: full path with file extension
         :type figure_directory: str
@@ -483,7 +483,7 @@ class Scope:
             timebase = 's'
 
         if len(channel) == 1:  # This is for a single plot with multiple graphs
-            plt.figure(figsize=(4, 3), dpi=80)
+            plt.figure(figsize=[x/25.4 for x in figure_size] if figure_size is not None else None, dpi=80)
             for plot_list in channel:
                 for channel_dataset in plot_list:
                     plt.plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
@@ -503,7 +503,7 @@ class Scope:
                 else:
                     plt.ylabel(channel_dataset.channel_unit)
         else:  # This is for multiple plots with multiple graphs
-            fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=figure_size)
+            fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=[x/25.4 for x in figure_size] if figure_size is not None else None)
             for plot_count, plot_list in enumerate(channel):
                 for channel_dataset in plot_list:
                     axs[plot_count].plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
