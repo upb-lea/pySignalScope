@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "electronic_scope"
+name = "pysignalscope"
 version = "0.1.0"
 authors = [
   { name="LEA - Paderborn University", email="upblea@mail.upb.de" },
@@ -20,8 +20,8 @@ dependencies = ["numpy",
                 "matplotlib"]
 
 [project.urls]
-Homepage = "https://github.com/upb-lea/electronic_scope"
-Issues = "https://github.com/upb-lea/electronic_scope/issues"
+Homepage = "https://github.com/upb-lea/pySignalScope"
+Issues = "https://github.com/upb-lea/pySignalScope/issues"
 
 
 

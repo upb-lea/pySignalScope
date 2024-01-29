@@ -15,7 +15,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
 
     :Minimal Example:
 
-    >>> import electronic_scope as sp
+    >>> import pysignalscope as sp
     >>> import numpy as np
     >>> example_waveform = np.array([[0, 1.34, 3.14, 4.48, 6.28],[-175.69, 103.47, 175.69, -103.47,-175.69]])
     >>> out = sp.fft(example_waveform, plot=True, mode='rad', f0=25000, title='ffT input current')

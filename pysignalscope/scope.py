@@ -6,7 +6,7 @@ import numpy as np
 import warnings
 from matplotlib import pyplot as plt
 from typing import Union, List, Tuple, Optional, Any
-import electronic_scope.functions as functions
+import pysignalscope.functions as functions
 
 
 class Scope:
@@ -136,7 +136,7 @@ class Scope:
         :rtype list[Channel, Channel, Channel, Channel]
 
         :Example:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> [voltage, current_prim, current_sec] = sp.Scope.from_tektronix('/path/to/tektronix/file/tek0000.csv')
         """
         channel_source = 'Tektronix scope'
@@ -163,11 +163,11 @@ class Scope:
         :rtype Channel
 
         :Example single channel:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> [current_prim] = sp.Scope.from_tektronix_mso58('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> [current_prim, current_sec] = sp.Scope.from_tektronix_mso58('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
         channel_source = 'Tektronix scope MSO58'
@@ -183,7 +183,6 @@ class Scope:
 
         return tektronix_channels
 
-
     @staticmethod
     def from_tektronix_mso58_multichannel(csv_file: str) -> List['Scope']:
         """
@@ -196,7 +195,7 @@ class Scope:
         :rtype Channel
 
         :Example multiple channel csv-file:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> [current_prim, current_sec] = sp.Scope.from_tektronix_mso58_multichannel('/path/to/lecroy/files/currents.csv')
         """
         channel_source = 'Tektronix scope MSO58'
@@ -224,11 +223,11 @@ class Scope:
         :rtype Channel
 
         :Example single channel:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> [current_prim] = sp.Scope.from_lecroy('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> [current_prim, current_sec] = sp.Scope.from_lecroy('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
         channel_source = 'LeCroy scope'
@@ -262,7 +261,7 @@ class Scope:
         :type channel_unit: str
 
         :Example:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> import numpy as np
         >>> channel = sp.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         """
@@ -446,14 +445,14 @@ class Scope:
         Plot channel datasets.
 
         Examples:
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> ch1, ch2, ch3, ch4 = sp.Scope.from_tektronix('tektronix_csv_file.csv')
         >>> sp.Scope.plot_channels([ch1, ch2, ch3],[ch4])
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
 
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
-        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_\mathrm{T}$ in A".
-        Note, that the 'r' before the string gives the command to accept LaTeX formulas, like $$.
+        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
+        Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
 
         :param channel: list of datasets
         :type channel: list[Scope]
@@ -501,6 +500,7 @@ class Scope:
                 elif channel_dataset.channel_unit.lower() == 'w':
                     plt.ylabel(f"Power in {channel_dataset.channel_unit}")
                 else:
+                    # in case of no matches, use a custom label. The channel_unit is used for this.
                     plt.ylabel(channel_dataset.channel_unit)
         else:  # This is for multiple plots with multiple graphs
             fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=[x/25.4 for x in figure_size] if figure_size is not None else None)
@@ -523,6 +523,7 @@ class Scope:
                 elif channel_dataset.channel_unit.lower() == 'j':
                     axs[plot_count].set_ylabel(f"Energy in {channel_dataset.channel_unit}")
                 else:
+                    # in case of no matches, use a custom label. The channel_unit is used for this.
                     axs[plot_count].set_ylabel(channel_dataset.channel_unit)
         plt.tight_layout()
         if figure_directory is not None:
@@ -640,7 +641,7 @@ class Scope:
 
         :Example:
 
-        >>> import electronic_scope as sp
+        >>> import pysignalscope as sp
         >>> import numpy as np
         >>> channel = sp.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         >>> channel.fft()
@@ -735,11 +736,16 @@ class Scope:
             self.channel_label = self.channel_label + '²'
 
     @staticmethod
-    def save(figure: plt.figure, width_mm: float = 160, height_mm: float = 80):
-        #figure.set_size_inches(w = width_mm / 25.4, h=height_mm / 25.4, forward=True)
-        figure.savefig("test.pdf")
+    def save(figure: plt.figure, fig_name: str):
+        """
+        Save the given figure object as pdf.
 
-
+        :param figure: figure object
+        :type figure: matplotlib.pyplot.figure
+        :param fig_name: figure name for pdf file naming
+        :type fig_name: str
+        """
+        figure.savefig(f"{fig_name}.pdf")
 
 
 if __name__ == '__main__':

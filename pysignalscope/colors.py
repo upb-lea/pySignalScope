@@ -1,3 +1,5 @@
+"""Definitions for different color schemes."""
+
 # matplotlib color specification: https://matplotlib.org/stable/tutorials/colors/colors.html
 
 color_combinations = 255
@@ -16,11 +18,11 @@ gnome_colors = {"blue": (28 / color_combinations, 113 / color_combinations, 216 
                 }
 
 gnome_colors_list = [gnome_colors["blue"],
-                    gnome_colors["red"],
-                    gnome_colors["green"],
-                    gnome_colors["orange"],
-                    gnome_colors["purple"],
-                    gnome_colors["brown"],
-                    gnome_colors["grey"],
-                    gnome_colors["yellow"],
-                    gnome_colors["black"]]
+                     gnome_colors["red"],
+                     gnome_colors["green"],
+                     gnome_colors["orange"],
+                     gnome_colors["purple"],
+                     gnome_colors["brown"],
+                     gnome_colors["grey"],
+                     gnome_colors["yellow"],
+                     gnome_colors["black"]]
