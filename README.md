@@ -13,7 +13,7 @@ Bring measurements from the oscilloscope and the circuit simulator into a standa
 It is currently only possible to obtain the current development version:
 ```
 cd /Documents/Folder/of/Interest   
-git clone git@github.com:upb-lea/electronic_scope.git
+git clone git@github.com:upb-lea/pySignalScope.git
 ```
 Install this repository into your virtual environment (venv) or jupyter notebook:
 ```
@@ -21,7 +21,7 @@ pip install -e .
 ```
 Use the toolbox in your python program:
 ```
-import electronic_scope as es
+import pysignalscope as pss
 
 ...
 ```
