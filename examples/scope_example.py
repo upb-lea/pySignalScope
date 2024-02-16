@@ -33,8 +33,8 @@ current_prim.fft()
 # ------------------------------------------
 
 meas_v_ob, meas_il_ib, meas_il_ob = pss.Scope.from_lecroy('scope_example_data_lecroy_1.csv',
-                                                         'scope_example_data_lecroy_2.csv',
-                                                         'scope_example_data_lecroy_3.csv')
+                                                          'scope_example_data_lecroy_2.csv',
+                                                          'scope_example_data_lecroy_3.csv')
 
 meas_v_ob.modify(channel_label='vl_ob_meas', channel_unit='V')
 meas_il_ib.modify(channel_label='il_ib_meas', channel_unit='A', channel_color='b')
