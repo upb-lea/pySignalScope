@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>1 Welcome to pySignalScope &mdash; pySignalScope 0.1.0 documentation</title>
+  <title>1 Scope toolbox for documentation purposes and comparisons &mdash; pySignalScope 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -45,7 +45,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><span class="sectnum">1 </span>Welcome to pySignalScope</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><span class="sectnum">1 </span>Scope toolbox for documentation purposes and comparisons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview"><span class="sectnum">1.1 </span>Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started"><span class="sectnum">1.2 </span>Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples"><span class="sectnum">1.3 </span>Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bug-reports"><span class="sectnum">1.4 </span>Bug Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changelog"><span class="sectnum">1.5 </span>Changelog</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#pysignalscope-function-documentation"><span class="sectnum">2 </span>pySignalScope function documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pysignalscope.Scope"><code class="docutils literal notranslate"><span class="pre">Scope</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.abs"><code class="docutils literal notranslate"><span class="pre">Scope.abs()</span></code></a></li>
@@ -96,7 +103,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="sectnum">1 </span>Welcome to pySignalScope</li>
+      <li class="breadcrumb-item active"><span class="sectnum">1 </span>Scope toolbox for documentation purposes and comparisons</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -106,8 +113,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-pysignalscope">
-<h1><span class="sectnum">1 </span>Welcome to pySignalScope<a class="headerlink" href="#welcome-to-pysignalscope" title="Link to this heading"></a></h1>
+  <section id="scope-toolbox-for-documentation-purposes-and-comparisons">
+<h1><span class="sectnum">1 </span>Scope toolbox for documentation purposes and comparisons<a class="headerlink" href="#scope-toolbox-for-documentation-purposes-and-comparisons" title="Link to this heading"></a></h1>
+<dl class="simple">
+<dt>Processing and comparison of time domain data similar to oscilloscopes in electronics. Typically used for technical comparisons in</dt><dd><ul class="simple">
+<li><p>Bachelor / Master / Ph.D. theses,</p></li>
+<li><p>Scientific papers,</p></li>
+<li><p>Technical manuals, and</p></li>
+<li><p>Measurement reports.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="overview">
+<h2><span class="sectnum">1.1 </span>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Bring measurements from the oscilloscope and the circuit simulator into a standardized format. Edit the signals by shifting them in time (different zero points) or define the zero point for measuring equipment that can only record AC. Calculate the FFT or important values such as RMS, mean etc. Bring the originally different input formats into common plots to make comparisons easy.</p>
+<img alt="docs/source/figures/introduction.png" src="docs/source/figures/introduction.png" />
+</section>
+<section id="getting-started">
+<h2><span class="sectnum">1.2 </span>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
+<p>Install this repository into your virtual environment (venv) or jupyter notebook:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pysignalscope</span>
+</pre></div>
+</div>
+<p>Use the toolbox in your python program:</p>
+<dl class="simple">
+<dt>::</dt><dd><p>import pysignalscope as pss
+…</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2><span class="sectnum">1.3 </span>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>Have a look at the <a class="reference external" href="examples/scope_example.py">example</a>, to see what you can do with this toolbox.</p>
+</section>
+<section id="bug-reports">
+<h2><span class="sectnum">1.4 </span>Bug Reports<a class="headerlink" href="#bug-reports" title="Link to this heading"></a></h2>
+<p>Please use the issues report button within GitHub to report bugs.</p>
+</section>
+<section id="changelog">
+<h2><span class="sectnum">1.5 </span>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h2>
+<p>Find the changelog <a class="reference external" href="CHANGELOG.md">here</a>.</p>
+</section>
 </section>
 <section id="pysignalscope-function-documentation">
 <h1><span class="sectnum">2 </span>pySignalScope function documentation<a class="headerlink" href="#pysignalscope-function-documentation" title="Link to this heading"></a></h1>
