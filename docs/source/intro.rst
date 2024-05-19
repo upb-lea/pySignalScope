@@ -25,12 +25,13 @@ Install this repository into your virtual environment (venv) or jupyter notebook
 Use the toolbox in your python program:
 
 ::
+
     import pysignalscope as pss
     ...
 
 Examples
 --------
-Have a look at the `example <../../examples/scope_example.py>`__, to see what you can do with this toolbox.
+Have a look at the `example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__, to see what you can do with this toolbox.
 
 Bug Reports
 -----------
@@ -38,7 +39,7 @@ Please use the issues report button within GitHub to report bugs.
 
 Changelog
 ---------
-Find the changelog `here <../../CHANGELOG.md>`__.
+Find the changelog `here <https://github.com/upb-lea/pySignalScope/blob/main/CHANGELOG.md>`__.
 
 
 
