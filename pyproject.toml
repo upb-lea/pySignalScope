@@ -9,7 +9,7 @@ authors = [
   { name="LEA - Paderborn University", email="upblea@mail.upb.de" },
 ]
 description = "View, edit and calculate scope results from simulations or real measurements."
-readme = "README.md"
+readme = "README.rst"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
