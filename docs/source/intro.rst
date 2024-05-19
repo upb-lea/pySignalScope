@@ -30,7 +30,7 @@ Use the toolbox in your python program:
 
 Examples
 --------
-Have a look at the `example <examples/scope_example.py>`__, to see what you can do with this toolbox.
+Have a look at the `example <../../examples/scope_example.py>`__, to see what you can do with this toolbox.
 
 Bug Reports
 -----------
@@ -38,7 +38,7 @@ Please use the issues report button within GitHub to report bugs.
 
 Changelog
 ---------
-Find the changelog `here <CHANGELOG.md>`__.
+Find the changelog `here <../../CHANGELOG.md>`__.
 
 
 
