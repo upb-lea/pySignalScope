@@ -169,6 +169,7 @@ class Scope:
         >>> [current_prim] = pss.Scope.from_tektronix_mso58('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
+
         >>> import pysignalscope as pss
         >>> [current_prim, current_sec] = pss.Scope.from_tektronix_mso58('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
