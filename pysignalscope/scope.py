@@ -65,7 +65,7 @@ class Scope:
         :type channel_time_cut_min: float
         :param channel_time_cut_max: removes all time units bigger than the given one
         :type channel_time_cut_max: float
-        :param channel_linestyle: channel linestyle, e. g. '--'
+        :param channel_linestyle: channel linestyle, e.g. '--'
         :type channel_linestyle: str
         :return: None
         :rtype: None
@@ -132,12 +132,13 @@ class Scope:
 
         :param csv_file: csv-file from tektronix scope
         :type csv_file: str
-        :return tuple of Channel, depending on the channel count stored in the .csv-file
-        :rtype list[Channel, Channel, Channel, Channel]
+        :return: tuple of Channel, depending on the channel count stored in the .csv-file
+        :rtype: list[Scope, Scope, Scope, Scope]
 
         :Example:
-        >>> import pysignalscope as sp
-        >>> [voltage, current_prim, current_sec] = sp.Scope.from_tektronix('/path/to/tektronix/file/tek0000.csv')
+
+        >>> import pysignalscope as pss
+        >>> [voltage, current_prim, current_sec] = pss.Scope.from_tektronix('/path/to/tektronix/file/tek0000.csv')
         """
         channel_source = 'Tektronix scope'
 
@@ -159,16 +160,17 @@ class Scope:
         Note: insert multiple .csv-files to get a list of all channels.
         :param csv_files: csv-file from tektronix scope
         :type csv_files: str
-        :return Channel
-        :rtype Channel
+        :return: List of Scope objects
+        :rtype: List['Scope']
 
         :Example single channel:
-        >>> import pysignalscope as sp
-        >>> [current_prim] = sp.Scope.from_tektronix_mso58('/path/to/lecroy/files/current_prim.csv')
+
+        >>> import pysignalscope as pss
+        >>> [current_prim] = pss.Scope.from_tektronix_mso58('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
-        >>> import pysignalscope as sp
-        >>> [current_prim, current_sec] = sp.Scope.from_tektronix_mso58('/path/one/current_prim.csv', '/path/two/current_sec.csv')
+        >>> import pysignalscope as pss
+        >>> [current_prim, current_sec] = pss.Scope.from_tektronix_mso58('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
         channel_source = 'Tektronix scope MSO58'
 
@@ -191,12 +193,13 @@ class Scope:
         Note: insert multiple .csv-files to get a list of all channels.
         :param csv_file: csv-file from tektronix scope
         :type csv_file: str
-        :return Channel
-        :rtype Channel
+        :return: List of Scope objects
+        :rtype: List['Scope']
 
         :Example multiple channel csv-file:
-        >>> import pysignalscope as sp
-        >>> [current_prim, current_sec] = sp.Scope.from_tektronix_mso58_multichannel('/path/to/lecroy/files/currents.csv')
+
+        >>> import pysignalscope as pss
+        >>> [current_prim, current_sec] = pss.Scope.from_tektronix_mso58_multichannel('/path/to/lecroy/files/currents.csv')
         """
         channel_source = 'Tektronix scope MSO58'
 
@@ -219,16 +222,18 @@ class Scope:
 
         :param csv_files: csv-file from tektronix scope
         :type csv_files: str
-        :return Channel
-        :rtype Channel
+        :return: List of scope objects
+        :rtype: List['Scope']
 
         :Example single channel:
-        >>> import pysignalscope as sp
-        >>> [current_prim] = sp.Scope.from_lecroy('/path/to/lecroy/files/current_prim.csv')
+
+        >>> import pysignalscope as pss
+        >>> [current_prim] = pss.Scope.from_lecroy('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
-        >>> import pysignalscope as sp
-        >>> [current_prim, current_sec] = sp.Scope.from_lecroy('/path/one/current_prim.csv', '/path/two/current_sec.csv')
+
+        >>> import pysignalscope as pss
+        >>> [current_prim, current_sec] = pss.Scope.from_lecroy('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
         channel_source = 'LeCroy scope'
 
@@ -261,9 +266,10 @@ class Scope:
         :type channel_unit: str
 
         :Example:
-        >>> import pysignalscope as sp
+
+        >>> import pysignalscope as pss
         >>> import numpy as np
-        >>> channel = sp.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
+        >>> channel = pss.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         """
         # changes period_vector_t_i to a float array. e.g. the user inserts a vector like this
         # [[0, 90, 180, 270, 360], [1, -1, 1, -1, 1]], with degree-mode, there are only integers inside.
@@ -445,9 +451,9 @@ class Scope:
         Plot channel datasets.
 
         Examples:
-        >>> import pysignalscope as sp
-        >>> ch1, ch2, ch3, ch4 = sp.Scope.from_tektronix('tektronix_csv_file.csv')
-        >>> sp.Scope.plot_channels([ch1, ch2, ch3],[ch4])
+        >>> import pysignalscope as pss
+        >>> ch1, ch2, ch3, ch4 = pss.Scope.from_tektronix('tektronix_csv_file.csv')
+        >>> pss.Scope.plot_channels([ch1, ch2, ch3],[ch4])
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
 
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
@@ -641,9 +647,9 @@ class Scope:
 
         :Example:
 
-        >>> import pysignalscope as sp
+        >>> import pysignalscope as pss
         >>> import numpy as np
-        >>> channel = sp.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
+        >>> channel = pss.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         >>> channel.fft()
         """
         period_vector = np.array([self.channel_time, self.channel_data])

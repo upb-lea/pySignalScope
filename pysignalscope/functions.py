@@ -83,7 +83,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
     f = np.linspace(0, (sample_factor - 1) * f0, sample_factor)
     x = np.fft.fft(i_interp)
     x_mag = np.abs(x) / sample_factor
-    print(f"{x_mag = }")
+    print(f"{x_mag=}")
     phi_rad = np.angle(x)
 
     f_corrected = list(f[0:int(sample_factor / 2 + 1)])
@@ -115,11 +115,11 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
             f"filter_type '{filter_value_harmonic}' not available: Must be 'factor','harmonic' or 'disabled ")
 
     if plot:
-        print(f"{title = }")
-        print(f"{t[-1] = }")
-        print(f"{f0 = }")
-        print(f"{Fs = }")
-        print(f"{sample_factor = }")
+        print(f"{title=}")
+        print(f"{t[-1]=}")
+        print(f"{f0=}")
+        print(f"{Fs=}")
+        print(f"{sample_factor=}")
         print(f"f_out = {np.around(f_out, decimals=0)}")
         print(f"x_out = {np.around(x_out, decimals=3)}")
         print(f"phi_rad_out = {np.around(phi_rad_out, decimals=3)}")
