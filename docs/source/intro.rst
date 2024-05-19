@@ -12,7 +12,7 @@ Overview
 --------
 Bring measurements from the oscilloscope and the circuit simulator into a standardized format. Edit the signals by shifting them in time (different zero points) or define the zero point for measuring equipment that can only record AC. Calculate the FFT or important values such as RMS, mean etc. Bring the originally different input formats into common plots to make comparisons easy.
 
-.. image:: docs/source/figures/introduction.png
+.. image:: figures/introduction.png
 
 Getting started
 ---------------
