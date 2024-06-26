@@ -7,7 +7,7 @@ import warnings
 from matplotlib import pyplot as plt
 from typing import Union, List, Tuple, Optional, Any
 import pysignalscope.functions as functions
-
+from lecroyutils.control import LecroyScope
 
 class Scope:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
@@ -217,7 +217,7 @@ class Scope:
     @classmethod
     def from_lecroy(cls, *csv_files: str) -> List['Scope']:
         """
-        Translate tektronix csv-files to a list of Channel class objects.
+        Translate LeCroy csv-files to a list of Channel class objects.
 
         Note: insert multiple .csv-files to get a list of all channels
 
@@ -248,6 +248,39 @@ class Scope:
                                         channel_label=os.path.basename(csv_file).replace('.csv', '')))
 
         return lecroy_channel
+
+    @classmethod
+    def from_lecroy_remote(cls, channel_number: int, ip_address: str, channel_label: str):
+        """
+
+        """
+        channel_source = "LeCroy scope"
+
+        scope = LecroyScope(ip_address)
+
+        if channel_number == 1:
+            channel = "C1"
+        elif channel_number == 2:
+            channel = "C2"
+        elif channel_number == 3:
+            channel = "C3"
+        elif channel_number == 4:
+            channel = "C4"
+        elif channel_number == 5:
+            channel = "C5"
+        elif channel_number == 6:
+            channel = "C6"
+        elif channel_number == 7:
+            channel = "C7"
+        elif channel_number == 8:
+            channel = "C8"
+        else:  # "else-case"
+            channel = None
+            print("No fitting channel found!")
+
+        if channel is not None:
+            data = scope.waveform(channel)
+            return Scope(channel_time=data.x, channel_data=data.y, channel_source=channel_source, channel_label=channel_label)
 
     @classmethod
     def from_numpy(cls, period_vector_t_i: np.ndarray, mode: str = 'rad', f0: Union[float, None] = None,
