@@ -252,7 +252,16 @@ class Scope:
     @classmethod
     def from_lecroy_remote(cls, channel_number: int, ip_address: str, channel_label: str):
         """
+        Get the data of a LeCroy oscilloscope and return a scope object with the collected data.
 
+        :param channel_number: number of the channel
+        :type channel_number: int
+        :param ip_address: ip-address of the oscilloscope
+        :type ip_address: str
+        :param channel_label: label name of channel
+        :type channel_label: str
+        :return: Scope object with collected data
+        :rtype: 'Scope'
         """
         channel_source = "LeCroy scope"
 
