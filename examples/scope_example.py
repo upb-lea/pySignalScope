@@ -1,6 +1,7 @@
 """Example file to demonstrate the scope functionality."""
 import pysignalscope as pss
 
+# Use this line to change the fonts into LaTeX font.
 # pss.global_plot_settings_font_latex()
 
 # ------------------------------------------
