@@ -1,7 +1,8 @@
 """Example file to demonstrate the scope functionality."""
 import pysignalscope as pss
 
-pss.global_plot_settings_font_latex()
+# Use this line to change the fonts into LaTeX font.
+# pss.global_plot_settings_font_latex()
 
 # ------------------------------------------
 # Example 1: Read curves from tektronix scope csv file, plot the signals and perform FFT
