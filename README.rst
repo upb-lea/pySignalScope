@@ -23,6 +23,7 @@ Install this repository into your virtual environment (venv) or jupyter notebook
 Use the toolbox in your python program:
 
 ::
+
     import pysignalscope as pss
     ...
 
