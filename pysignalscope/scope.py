@@ -67,8 +67,6 @@ class Scope:
         :type channel_time_cut_max: float
         :param channel_linestyle: channel linestyle, e.g. '--'
         :type channel_linestyle: str
-        :return: None
-        :rtype: None
         """
         if channel_label is not None:
             self.channel_label = channel_label
@@ -734,9 +732,6 @@ class Scope:
         :type figure_size: Tuple
         :param figure_directory: full path with file extension
         :type figure_directory: str
-
-        :return: Plots
-        :rtype: None
         """
         self.plot_channels([self], timebase=timebase, figure_size=figure_size, figure_directory=figure_directory)
 
