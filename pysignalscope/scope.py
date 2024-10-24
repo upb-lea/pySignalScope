@@ -15,23 +15,45 @@ class Scope:
     def __init__(self, channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
                  channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
                  channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> None:
+        # check channel_time for a valid type, convert to numpy if necessary
         if isinstance(channel_time, List):
             self.channel_time = np.array(channel_time)
         elif isinstance(channel_time, np.ndarray):
             self.channel_time = channel_time
         else:
-            raise Exception("channel_time must be type list or ArrayLike")
+            raise TypeError("channel_time must be type list or ArrayLike.")
+        # check channel_data for a valid type, convert to numpy if necessary
         if isinstance(channel_data, List):
             self.channel_data = np.array(channel_data)
         elif isinstance(channel_data, np.ndarray):
             self.channel_data = channel_data
         else:
-            raise Exception("channel_data must be type list or ArrayLike")
-        self.channel_label = channel_label
-        self.channel_unit = channel_unit
-        self.channel_color = channel_color
-        self.channel_source = channel_source
-        self.channel_linestyle = channel_linestyle
+            raise TypeError("channel_data must be type list or ArrayLike")
+        # check channel_label for a valid type
+        if isinstance(channel_label, str) or channel_label is None:
+            self.channel_label = channel_label
+        else:
+            raise TypeError("channel_label must be type str or None.")
+        # check channel unit for a valid type
+        if isinstance(channel_unit, str) or channel_unit is None:
+            self.channel_unit = channel_unit
+        else:
+            raise TypeError("channel_unit must be type str or None.")
+        # check channel_color for a valid type
+        if isinstance(channel_color, str) or channel_color is None:
+            self.channel_color = channel_color
+        else:
+            raise TypeError("channel_color must be type str or None.")
+        # check channel_source for a valid type
+        if isinstance(channel_source, str) or channel_source is None:
+            self.channel_source = channel_source
+        else:
+            raise TypeError("channel_source must be type str or None.")
+        # check channel_linestyle for a valid type
+        if isinstance(channel_linestyle, str) or channel_linestyle is None:
+            self.channel_linestyle = channel_linestyle
+        else:
+            raise TypeError("channel_linestyle must be type str or None.")
 
     def modify(self, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
                channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
