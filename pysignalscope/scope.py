@@ -92,21 +92,41 @@ class Scope:
         :return: None
         :rtype: None
         """
-        if channel_label is not None:
+        if isinstance(channel_label, str) or channel_label is None:
             self.channel_label = channel_label
-        if channel_unit is not None:
+        else:
+            raise TypeError("channel_label must be type str or None")
+        if isinstance(channel_unit, str) or channel_unit is None:
             self.channel_unit = channel_unit
-        if channel_data_factor is not None:
+        else:
+            raise TypeError("channel_unit must be type str or None")
+        if isinstance(channel_data_factor, (int, float)):
             self.channel_data = self.channel_data * channel_data_factor
-        if channel_data_offset is not None:
+        elif channel_data_factor is None:
+            pass
+        else:
+            raise TypeError("channel_data_factor must be type float or None")
+        if isinstance(channel_data_offset, (int, float)):
             self.channel_data = self.channel_data + channel_data_offset
-        if channel_color is not None:
+        elif channel_data_offset is None:
+            pass
+        else:
+            raise TypeError("channel_data_offset must be type float or None")
+        if isinstance(channel_color, str) or channel_color is None:
             self.channel_color = channel_color
-        if channel_source is not None:
+        else:
+            raise TypeError("channel_color must be type str or None")
+        if isinstance(channel_source, str) or channel_source is None:
             self.channel_source = channel_source
-        if channel_time_shift is not None:
+        else:
+            raise TypeError("channel_source must be type str or None")
+        if isinstance(channel_time_shift, (int, float)):
             self.channel_time = self.channel_time + channel_time_shift
-        if channel_time_shift_rotate is not None:
+        elif channel_time_shift is None:
+            pass
+        else:
+            raise TypeError("channel_time_shift must be type float or None")
+        if isinstance(channel_time_shift_rotate, (int, float)):
             # figure out current max time
             current_max_time = self.channel_time[-1]
             current_period = current_max_time - self.channel_time[0]
@@ -117,8 +137,12 @@ class Scope:
             new_index = np.argsort(self.channel_time)
             self.channel_time = np.array(self.channel_time)[new_index]
             self.channel_data = np.array(self.channel_data)[new_index]
+        elif channel_time_shift_rotate is None:
+            pass
+        else:
+            raise TypeError("channel_time_shift_rotate must be type str or None")
 
-        if channel_time_cut_min is not None:
+        if isinstance(channel_time_cut_min, (int, float)):
             index_list_to_remove = []
             if channel_time_cut_min < self.channel_time[0]:
                 raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({self.channel_time[0]}). This is not allowed!")
@@ -127,8 +151,12 @@ class Scope:
                     index_list_to_remove.append(count)
             self.channel_time = np.delete(self.channel_time, index_list_to_remove)
             self.channel_data = np.delete(self.channel_data, index_list_to_remove)
+        elif channel_time_cut_min is None:
+            pass
+        else:
+            raise TypeError("channel_time_cut_min must be type float or None")
 
-        if channel_time_cut_max is not None:
+        if isinstance(channel_time_cut_max, (int, float)):
             index_list_to_remove = []
             if channel_time_cut_max > self.channel_time[-1]:
                 raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({self.channel_time[-1]}). This is not allowed!")
@@ -137,8 +165,16 @@ class Scope:
                     index_list_to_remove.append(count)
             self.channel_time = np.delete(self.channel_time, index_list_to_remove)
             self.channel_data = np.delete(self.channel_data, index_list_to_remove)
-        if channel_linestyle is not None:
+        elif channel_time_cut_max is None:
+            pass
+        else:
+            raise TypeError("channel_time_cut_max must be type float or None")
+        if isinstance(channel_linestyle, str):
             self.channel_linestyle = channel_linestyle
+        elif channel_linestyle is None:
+            pass
+        else:
+            raise TypeError("channel_linestyle must be type str or None")
 
     def copy(self):
         """Create a deepcopy of Channel."""
@@ -816,7 +852,10 @@ class Scope:
         :param fig_name: figure name for pdf file naming
         :type fig_name: str
         """
-        figure.savefig(f"{fig_name}.pdf")
+        if isinstance(fig_name, str):
+            figure.savefig(f"{fig_name}.pdf")
+        else:
+            raise TypeError("figure name must be of type str.")
 
 
 if __name__ == '__main__':
