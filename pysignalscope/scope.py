@@ -1,6 +1,8 @@
 """Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
 import copy
 import os.path
+from pysignalscope.logconfig import setup_logging
+import logging
 
 import numpy as np
 import warnings
@@ -8,6 +10,14 @@ from matplotlib import pyplot as plt
 from typing import Union, List, Tuple, Optional, Any
 import pysignalscope.functions as functions
 from lecroyutils.control import LecroyScope
+
+#-- Logging setup ---------------------------------------------------------------------------------
+setup_logging()
+
+# Modulname für static methods
+class_modulename="TransformerCalculation"
+
+#-- Class definition ------------------------------------------------------------------------------
 
 class Scope:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
@@ -54,6 +64,10 @@ class Scope:
             self.channel_linestyle = channel_linestyle
         else:
             raise TypeError("channel_linestyle must be type str or None.")
+        # Set module name for logger
+        self.modulename=class_modulename
+
+    #-- Function modify ------------------------------------------------------------------------------
 
     def modify(self, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
                channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
@@ -92,20 +106,31 @@ class Scope:
         :return: None
         :rtype: None
         """
+        #Variable declaration
+        # Reflects, if any modification is performed
+        modify_flag=False
+
+
         if channel_label is not None:
             self.channel_label = channel_label
+            modify_flag = True
         if channel_unit is not None:
             self.channel_unit = channel_unit
+            modify_flag = True
         if channel_data_factor is not None:
             self.channel_data = self.channel_data * channel_data_factor
+            modify_flag = True
         if channel_data_offset is not None:
             self.channel_data = self.channel_data + channel_data_offset
         if channel_color is not None:
             self.channel_color = channel_color
+            modify_flag = True
         if channel_source is not None:
             self.channel_source = channel_source
+            modify_flag = True
         if channel_time_shift is not None:
             self.channel_time = self.channel_time + channel_time_shift
+            modify_flag = True
         if channel_time_shift_rotate is not None:
             # figure out current max time
             current_max_time = self.channel_time[-1]
@@ -117,16 +142,19 @@ class Scope:
             new_index = np.argsort(self.channel_time)
             self.channel_time = np.array(self.channel_time)[new_index]
             self.channel_data = np.array(self.channel_data)[new_index]
+            modify_flag = True
 
         if channel_time_cut_min is not None:
             index_list_to_remove = []
             if channel_time_cut_min < self.channel_time[0]:
                 raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({self.channel_time[0]}). This is not allowed!")
+
             for count, value in enumerate(self.channel_time):
                 if value < channel_time_cut_min:
                     index_list_to_remove.append(count)
             self.channel_time = np.delete(self.channel_time, index_list_to_remove)
             self.channel_data = np.delete(self.channel_data, index_list_to_remove)
+            modify_flag = True
 
         if channel_time_cut_max is not None:
             index_list_to_remove = []
@@ -137,8 +165,19 @@ class Scope:
                     index_list_to_remove.append(count)
             self.channel_time = np.delete(self.channel_time, index_list_to_remove)
             self.channel_data = np.delete(self.channel_data, index_list_to_remove)
+            modify_flag = True
+
         if channel_linestyle is not None:
             self.channel_linestyle = channel_linestyle
+            modify_flag = True
+        pass
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl", self.modulename)
+        # Log, if no modification is requested
+        if modify_flag==False:
+            logging.info("%s : No modification is requested", self.modulename)
+
 
     def copy(self):
         """Create a deepcopy of Channel."""
@@ -172,6 +211,13 @@ class Scope:
         for channel_count in range(1, channel_counts + 1):
             channel_list.append(Scope(time, file[:, channel_count], channel_source=channel_source))
 
+        # Log user error Empty csv-file
+        if channel_count==0:
+            logging.info("%s : Invalid file or file without content", class_modulename)
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Channelcounts %i,File %s", class_modulename,channel_counts,csv_file)
+
         return channel_list
 
     @staticmethod
@@ -203,8 +249,20 @@ class Scope:
             time = file[:, 0]
             ch1_data = file[:, 1]
 
+            # Log user error Empty csv-file
+            if not ch1_data:
+                logging.info("%s : file %s->Invalid file or file without content", class_modulename,csv_file)
+
             tektronix_channels.append(Scope(time, ch1_data, channel_source=channel_source,
                                             channel_label=os.path.basename(csv_file).replace('.csv', '')))
+
+
+        # Log user error Empty csv-file
+        if not tektronix_channels:
+            logging.info("%s : %s Invalid file list or files without content", class_modulename,csv_files)
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl %s", class_modulename,csv_files)
 
         return tektronix_channels
 
@@ -234,6 +292,14 @@ class Scope:
         for channel_count in range(1, channel_counts + 1):
             channel_list.append(Scope(time, file[:, channel_count], channel_source=channel_source))
 
+        # Log user error Empty csv-file
+        if channel_count==0:
+            logging.info("%s : Invalid file or file without content", class_modulename)
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Channelcounts %i,File %s", class_modulename,channel_count,csv_file)
+
+        # Log user Error ASA
         return channel_list
 
     @classmethod
@@ -268,6 +334,13 @@ class Scope:
 
             lecroy_channel.append(Scope(time, ch1_data, channel_source=channel_source,
                                         channel_label=os.path.basename(csv_file).replace('.csv', '')))
+
+        # Log user error Empty csv-file
+        if not lecroy_channel:
+            logging.info("%s : %s Invalid file list or files without content", class_modulename, csv_files)
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl %s", class_modulename,csv_file)
 
         return lecroy_channel
 
@@ -307,7 +380,12 @@ class Scope:
             channel = "C8"
         else:  # "else-case"
             channel = None
+            # Log user info
+            logging.info("%s : Requested channel number %i is out of range (1-8)", class_modulename,channel_number)
             print("No fitting channel found!")
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Channelnummber: %i Assigned  channel: %s", class_modulename,channel_number,channel)
 
         if channel is not None:
             data = scope.waveform(channel)
@@ -360,6 +438,9 @@ class Scope:
         single_dataset_channel = Scope(period_vector_t_i[0], period_vector_t_i[1],
                                        channel_label=channel_label, channel_unit=channel_unit)
 
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Amount of Data: %i", class_modulename,len(single_dataset_channel))
+
         return single_dataset_channel
 
     @classmethod
@@ -403,6 +484,9 @@ class Scope:
                 list_return_dataset.append(Scope(time_modified, list_simulation_data[count_var],
                                                  channel_label=variable, channel_source=channel_source))
 
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Value of count_var %i", class_modulename,count_var)
+
         return list_return_dataset
 
     @classmethod
@@ -425,6 +509,9 @@ class Scope:
             channel_label = f"{channel_voltage.channel_label} * {channel_current.channel_label}"
         channel_power = Scope(channel_voltage.channel_time, channel_data, channel_label=channel_label,
                               channel_unit='W')
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Amount of channel data elements=%i", class_modulename,len(channel_data))
 
         return channel_power
 
@@ -453,7 +540,14 @@ class Scope:
                 energy = (np.nan_to_num(channel_power.channel_data[count]) + np.nan_to_num(channel_power.channel_data[count-1])) / 2 * timestep
                 channel_energy = np.append(channel_energy, channel_energy[-1] + energy)
         if channel_label is None:
+            # Log missing user input
+            logging.info("%s :Label was not defined. So default value is used", class_modulename)
             channel_label = "Energy"
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Amount of channel data elements=%i", class_modulename,count)
+
+
         return Scope(channel_power.channel_time, channel_energy, channel_label=channel_label, channel_unit='J')
 
     @classmethod
@@ -478,6 +572,13 @@ class Scope:
             channel_label_result += channel.channel_label + ' + ' if channel.channel_label is not None else ""
         channel_label_result = channel_label_result[:-3]
 
+        # Log missing channel input, if amout of channels is one
+        if(len(channels)==1):
+            logging.info("%s :Only on channel was provided. No channel was added.", class_modulename)
+            # Log flow control ASA
+
+        logging.debug("%s :FlCtl Amount of channels, which are added=%i", class_modulename,len(channels))
+
         return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
                      channel_label=channel_label_result)
 
@@ -488,7 +589,7 @@ class Scope:
 
         :param channels: Input channels
         :type channels: Scope
-        :return: Channel resulting from added input channels
+        :return: Channel resulting from first input channel minus all following input channels
         :rtype: Scope
         """
         if len(channels) < 2:
@@ -505,6 +606,15 @@ class Scope:
                 channel_data_result -= channel.channel_data
             channel_label_result += channel.channel_label + ' - ' if channel.channel_label is not None else ""
         channel_label_result = channel_label_result[:-3]
+
+        # Log missing channel input, if amout of channels is one
+        if(len(channels)==1):
+            logging.info("%s :Only on channel was provided. No channel was substracted.", class_modulename)
+            # Log flow control ASA
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Amount of channels, which are substracted=%i", class_modulename,len(channels))
+
 
         return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
                      channel_label=channel_label_result)
@@ -553,7 +663,7 @@ class Scope:
             timebase = 's'
 
         if len(channel) == 1:  # This is for a single plot with multiple graphs
-            plt.figure(figsize=[x/25.4 for x in figure_size] if figure_size is not None else None, dpi=80)
+            fig = plt.figure(figsize=[x/25.4 for x in figure_size] if figure_size is not None else None, dpi=80)
             for plot_list in channel:
                 for channel_dataset in plot_list:
                     plt.plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
@@ -573,6 +683,9 @@ class Scope:
                 else:
                     # in case of no matches, use a custom label. The channel_unit is used for this.
                     plt.ylabel(channel_dataset.channel_unit)
+            # Log flow control ASA
+            logging.debug("%s :FlCtl Amount of plots within one channel=%i", class_modulename, len(plot_list))
+
         else:  # This is for multiple plots with multiple graphs
             fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=[x/25.4 for x in figure_size] if figure_size is not None else None)
             for plot_count, plot_list in enumerate(channel):
@@ -596,9 +709,16 @@ class Scope:
                 else:
                     # in case of no matches, use a custom label. The channel_unit is used for this.
                     axs[plot_count].set_ylabel(channel_dataset.channel_unit)
+            # Log flow control ASA
+            logging.debug("%s :FlCtl Amount of plots within multiple channels=%i", class_modulename, plot_count)
+
         plt.tight_layout()
         if figure_directory is not None:
             plt.savefig(figure_directory, bbox_inches="tight")
+
+        # Log flow control ASA
+        logging.debug("%s :FlCtl Amount of channels, which are displayed=%i", class_modulename, len(channel))
+
         plt.show()
         return fig
 
@@ -626,6 +746,9 @@ class Scope:
         elif scope.lower() == 'lecroy':
             channel_list = Scope.from_lecroy(csv_file)
         else:
+            # Log user warning
+            logging.warning("%s :Scope %s is unknown. Set to Tektronix scope", class_modulename, scope)
+            # Display message
             warnings.warn('Can not detect scope type. Set to Tektronix scope', stacklevel=2)
             channel_list = Scope.from_tektronix(csv_file)
 
@@ -642,6 +765,10 @@ class Scope:
         else:
             Scope.plot_channels([channel_list[0]], [channel_list[1]], [channel_list[2]], [channel_list[3]],
                                 timebase=timebase)
+
+        # Log flow control
+        logging.debug("%s :Data of file %s are displayed (Type %s)", class_modulename,csv_file,scope)
+
 
     @classmethod
     def compare_channels(cls, *channel_datasets: 'Scope', shift: Optional[List[Union[None, float]]] = None,
@@ -673,6 +800,9 @@ class Scope:
         elif timebase.lower() == 'ps':
             time_factor = 1e-12
         else:
+            # Log user info
+            logging.info("%s :time base was not defined or unknown (Set to %s).\n timebase are set to second", class_modulename, timebase)
+
             time_factor = 1
             timebase = 's'
 
@@ -701,6 +831,9 @@ class Scope:
         plt.grid()
         plt.show()
 
+        # Log flow control
+        logging.debug("%s :Amount of displayed datasets=%i", class_modulename,len(channel_datasets) )
+
     def fft(self, plot: bool = True):
         """
         Perform fft to the signal.
@@ -718,6 +851,9 @@ class Scope:
         >>> channel.fft()
         """
         period_vector = np.array([self.channel_time, self.channel_data])
+
+        # Log flow control
+        logging.debug("%s :Amount of channel data=%i", class_modulename,len(self.channel_data) )
 
         return functions.fft(period_vector, mode='time', plot=plot)
 
@@ -743,6 +879,8 @@ class Scope:
         elif f0 is not None:
             end_time = start_time + 1/f0
         self.modify(channel_time_cut_min=start_time, channel_time_cut_max=end_time)
+        # Log flow control
+        logging.debug("%s :Time range: %f to %f", class_modulename,start_time,end_time)
 
     def plot(self, timebase: str = 's', figure_size: Optional[Tuple] = None, figure_directory: Optional[str] = None):
         """
@@ -768,6 +906,10 @@ class Scope:
 
         Returns: rms(self.channel_data).
         """
+
+        # Log flow control
+        logging.debug("%s :Number of channel data=%i", class_modulename,len(self.channel_data))
+
         return np.sqrt(np.mean(self.channel_data ** 2))
 
     def mean(self) -> Any:
@@ -776,6 +918,9 @@ class Scope:
 
         Returns: mean(self.channel_data).
         """
+        # Log flow control
+        logging.debug("%s :Number of channel data=%i", class_modulename,len(self.channel_data))
+
         return np.mean(self.channel_data)
 
     def absmean(self) -> Any:
@@ -784,14 +929,20 @@ class Scope:
 
         Returns: abs(mean(self.channel_data)).
         """
+        # Log flow control
+        logging.debug("%s :Number of channel data=%i", class_modulename, len(self.channel_data))
+
         return np.mean(np.abs(self.channel_data))
 
     def abs(self) -> None:
         """
         Modify the existing scope channel so that the signal is rectified.
-
         Returns: abs(self.channel_data).
         """
+
+        # Log flow control
+        logging.debug("%s :Number of channel data=%i", class_modulename,len(self.channel_data))
+
         self.channel_data = np.abs(self.channel_data)
         if self.channel_label is not None:
             self.channel_label = '|' + self.channel_label + '|'
@@ -806,6 +957,9 @@ class Scope:
         if self.channel_label is not None:
             self.channel_label = self.channel_label + '²'
 
+        # Log flow control
+        logging.debug("%s :Number of channel data=%i", class_modulename,len(self.channel_data))
+
     @staticmethod
     def save(figure: plt.figure, fig_name: str):
         """
@@ -818,6 +972,8 @@ class Scope:
         """
         figure.savefig(f"{fig_name}.pdf")
 
+        # Log flow control
+        logging.debug("%s :Name of file to save=%s", class_modulename,f"{fig_name}.pdf")
 
 if __name__ == '__main__':
     pass
