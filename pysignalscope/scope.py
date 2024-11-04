@@ -481,8 +481,8 @@ class Scope:
             raise TypeError("channel_voltage must be type Scope.")
         if not isinstance(channel_current, Scope):
             raise TypeError("channel_current must be type Scope.")
-        if not isinstance(channel_label, str):
-            raise TypeError("channel_label must be type str.")
+        if not isinstance(channel_label, str) != channel_label is not None:
+            raise TypeError("channel_label must be type str or None.")
 
         channel_data = channel_voltage.channel_data * channel_current.channel_data
         if channel_label is None and channel_voltage.channel_label is not None \
