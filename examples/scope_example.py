@@ -55,31 +55,29 @@ pss.Scope.compare_channels(meas_il_ib, gecko_il_ib, meas_il_ob, gecko_il_ob, shi
 # Shift data
 meas_il_ob.modify(channel_time_shift=-67.53e-6)
 # Calculate sum
-sum_il_ob=pss.Scope.add(meas_il_ob,meas_il_ob)
+sum_il_ob = pss.Scope.add(meas_il_ob, meas_il_ob)
 
 # Calculate difference
-diff_il_ob=pss.Scope.subtract(sum_il_ob,meas_il_ob)
+diff_il_ob = pss.Scope.subtract(sum_il_ob, meas_il_ob)
 
 # Copy values to new variable
-abs_diff_il_ob=diff_il_ob.copy()
+abs_diff_il_ob = diff_il_ob.copy()
 # Calculate absolute values
 abs_diff_il_ob.abs()
 # Copy values to new variable
-sqr_diff_il_ob=diff_il_ob.copy()
+sqr_diff_il_ob = diff_il_ob.copy()
 # Calculate square
 sqr_diff_il_ob.square()
 # Calculate values:
 # Root means square
-rms_diff_il_ob=diff_il_ob.rms()
+rms_diff_il_ob = diff_il_ob.rms()
 # Average value
-mean_diff_il_ob=diff_il_ob.mean()
+mean_diff_il_ob = diff_il_ob.mean()
 # Average of absolute values
-absmean_diff_il_ob=diff_il_ob.absmean()
+absmean_diff_il_ob = diff_il_ob.absmean()
 # Print calculated values
 print(f"Rootmeansquare={rms_diff_il_ob}\n Average value={mean_diff_il_ob}\n Absolute average value={absmean_diff_il_ob}\n")
 # Plot results
 pss.Scope.plot_channels([diff_il_ob])
 # Plot results
-pss.Scope.plot_channels([diff_il_ob,abs_diff_il_ob,sqr_diff_il_ob])
-
-
+pss.Scope.plot_channels([diff_il_ob, abs_diff_il_ob, sqr_diff_il_ob])
