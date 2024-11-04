@@ -798,8 +798,8 @@ class Scope:
 
         return functions.fft(period_vector, mode='time', plot=plot)
 
-    def short_to_period(self, f0: Optional[float] = None, time_period: Optional[float] = None,
-                        start_time: Optional[float] = None):
+    def short_to_period(self, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
+                        start_time: Union[float, int, None] = None):
         """Short a given Scope object to a period.
 
         :param f0: frequency in Hz
