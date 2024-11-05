@@ -106,31 +106,48 @@ class Scope:
         :return: None
         :rtype: None
         """
-        # Variable declaration
-        # Reflects, if any modification is performed
-        modify_flag = False
-
-        if channel_label is not None:
+        if isinstance(channel_label, str) or channel_label is None:
             self.channel_label = channel_label
             modify_flag = True
-        if channel_unit is not None:
+        else:
+            raise TypeError("channel_label must be type str or None")
+        if isinstance(channel_unit, str) or channel_unit is None:
             self.channel_unit = channel_unit
             modify_flag = True
-        if channel_data_factor is not None:
+        else:
+            raise TypeError("channel_unit must be type str or None")
+        if isinstance(channel_data_factor, (int, float)):
             self.channel_data = self.channel_data * channel_data_factor
             modify_flag = True
-        if channel_data_offset is not None:
+        elif channel_data_factor is None:
+            pass
+        else:
+            raise TypeError("channel_data_factor must be type float or None")
+        if isinstance(channel_data_offset, (int, float)):
             self.channel_data = self.channel_data + channel_data_offset
-        if channel_color is not None:
+            modify_flag = True
+        elif channel_data_offset is None:
+            pass
+        else:
+            raise TypeError("channel_data_offset must be type float or None")
+        if isinstance(channel_color, str) or channel_color is None:
             self.channel_color = channel_color
             modify_flag = True
-        if channel_source is not None:
+        else:
+            raise TypeError("channel_color must be type str or None")
+        if isinstance(channel_source, str) or channel_source is None:
             self.channel_source = channel_source
             modify_flag = True
-        if channel_time_shift is not None:
+        else:
+            raise TypeError("channel_source must be type str or None")
+        if isinstance(channel_time_shift, (int, float)):
             self.channel_time = self.channel_time + channel_time_shift
             modify_flag = True
-        if channel_time_shift_rotate is not None:
+        elif channel_time_shift is None:
+            pass
+        else:
+            raise TypeError("channel_time_shift must be type float or None")
+        if isinstance(channel_time_shift_rotate, (int, float)):
             # figure out current max time
             current_max_time = self.channel_time[-1]
             current_period = current_max_time - self.channel_time[0]
@@ -142,20 +159,27 @@ class Scope:
             self.channel_time = np.array(self.channel_time)[new_index]
             self.channel_data = np.array(self.channel_data)[new_index]
             modify_flag = True
+        elif channel_time_shift_rotate is None:
+            pass
+        else:
+            raise TypeError("channel_time_shift_rotate must be type str or None")
 
-        if channel_time_cut_min is not None:
+        if isinstance(channel_time_cut_min, (int, float)):
             index_list_to_remove = []
             if channel_time_cut_min < self.channel_time[0]:
                 raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({self.channel_time[0]}). This is not allowed!")
-
             for count, value in enumerate(self.channel_time):
                 if value < channel_time_cut_min:
                     index_list_to_remove.append(count)
             self.channel_time = np.delete(self.channel_time, index_list_to_remove)
             self.channel_data = np.delete(self.channel_data, index_list_to_remove)
             modify_flag = True
+        elif channel_time_cut_min is None:
+            pass
+        else:
+            raise TypeError("channel_time_cut_min must be type float or None")
 
-        if channel_time_cut_max is not None:
+        if isinstance(channel_time_cut_max, (int, float)):
             index_list_to_remove = []
             if channel_time_cut_max > self.channel_time[-1]:
                 raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({self.channel_time[-1]}). This is not allowed!")
@@ -165,10 +189,17 @@ class Scope:
             self.channel_time = np.delete(self.channel_time, index_list_to_remove)
             self.channel_data = np.delete(self.channel_data, index_list_to_remove)
             modify_flag = True
-
-        if channel_linestyle is not None:
+        elif channel_time_cut_max is None:
+            pass
+        else:
+            raise TypeError("channel_time_cut_max must be type float or None")
+        if isinstance(channel_linestyle, str):
             self.channel_linestyle = channel_linestyle
             modify_flag = True
+        elif channel_linestyle is None:
+            pass
+        else:
+            raise TypeError("channel_linestyle must be type str or None")
 
         # Log flow control
         logging.debug(f"{self.modulename} :FlCtl")
@@ -199,6 +230,9 @@ class Scope:
         >>> [voltage, current_prim, current_sec] = pss.Scope.from_tektronix('/path/to/tektronix/file/tek0000.csv')
         """
         channel_source = 'Tektronix scope'
+
+        if not isinstance(csv_file, str):
+            raise TypeError("csv_file must be type str to show the full filepath.")
 
         file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=15)
         channel_counts = file.shape[1] - 1
@@ -242,6 +276,8 @@ class Scope:
 
         tektronix_channels = []
         for csv_file in csv_files:
+            if not isinstance(csv_file, str):
+                raise TypeError("csv_file must be type str to show the full filepath.")
             file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=24)
             time = file[:, 0]
             ch1_data = file[:, 1]
@@ -280,6 +316,9 @@ class Scope:
         """
         channel_source = 'Tektronix scope MSO58'
 
+        if not isinstance(csv_file, str):
+            raise TypeError("csv_file must be type str to show the full filepath.")
+
         file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=24)
         channel_counts = file.shape[1] - 1
         time = file[:, 0]
@@ -295,7 +334,6 @@ class Scope:
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Channelcounts {channel_count},File {csv_file}")
 
-        # Log user Error
         return channel_list
 
     @classmethod
@@ -324,6 +362,8 @@ class Scope:
 
         lecroy_channel = []
         for csv_file in csv_files:
+            if not isinstance(csv_file, str):
+                raise TypeError("csv_file must be type str to show the full filepath.")
             file: np.ndarray = np.genfromtxt(csv_file, delimiter=',', dtype=float, skip_header=5)
             time = file[:, 0]
             ch1_data = file[:, 1]
@@ -354,6 +394,13 @@ class Scope:
         :return: Scope object with collected data
         :rtype: 'Scope'
         """
+        if not isinstance(channel_number, int):
+            raise TypeError("channel_number must be type int.")
+        if not isinstance(ip_address, str):
+            raise TypeError("ip_address must be type str.")
+        if not isinstance(channel_label, str):
+            raise TypeError("channel_label must be type str.")
+
         channel_source = "LeCroy scope"
 
         scope = LecroyScope(ip_address)
@@ -451,6 +498,11 @@ class Scope:
         :return: List of Channels
         :rtype: list[Scope]
         """
+        if not isinstance(txt_datafile, str):
+            raise TypeError("txt_datafile must be type str to show the full filepath.")
+        if not isinstance(f0, (float, int)) != f0 is not None:
+            raise TypeError("f0 must be type float/int/None.")
+
         channel_source = 'GeckoCIRCUITS simulation'
 
         # Read variables from first line in gecko output file
@@ -499,6 +551,13 @@ class Scope:
         :return: power in a dataset
         :rtype: Scope
         """
+        if not isinstance(channel_voltage, Scope):
+            raise TypeError("channel_voltage must be type Scope.")
+        if not isinstance(channel_current, Scope):
+            raise TypeError("channel_current must be type Scope.")
+        if not isinstance(channel_label, str) != channel_label is not None:
+            raise TypeError("channel_label must be type str or None.")
+
         channel_data = channel_voltage.channel_data * channel_current.channel_data
         if channel_label is None and channel_voltage.channel_label is not None \
                 and channel_current.channel_label is not None:
@@ -525,6 +584,10 @@ class Scope:
         :return: returns a scope-class, what integrates the input values
         :rtype: Scope
         """
+        if not isinstance(channel_power, Scope):
+            raise TypeError("channel_power must be type Scope.")
+        if not isinstance(channel_label, str):
+            raise TypeError("channel_label must be type str.")
         channel_energy = np.array([])
         timestep = channel_power.channel_time[2] - channel_power.channel_time[1]
         for count, _ in enumerate(channel_power.channel_time):
@@ -561,6 +624,8 @@ class Scope:
         channel_data_result = np.zeros_like(channels[0].channel_data)
         channel_label_result = ''
         for channel in channels:
+            if not isinstance(channel, Scope):
+                raise TypeError("channel must be type Scope.")
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
             channel_data_result += channel.channel_data
@@ -593,6 +658,8 @@ class Scope:
         channel_data_result = np.zeros_like(channels[0].channel_data)
         channel_label_result = ''
         for channel_count, channel in enumerate(channels):
+            if not isinstance(channel, Scope):
+                raise TypeError("channel must be type Scope.")
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
             if channel_count == 0:
@@ -800,6 +867,8 @@ class Scope:
             timebase = 's'
 
         for count, channel_dataset in enumerate(channel_datasets):
+            if not isinstance(channel_dataset, Scope):
+                raise TypeError("channel_dataset must be type Scope.")
             modified_time = channel_dataset.channel_time
             modified_data = channel_dataset.channel_data
 
@@ -843,6 +912,8 @@ class Scope:
         >>> channel = pss.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         >>> channel.fft()
         """
+        if not isinstance(plot, bool):
+            raise TypeError("plot must be type bool.")
         period_vector = np.array([self.channel_time, self.channel_data])
 
         # Log flow control
@@ -850,8 +921,8 @@ class Scope:
 
         return functions.fft(period_vector, mode='time', plot=plot)
 
-    def short_to_period(self, f0: Optional[float] = None, time_period: Optional[float] = None,
-                        start_time: Optional[float] = None):
+    def short_to_period(self, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
+                        start_time: Union[float, int, None] = None):
         """Short a given Scope object to a period.
 
         :param f0: frequency in Hz
@@ -861,6 +932,13 @@ class Scope:
         :param start_time: start time in seconds
         :type start_time: float
         """
+        if not isinstance(f0, (float, int)) != f0 is not None:
+            raise TypeError("f0 must be type float/int/None.")
+        if not isinstance(time_period, (float, int)) != f0 is not None:
+            raise TypeError("time_period must be type float/int/None.")
+        if not isinstance(start_time, (float, int)) != f0 is not None:
+            raise TypeError("start_time must be type float/int/None.")
+
         if start_time is None:
             start_time = self.channel_time[0]
         # check for correct input parameter
@@ -962,7 +1040,10 @@ class Scope:
         :param fig_name: figure name for pdf file naming
         :type fig_name: str
         """
-        figure.savefig(f"{fig_name}.pdf")
+        if isinstance(fig_name, str):
+            figure.savefig(f"{fig_name}.pdf")
+        else:
+            raise TypeError("figure name must be of type str.")
 
         # Log flow control
         logging.debug(f"{class_modulename} :Name of file to save={fig_name}.pdf")
