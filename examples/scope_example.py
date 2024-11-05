@@ -76,7 +76,7 @@ mean_diff_il_ob = diff_il_ob.mean()
 # Average of absolute values
 absmean_diff_il_ob = diff_il_ob.absmean()
 # Print calculated values
-print(f"Rootmeansquare={rms_diff_il_ob}\n Average value={mean_diff_il_ob}\n Absolute average value={absmean_diff_il_ob}\n")
+print(f"Rootmeansquare={rms_diff_il_ob}\nAverage value={mean_diff_il_ob}\nAbsolute average value={absmean_diff_il_ob}\n")
 # Plot results
 pss.Scope.plot_channels([diff_il_ob])
 # Plot results

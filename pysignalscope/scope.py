@@ -169,13 +169,12 @@ class Scope:
         if channel_linestyle is not None:
             self.channel_linestyle = channel_linestyle
             modify_flag = True
-        pass
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl", self.modulename)
+        # Log flow control
+        logging.debug(f"{self.modulename} :FlCtl")
         # Log, if no modification is requested
         if not modify_flag:
-            logging.info("%s : No modification is requested", self.modulename)
+            logging.info(f"{self.modulename} : No modification is requested", )
 
     def copy(self):
         """Create a deepcopy of Channel."""
@@ -211,10 +210,10 @@ class Scope:
 
         # Log user error Empty csv-file
         if channel_count == 0:
-            logging.info("%s : Invalid file or file without content", class_modulename)
+            logging.info(f"{class_modulename} : Invalid file or file without content")
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Channelcounts %i,File %s", class_modulename, channel_counts, csv_file)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Channelcounts {channel_counts},File {csv_file}")
 
         return channel_list
 
@@ -249,17 +248,17 @@ class Scope:
 
             # Log user error Empty csv-file
             if not ch1_data:
-                logging.info("%s : file %s->Invalid file or file without content", class_modulename, csv_file)
+                logging.info(f"{class_modulename} : file {csv_file}->Invalid file or file without content")
 
             tektronix_channels.append(Scope(time, ch1_data, channel_source=channel_source,
                                             channel_label=os.path.basename(csv_file).replace('.csv', '')))
 
         # Log user error Empty csv-file
         if not tektronix_channels:
-            logging.info("%s : %s Invalid file list or files without content", class_modulename, csv_files)
+            logging.info(f"{class_modulename} : file {csv_files}-> Invalid file list or files without content")
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl %s", class_modulename, csv_files)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl {csv_files}")
 
         return tektronix_channels
 
@@ -291,12 +290,12 @@ class Scope:
 
         # Log user error Empty csv-file
         if channel_count == 0:
-            logging.info("%s : Invalid file or file without content", class_modulename)
+            logging.info(f"{class_modulename} : Invalid file or file without content", class_modulename)
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Channelcounts %i,File %s", class_modulename, channel_count, csv_file)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Channelcounts {channel_count},File {csv_file}")
 
-        # Log user Error ASA
+        # Log user Error
         return channel_list
 
     @classmethod
@@ -334,10 +333,10 @@ class Scope:
 
         # Log user error Empty csv-file
         if not lecroy_channel:
-            logging.info("%s : %s Invalid file list or files without content", class_modulename, csv_files)
+            logging.info(f"{class_modulename} : {csv_files} Invalid file list or files without content")
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl %s", class_modulename, csv_file)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl {csv_file}")
 
         return lecroy_channel
 
@@ -378,11 +377,11 @@ class Scope:
         else:  # "else-case"
             channel = None
             # Log user info
-            logging.info("%s : Requested channel number %i is out of range (1-8)", class_modulename, channel_number)
+            logging.info(f"{class_modulename} : Requested channel number {channel_number} is out of range (1-8)")
             print("No fitting channel found!")
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Channelnummber: %i Assigned  channel: %s", class_modulename, channel_number, channel)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Channelnummber: {channel_number} Assigned  channel: {channel}")
 
         if channel is not None:
             data = scope.waveform(channel)
@@ -435,8 +434,8 @@ class Scope:
         single_dataset_channel = Scope(period_vector_t_i[0], period_vector_t_i[1],
                                        channel_label=channel_label, channel_unit=channel_unit)
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Amount of Data: %i", class_modulename, len(single_dataset_channel))
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of Data: {len(single_dataset_channel)}")
 
         return single_dataset_channel
 
@@ -481,8 +480,8 @@ class Scope:
                 list_return_dataset.append(Scope(time_modified, list_simulation_data[count_var],
                                                  channel_label=variable, channel_source=channel_source))
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Value of count_var %i", class_modulename, count_var)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Value of count_var {count_var}")
 
         return list_return_dataset
 
@@ -507,8 +506,8 @@ class Scope:
         channel_power = Scope(channel_voltage.channel_time, channel_data, channel_label=channel_label,
                               channel_unit='W')
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Amount of channel data elements=%i", class_modulename, len(channel_data))
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={len(channel_data)}")
 
         return channel_power
 
@@ -538,11 +537,11 @@ class Scope:
                 channel_energy = np.append(channel_energy, channel_energy[-1] + energy)
         if channel_label is None:
             # Log missing user input
-            logging.info("%s :Label was not defined. So default value is used", class_modulename)
+            logging.info(f"{class_modulename} :Label was not defined. So default value is used", class_modulename)
             channel_label = "Energy"
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Amount of channel data elements=%i", class_modulename, count)
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={count}")
 
         return Scope(channel_power.channel_time, channel_energy, channel_label=channel_label, channel_unit='J')
 
@@ -570,10 +569,10 @@ class Scope:
 
         # Log missing channel input, if amout of channels is one
         if len(channels) == 1:
-            logging.info("%s :Only on channel was provided. No channel was added.", class_modulename)
-            # Log flow control ASA
+            logging.info(f"{class_modulename} :Only on channel was provided. No channel was added.")
+            # Log flow control
 
-        logging.debug("%s :FlCtl Amount of channels, which are added=%i", class_modulename, len(channels))
+        logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are added={len(channels)}")
 
         return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
                      channel_label=channel_label_result)
@@ -605,11 +604,11 @@ class Scope:
 
         # Log missing channel input, if amout of channels is one
         if len(channels) == 1:
-            logging.info("%s :Only on channel was provided. No channel was substracted.", class_modulename)
-            # Log flow control ASA
+            logging.info(f"{class_modulename} :Only on channel was provided. No channel was substracted.")
+            # Log flow control
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Amount of channels, which are substracted=%i", class_modulename, len(channels))
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are substracted={len(channels)}")
 
         return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
                      channel_label=channel_label_result)
@@ -678,8 +677,8 @@ class Scope:
                 else:
                     # in case of no matches, use a custom label. The channel_unit is used for this.
                     plt.ylabel(channel_dataset.channel_unit)
-            # Log flow control ASA
-            logging.debug("%s :FlCtl Amount of plots within one channel=%i", class_modulename, len(plot_list))
+            # Log flow control
+            logging.debug(f"{class_modulename} :FlCtl Amount of plots within one channel={len(plot_list)}")
 
         else:  # This is for multiple plots with multiple graphs
             fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=[x/25.4 for x in figure_size] if figure_size is not None else None)
@@ -704,15 +703,15 @@ class Scope:
                 else:
                     # in case of no matches, use a custom label. The channel_unit is used for this.
                     axs[plot_count].set_ylabel(channel_dataset.channel_unit)
-            # Log flow control ASA
-            logging.debug("%s :FlCtl Amount of plots within multiple channels=%i", class_modulename, plot_count)
+            # Log flow control
+            logging.debug(f"{class_modulename} :FlCtl Amount of plots within multiple channels={plot_count}")
 
         plt.tight_layout()
         if figure_directory is not None:
             plt.savefig(figure_directory, bbox_inches="tight")
 
-        # Log flow control ASA
-        logging.debug("%s :FlCtl Amount of channels, which are displayed=%i", class_modulename, len(channel))
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are displayed={len(channel)}")
 
         plt.show()
         return fig
@@ -742,7 +741,7 @@ class Scope:
             channel_list = Scope.from_lecroy(csv_file)
         else:
             # Log user warning
-            logging.warning("%s :Scope %s is unknown. Set to Tektronix scope", class_modulename, scope)
+            logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope", class_modulename, scope)
             # Display message
             warnings.warn('Can not detect scope type. Set to Tektronix scope', stacklevel=2)
             channel_list = Scope.from_tektronix(csv_file)
@@ -762,7 +761,7 @@ class Scope:
                                 timebase=timebase)
 
         # Log flow control
-        logging.debug("%s :Data of file %s are displayed (Type %s)", class_modulename, csv_file, scope)
+        logging.debug(f"{class_modulename} :Data of file {csv_file} are displayed (Type {scope})")
 
     @classmethod
     def compare_channels(cls, *channel_datasets: 'Scope', shift: Optional[List[Union[None, float]]] = None,
@@ -795,7 +794,7 @@ class Scope:
             time_factor = 1e-12
         else:
             # Log user info
-            logging.info("%s :time base was not defined or unknown (Set to %s).\n timebase are set to second", class_modulename, timebase)
+            logging.info(f"{class_modulename} :time base was not defined or unknown (Set to {timebase}).\n timebase are set to second")
 
             time_factor = 1
             timebase = 's'
@@ -826,7 +825,7 @@ class Scope:
         plt.show()
 
         # Log flow control
-        logging.debug("%s :Amount of displayed datasets=%i", class_modulename, len(channel_datasets))
+        logging.debug(f"{class_modulename} :Amount of displayed datasets={len(channel_datasets)}")
 
     def fft(self, plot: bool = True):
         """
@@ -847,7 +846,7 @@ class Scope:
         period_vector = np.array([self.channel_time, self.channel_data])
 
         # Log flow control
-        logging.debug("%s :Amount of channel data=%i", class_modulename, len(self.channel_data))
+        logging.debug(f"{self.modulename} :Amount of channel data={len(self.channel_data)}")
 
         return functions.fft(period_vector, mode='time', plot=plot)
 
@@ -874,7 +873,7 @@ class Scope:
             end_time = start_time + 1/f0
         self.modify(channel_time_cut_min=start_time, channel_time_cut_max=end_time)
         # Log flow control
-        logging.debug("%s :Time range: %f to %f", class_modulename, start_time, end_time)
+        logging.debug(f"{self.modulename} :Time range: {start_time} to {end_time}")
 
     def plot(self, timebase: str = 's', figure_size: Optional[Tuple] = None, figure_directory: Optional[str] = None):
         """
@@ -901,7 +900,7 @@ class Scope:
         Returns: rms(self.channel_data).
         """
         # Log flow control
-        logging.debug("%s :Number of channel data=%i", class_modulename, len(self.channel_data))
+        logging.debug(f"{self.modulename} :Number of channel data={len(self.channel_data)}")
 
         return np.sqrt(np.mean(self.channel_data ** 2))
 
@@ -912,7 +911,7 @@ class Scope:
         Returns: mean(self.channel_data).
         """
         # Log flow control
-        logging.debug("%s :Number of channel data=%i", class_modulename, len(self.channel_data))
+        logging.debug(f"{self.modulename} :Number of channel data={len(self.channel_data)}")
 
         return np.mean(self.channel_data)
 
@@ -923,7 +922,7 @@ class Scope:
         Returns: abs(mean(self.channel_data)).
         """
         # Log flow control
-        logging.debug("%s :Number of channel data=%i", class_modulename, len(self.channel_data))
+        logging.debug(f"{self.modulename} :Number of channel data={len(self.channel_data)}")
 
         return np.mean(np.abs(self.channel_data))
 
@@ -934,7 +933,7 @@ class Scope:
         Returns: abs(self.channel_data).
         """
         # Log flow control
-        logging.debug("%s :Number of channel data=%i", class_modulename, len(self.channel_data))
+        logging.debug(f"{self.modulename} :Number of channel data={len(self.channel_data)}")
 
         self.channel_data = np.abs(self.channel_data)
         if self.channel_label is not None:
@@ -951,7 +950,7 @@ class Scope:
             self.channel_label = self.channel_label + '²'
 
         # Log flow control
-        logging.debug("%s :Number of channel data=%i", class_modulename, len(self.channel_data))
+        logging.debug(f"{self.modulename} :Number of channel data={len(self.channel_data)}")
 
     @staticmethod
     def save(figure: plt.figure, fig_name: str):
@@ -966,7 +965,7 @@ class Scope:
         figure.savefig(f"{fig_name}.pdf")
 
         # Log flow control
-        logging.debug("%s :Name of file to save=%s", class_modulename, f"{fig_name}.pdf")
+        logging.debug(f"{class_modulename} :Name of file to save={fig_name}.pdf")
 
 
 if __name__ == '__main__':
