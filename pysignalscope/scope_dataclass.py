@@ -9,6 +9,8 @@ import numpy as np
 
 @dataclasses.dataclass
 class Scope:
+    """Scope data class."""
+
     # mandatory measurement data
     channel_time: np.array
     channel_data: np.array
