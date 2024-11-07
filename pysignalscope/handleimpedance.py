@@ -289,7 +289,9 @@ class HandleImpedance:
             ax2.grid()
             fig.show()
 
-        return [(channel.channel_frequency, frequency_real_part), (channel.channel_frequency, frequency_imag_part)]
+        frequency = copy.deepcopy(channel.channel_frequency)
+
+        return [(frequency, frequency_real_part), (frequency, frequency_imag_part)]
 
     @staticmethod
     def calc_rlc(channel: Impedance, type_rlc: str, f_calc_c: float, f_calc_l: float, plot_figure: bool = False) -> tuple:
