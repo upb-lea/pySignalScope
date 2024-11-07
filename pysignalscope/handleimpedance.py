@@ -105,40 +105,43 @@ class HandleImpedance:
         :return: Modified impedance object
         :rtype: Impedance
         """
+        # deep copy to not modify the original input data
+        modified_channel = copy.deepcopy(channel)
+
         if channel_label is not None:
-            channel.channel_label = channel_label
+            modified_channel.channel_label = channel_label
         if channel_unit is not None:
-            channel.channel_unit = channel_unit
+            modified_channel.channel_unit = channel_unit
         if channel_impedance_factor is not None:
-            channel.channel_impedance = channel.channel_impedance * channel_impedance_factor
+            modified_channel.channel_impedance = modified_channel.channel_impedance * channel_impedance_factor
         if channel_impedance_offset is not None:
-            channel.channel_impedance = channel.channel_impedance + channel_impedance_offset
+            modified_channel.channel_impedance = modified_channel.channel_impedance + channel_impedance_offset
         if channel_color is not None:
-            channel.channel_color = channel_color
+            modified_channel.channel_color = channel_color
         if channel_source is not None:
-            channel.channel_source = channel_source
+            modified_channel.channel_source = channel_source
         if channel_linestyle is not None:
-            channel.channel_linestyle = channel_linestyle
+            modified_channel.channel_linestyle = channel_linestyle
 
         if channel_frequency_cut_min is not None:
             index_list_to_remove = []
-            for count, value in enumerate(channel.channel_frequency):
+            for count, value in enumerate(modified_channel.channel_frequency):
                 if value < channel_frequency_cut_min:
                     index_list_to_remove.append(count)
-            channel.channel_frequency = np.delete(channel.channel_frequency, index_list_to_remove)
-            channel.channel_impedance = np.delete(channel.channel_impedance, index_list_to_remove)
-            channel.channel_phase = np.delete(channel.channel_phase, index_list_to_remove)
+            modified_channel.channel_frequency = np.delete(modified_channel.channel_frequency, index_list_to_remove)
+            modified_channel.channel_impedance = np.delete(modified_channel.channel_impedance, index_list_to_remove)
+            modified_channel.channel_phase = np.delete(modified_channel.channel_phase, index_list_to_remove)
 
         if channel_frequency_cut_max is not None:
             index_list_to_remove = []
-            for count, value in enumerate(channel.channel_frequency):
+            for count, value in enumerate(modified_channel.channel_frequency):
                 if value > channel_frequency_cut_max:
                     index_list_to_remove.append(count)
-            channel.channel_frequency = np.delete(channel.channel_frequency, index_list_to_remove)
-            channel.channel_impedance = np.delete(channel.channel_impedance, index_list_to_remove)
-            channel.channel_phase = np.delete(channel.channel_phase, index_list_to_remove)
+            modified_channel.channel_frequency = np.delete(modified_channel.channel_frequency, index_list_to_remove)
+            modified_channel.channel_impedance = np.delete(modified_channel.channel_impedance, index_list_to_remove)
+            modified_channel.channel_phase = np.delete(modified_channel.channel_phase, index_list_to_remove)
 
-        return channel
+        return modified_channel
 
     @staticmethod
     def copy(channel: Impedance) -> Impedance:
