@@ -12,10 +12,10 @@ import pysignalscope as pss
 [voltage_prim, voltage_sec, current_prim, current_sec] = pss.HandleScope.from_tektronix('scope_example_data_tek.csv')
 
 # Add labels and units to channels
-voltage_prim = pss.HandleScope.modify(voltage_prim, channel_label='voltage primary', channel_unit='V', )
+voltage_prim = pss.HandleScope.modify(voltage_prim, channel_label='voltage primary', channel_unit='V')
 voltage_sec = pss.HandleScope.modify(voltage_sec, channel_label='voltage secondary', channel_unit='V')
 current_prim = pss.HandleScope.modify(current_prim, channel_label='current primary', channel_unit='A')
-current_sec = pss.HandleScope.modify(current_sec, channel_label='Secondary current', channel_unit='A')
+current_sec = pss.HandleScope.modify(current_sec, channel_label='current secondary', channel_unit='A')
 
 # Show gain and DC-offset
 current_sec = pss.HandleScope.modify(current_sec, channel_data_factor=1.3, channel_data_offset=10)
@@ -27,7 +27,7 @@ pss.HandleScope.save(fig1, 'test')
 # short channels to a single period, perform FFT for current waveforms
 current_prim = pss.HandleScope.short_to_period(current_prim, f0=200000)
 current_prim = pss.HandleScope.modify(current_prim, channel_time_shift=5e-6)
-# pss.HandleScope.fft(current_prim)
+pss.HandleScope.fft(current_prim)
 
 # ------------------------------------------
 # Example 2: Read curves from LeCroy csv-Files and GeckoCirucits. Compare these signals.
@@ -50,7 +50,7 @@ gecko_il_ob = gecko_data[-1]
 gecko_il_ob = pss.HandleScope.modify(gecko_il_ob, channel_data_factor=-1, channel_label='il_ob_gecko', channel_unit='A', channel_color='g')
 
 # compare both waveforms
-# pss.HandleScope.compare_channels(meas_il_ib, gecko_il_ib, meas_il_ob, gecko_il_ob, shift=[-67.53e-6, 0, -67.53e-6, 0], timebase='us')
+pss.HandleScope.compare_channels(meas_il_ib, gecko_il_ib, meas_il_ob, gecko_il_ob, shift=[-67.53e-6, 0, -67.53e-6, 0], timebase='us')
 
 # Shift data
 meas_il_ob = pss.HandleScope.modify(meas_il_ob, channel_time_shift=-67.53e-6)

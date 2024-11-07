@@ -140,42 +140,52 @@ class HandleScope:
         :return: Scope object
         :rtype: Scope
         """
-        if isinstance(channel_label, str) or channel_label is None:
-            channel.channel_label = channel_label
+        channel_modified = copy.deepcopy(channel)
+
+        if isinstance(channel_label, str):
+            channel_modified.channel_label = channel_label
             modify_flag = True
+        elif channel_label is None:
+            pass
         else:
             raise TypeError("channel_label must be type str or None")
-        if isinstance(channel_unit, str) or channel_unit is None:
-            channel.channel_unit = channel_unit
+        if isinstance(channel_unit, str):
+            channel_modified.channel_unit = channel_unit
             modify_flag = True
+        elif channel_unit is None:
+            pass
         else:
             raise TypeError("channel_unit must be type str or None")
         if isinstance(channel_data_factor, (int, float)):
-            channel.channel_data = channel.channel_data * channel_data_factor
+            channel_modified.channel_data = channel_modified.channel_data * channel_data_factor
             modify_flag = True
         elif channel_data_factor is None:
             pass
         else:
             raise TypeError("channel_data_factor must be type float or None")
         if isinstance(channel_data_offset, (int, float)):
-            channel.channel_data = channel.channel_data + channel_data_offset
+            channel_modified.channel_data = channel_modified.channel_data + channel_data_offset
             modify_flag = True
         elif channel_data_offset is None:
             pass
         else:
             raise TypeError("channel_data_offset must be type float or None")
-        if isinstance(channel_color, str) or channel_color is None:
-            channel.channel_color = channel_color
+        if isinstance(channel_color, str):
+            channel_modified.channel_color = channel_color
             modify_flag = True
+        elif channel_color is None:
+            pass
         else:
             raise TypeError("channel_color must be type str or None")
-        if isinstance(channel_source, str) or channel_source is None:
-            channel.channel_source = channel_source
+        if isinstance(channel_source, str):
+            channel_modified.channel_source = channel_source
             modify_flag = True
+        elif channel_source is None:
+            pass
         else:
             raise TypeError("channel_source must be type str or None")
         if isinstance(channel_time_shift, (int, float)):
-            channel.channel_time = channel.channel_time + channel_time_shift
+            channel_modified.channel_time = channel_modified.channel_time + channel_time_shift
             modify_flag = True
         elif channel_time_shift is None:
             pass
@@ -183,15 +193,15 @@ class HandleScope:
             raise TypeError("channel_time_shift must be type float or None")
         if isinstance(channel_time_shift_rotate, (int, float)):
             # figure out current max time
-            current_max_time = channel.channel_time[-1]
-            current_period = current_max_time - channel.channel_time[0]
+            current_max_time = channel_modified.channel_time[-1]
+            current_period = current_max_time - channel_modified.channel_time[0]
             # shift all times
-            channel.channel_time = channel.channel_time + channel_time_shift_rotate
-            channel.channel_time[channel.channel_time > current_max_time] = channel.channel_time[channel.channel_time > current_max_time] - current_period
+            channel_modified.channel_time = channel_modified.channel_time + channel_time_shift_rotate
+            channel_modified.channel_time[channel_modified.channel_time > current_max_time] = channel_modified.channel_time[channel_modified.channel_time > current_max_time] - current_period
             # due to rolling time-shift, channel_time and channel_data needs to be re-sorted.
-            new_index = np.argsort(channel.channel_time)
-            channel.channel_time = np.array(channel.channel_time)[new_index]
-            channel.channel_data = np.array(channel.channel_data)[new_index]
+            new_index = np.argsort(channel_modified.channel_time)
+            channel_modified.channel_time = np.array(channel_modified.channel_time)[new_index]
+            channel_modified.channel_data = np.array(channel_modified.channel_data)[new_index]
             modify_flag = True
         elif channel_time_shift_rotate is None:
             pass
@@ -200,13 +210,13 @@ class HandleScope:
 
         if isinstance(channel_time_cut_min, (int, float)):
             index_list_to_remove = []
-            if channel_time_cut_min < channel.channel_time[0]:
-                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel.channel_time[0]}). This is not allowed!")
-            for count, value in enumerate(channel.channel_time):
+            if channel_time_cut_min < channel_modified.channel_time[0]:
+                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel_modified.channel_time[0]}). This is not allowed!")
+            for count, value in enumerate(channel_modified.channel_time):
                 if value < channel_time_cut_min:
                     index_list_to_remove.append(count)
-            channel.channel_time = np.delete(channel.channel_time, index_list_to_remove)
-            channel.channel_data = np.delete(channel.channel_data, index_list_to_remove)
+            channel_modified.channel_time = np.delete(channel_modified.channel_time, index_list_to_remove)
+            channel_modified.channel_data = np.delete(channel_modified.channel_data, index_list_to_remove)
             modify_flag = True
         elif channel_time_cut_min is None:
             pass
@@ -215,20 +225,20 @@ class HandleScope:
 
         if isinstance(channel_time_cut_max, (int, float)):
             index_list_to_remove = []
-            if channel_time_cut_max > channel.channel_time[-1]:
-                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel.channel_time[-1]}). This is not allowed!")
-            for count, value in enumerate(channel.channel_time):
+            if channel_time_cut_max > channel_modified.channel_time[-1]:
+                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel_modified.channel_time[-1]}). This is not allowed!")
+            for count, value in enumerate(channel_modified.channel_time):
                 if value > channel_time_cut_max:
                     index_list_to_remove.append(count)
-            channel.channel_time = np.delete(channel.channel_time, index_list_to_remove)
-            channel.channel_data = np.delete(channel.channel_data, index_list_to_remove)
+            channel_modified.channel_time = np.delete(channel_modified.channel_time, index_list_to_remove)
+            channel_modified.channel_data = np.delete(channel_modified.channel_data, index_list_to_remove)
             modify_flag = True
         elif channel_time_cut_max is None:
             pass
         else:
             raise TypeError("channel_time_cut_max must be type float or None")
         if isinstance(channel_linestyle, str):
-            channel.channel_linestyle = channel_linestyle
+            channel_modified.channel_linestyle = channel_linestyle
             modify_flag = True
         elif channel_linestyle is None:
             pass
@@ -236,12 +246,12 @@ class HandleScope:
             raise TypeError("channel_linestyle must be type str or None")
 
         # Log flow control
-        logging.debug(f"{channel.modulename} :FlCtl")
+        logging.debug(f"{channel_modified.modulename} :FlCtl")
         # Log, if no modification is requested
         if not modify_flag:
-            logging.info(f"{channel.modulename} : No modification is requested", )
+            logging.info(f"{channel_modified.modulename} : No modification is requested", )
 
-        return channel
+        return channel_modified
 
     @staticmethod
     def copy(channel: Scope):
