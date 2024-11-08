@@ -254,8 +254,12 @@ class HandleScope:
         return channel_modified
 
     @staticmethod
-    def copy(channel: Scope):
-        """Create a deepcopy of Channel."""
+    def copy(channel: Scope) -> Scope:
+        """Create a deepcopy of Channel.
+
+        :param channel: Scope channel object
+        :type channel: Scope
+        """
         return copy.deepcopy(channel)
 
     @staticmethod
@@ -1028,6 +1032,8 @@ class HandleScope:
         """
         Calculate the RMS of a given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
+        :param channel: Scope channel object
+        :type channel: Scope
         Returns: rms(self.channel_data).
         """
         # Log flow control
@@ -1040,6 +1046,8 @@ class HandleScope:
         """
         Calculate the mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
+        :param channel: Scope channel object
+        :type channel: Scope
         Returns: mean(self.channel_data).
         """
         # Log flow control
@@ -1052,6 +1060,8 @@ class HandleScope:
         """
         Calculate the absolute mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
+        :param channel: Scope channel object
+        :type channel: Scope
         Returns: abs(mean(self.channel_data)).
         """
         # Log flow control
@@ -1064,32 +1074,40 @@ class HandleScope:
         """
         Modify the existing scope channel so that the signal is rectified.
 
+        :param channel: Scope channel object
+        :type channel: Scope
         Returns: abs(channel.channel_data).
         """
+        channel_modified = copy.deepcopy(channel)
+
         # Log flow control
-        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
+        logging.debug(f"{channel_modified.modulename} :Number of channel data={len(channel_modified.channel_data)}")
 
-        channel.channel_data = np.abs(channel.channel_data)
-        if channel.channel_label is not None:
-            channel.channel_label = '|' + channel.channel_label + '|'
+        channel_modified.channel_data = np.abs(channel_modified.channel_data)
+        if channel_modified.channel_label is not None:
+            channel_modified.channel_label = '|' + channel_modified.channel_label + '|'
 
-        return channel
+        return channel_modified
 
     @staticmethod
     def square(channel: Scope) -> Scope:
         """
         Square the data channel.
 
+        :param channel: Scope channel object
+        :type channel: Scope
         Returns: channel.channel_data ** 2.
         """
-        channel.channel_data = channel.channel_data ** 2
-        if channel.channel_label is not None:
-            channel.channel_label = channel.channel_label + '²'
+        channel_modified = copy.deepcopy(channel)
+
+        channel_modified.channel_data = channel_modified.channel_data ** 2
+        if channel_modified.channel_label is not None:
+            channel_modified.channel_label = channel_modified.channel_label + '²'
 
         # Log flow control
-        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
+        logging.debug(f"{channel_modified.modulename} :Number of channel data={len(channel_modified.channel_data)}")
 
-        return channel
+        return channel_modified
 
     @staticmethod
     def save(figure: plt.figure, fig_name: str):
