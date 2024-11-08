@@ -206,8 +206,6 @@ class HandleImpedance:
         :type channel_list: List
         :param figure_size: figure size as tuple in inch, e.g. (4,3)
         :type figure_size: Tuple
-        :return: None
-        :rtype: None
         """
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=[x / 25.4 for x in figure_size] if figure_size is not None else None)
         for channel in channel_list:
@@ -233,8 +231,6 @@ class HandleImpedance:
 
         :param channel_list: List with impedances
         :type channel_list: List
-        :return: None
-        :rtype: None
         """
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
         for channel in channel_list:
