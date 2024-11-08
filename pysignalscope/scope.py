@@ -197,7 +197,8 @@ class HandleScope:
             current_period = current_max_time - channel_modified.channel_time[0]
             # shift all times
             channel_modified.channel_time = channel_modified.channel_time + channel_time_shift_rotate
-            channel_modified.channel_time[channel_modified.channel_time > current_max_time] = channel_modified.channel_time[channel_modified.channel_time > current_max_time] - current_period
+            channel_modified.channel_time[channel_modified.channel_time > current_max_time] = (
+                channel_modified.channel_time[channel_modified.channel_time > current_max_time] - current_period)
             # due to rolling time-shift, channel_time and channel_data needs to be re-sorted.
             new_index = np.argsort(channel_modified.channel_time)
             channel_modified.channel_time = np.array(channel_modified.channel_time)[new_index]
@@ -211,7 +212,8 @@ class HandleScope:
         if isinstance(channel_time_cut_min, (int, float)):
             index_list_to_remove = []
             if channel_time_cut_min < channel_modified.channel_time[0]:
-                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel_modified.channel_time[0]}). This is not allowed!")
+                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel_modified.channel_time[0]}). "
+                                 f"This is not allowed!")
             for count, value in enumerate(channel_modified.channel_time):
                 if value < channel_time_cut_min:
                     index_list_to_remove.append(count)
@@ -226,7 +228,8 @@ class HandleScope:
         if isinstance(channel_time_cut_max, (int, float)):
             index_list_to_remove = []
             if channel_time_cut_max > channel_modified.channel_time[-1]:
-                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel_modified.channel_time[-1]}). This is not allowed!")
+                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel_modified.channel_time[-1]}). "
+                                 f"This is not allowed!")
             for count, value in enumerate(channel_modified.channel_time):
                 if value > channel_time_cut_max:
                     index_list_to_remove.append(count)
