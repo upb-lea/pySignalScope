@@ -920,7 +920,7 @@ class HandleScope:
         return fig
 
     @staticmethod
-    def check_limits(cur_value: float, max_value: float, min_value: float) -> bool:
+    def check_limits(cur_value: float, min_value: float, max_value: float) -> bool:
         """
         Check if the current value is within the given range.
 
@@ -980,9 +980,9 @@ class HandleScope:
         :type shiftstep_x: float
         :param shiftstep_y: shift step in y-direction (optional parameter)
         :type shiftstep_y: float
-        :param displayrange_x: Display range limits in x-direction  (optional parameter)
+        :param displayrange_x: Display range limits in x-direction (min_x, max_x)  (optional parameter)
         :type displayrange_x: tuple of float
-        :param displayrange_y: Display range limits in x-direction  (optional parameter)
+        :param displayrange_y: Display range limits in x-direction (min_y, max_y) (optional parameter)
         :type displayrange_y: tuple of float
 
         :return: List of x and y-shifts per channel
@@ -1023,7 +1023,7 @@ class HandleScope:
         # Initialize values
         # Shift steps x
         if isinstance(shiftstep_x, float) or isinstance(shiftstep_x, int):
-            if not HandleScope.check_limits(shiftstep_x, HandleScope.max_shiftstep_x, HandleScope.min_shiftstep_x):
+            if not HandleScope.check_limits(shiftstep_x, HandleScope.min_shiftstep_x, HandleScope.max_shiftstep_x):
                 HandleScope.shiftstep_x = def_shiftstep_x
                 # logging
             else:
@@ -1033,7 +1033,7 @@ class HandleScope:
 
         # Shift steps y
         if isinstance(shiftstep_y, float) or isinstance(shiftstep_y, int):
-            if not HandleScope.check_limits(shiftstep_y, HandleScope.max_shiftstep_y, HandleScope.min_shiftstep_y):
+            if not HandleScope.check_limits(shiftstep_y, HandleScope.min_shiftstep_y, HandleScope.max_shiftstep_y):
                 HandleScope.shiftstep_y = def_shiftstep_y
                 # logging
             else:
@@ -1041,6 +1041,36 @@ class HandleScope:
                 # logging
         elif shiftstep_y is None:
             HandleScope.shiftstep_y = def_shiftstep_y
+
+        # Display range x
+        if isinstance(displayrange_x, tuple) and len(displayrange_x) == 2 \
+           and isinstance(displayrange_x[0], (float, int)) and isinstance(displayrange_x[1], (float, int)):
+            # Allow +-100 Percent: Calculate the delta
+            global_delta = HandleScope.global_max_x-HandleScope.global_min_x
+            if (displayrange_y[0] < HandleScope.global_min_x-HandleScope.global_delta_x) \
+               or (displayrange_x[1] > HandleScope.global_max_x+HandleScope.global_delta_x) \
+               or global_delta < (HandleScope.min_shiftstep_x * 5):
+                # logging error
+                pass
+            else:
+                # Overtake the limits
+                HandleScope.global_min_y = displayrange_y[0]
+                HandleScope.global_max_y = displayrange_y[1]
+
+        # Display range y
+        if isinstance(displayrange_y, tuple) and len(displayrange_y) == 2 \
+           and isinstance(displayrange_y[0], (float, int)) and isinstance(displayrange_y[1], (float, int)):
+            # Allow +-100 Percent: Calculate the delta
+            global_delta = HandleScope.global_max_y-HandleScope.global_min_y
+            if (displayrange_y[0] < (HandleScope.global_min_y - HandleScope.global_delta_y)) \
+               or (displayrange_y[1] > (HandleScope.global_max_y+HandleScope.global_delta_y)) \
+               or (global_delta < (HandleScope.min_shiftstep_y*5)):
+                # logging error
+                pass
+            else:
+                # Overtake the limits
+                HandleScope.global_min_y = displayrange_y[0]
+                HandleScope.global_max_y = displayrange_y[1]
 
         # Define mimimum zoom window as min_shiftstep_[xy]*5
         HandleScope.zoom_delta_y = HandleScope.min_shiftstep_y*5
@@ -1090,7 +1120,15 @@ class HandleScope:
         HandleScope.shift_text_box.on_submit(HandleScope.submit)
 
         # Selected dataset (Show label)
-        selplotlabel = HandleScope.shiftfig.text(0.6, 0.3, HandleScope.channelplotlist[0].get_label(), ha='left', va='top', fontsize=12)
+        labeltext = HandleScope.channelplotlist[0].get_label()
+        # Check, if label text is not set
+        if labeltext is None:
+            labeltext = "●"
+        else:
+            labeltext = "● "+labeltext
+        # Set labeltext in figure
+        HandleScope.selplotlabel = HandleScope.shiftfig.text(0.6, 0.3, labeltext, ha='left', va='top', fontsize=12)
+        HandleScope.selplotlabel.set_color(HandleScope.channelplotlist[HandleScope.chn_index].get_color())
 
         # Register eventhandler
         HandleScope.shiftfig.canvas.mpl_connect('button_press_event', HandleScope.on_press)
@@ -1137,8 +1175,13 @@ class HandleScope:
         labeltext = HandleScope.channelplotlist[HandleScope.chn_index].get_label()
         # Check, if label text is not set
         if labeltext is None:
-            labeltext = ""
+            labeltext = "●"
+        else:
+            labeltext = "● "+labeltext
+
         HandleScope.selplotlabel.set_text(labeltext)
+        HandleScope.selplotlabel.set_color(HandleScope.channelplotlist[HandleScope.chn_index].get_color())
+
         HandleScope.shiftfig.canvas.draw_idle()  # Aktualisiert die Darstellung
         HandleScope.last_val = 0
         HandleScope.shift_slider.set_val(0)
@@ -1229,7 +1272,8 @@ class HandleScope:
         if HandleScope.shift_dir == 1:
             delta = val-HandleScope.last_val
             dshift = (delta*HandleScope.shiftstep_y)
-            shift = HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir]+dshift
+            HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir] = \
+                (HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir]+dshift)
             # Shift values in y-direction
             new_y = [value + dshift for value in HandleScope.channelplotlist[HandleScope.chn_index].get_ydata()]
             # Update dataset
@@ -1247,8 +1291,9 @@ class HandleScope:
             HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir] = shift
             # Update the plot
             HandleScope.shiftfig.canvas.draw_idle()
-            # Store current slider value
-            HandleScope.last_val = val
+
+        # Store current slider value
+        HandleScope.last_val = val
 
     @staticmethod
     def reset_slider(event):

@@ -30,10 +30,10 @@ pss.HandleScope.save(fig1, 'test')
 shiftlist = pss.HandleScope.plot_shiftchannels([voltage_prim, voltage_sec])
 
 # print the list
-ch_i=0
+ch_i = 0
 for ch_shift in shiftlist:
-  print(f"shifts of channel {ch_i}=x->{ch_shift[0]},y->{ch_shift[1]}")
-  ch_i=ch_i+1
+    print(f"shifts of channel {ch_i}=x->{ch_shift[0]},y->{ch_shift[1]}")
+    ch_i = ch_i+1
 
 # short channels to a single period, perform FFT for current waveforms
 current_prim = pss.HandleScope.short_to_period(current_prim, f0=200000)
