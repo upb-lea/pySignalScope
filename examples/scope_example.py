@@ -5,7 +5,9 @@ import pysignalscope as pss
 # pss.global_plot_settings_font_latex()
 
 # ------------------------------------------
-# Example 1: Read curves from tektronix scope csv file, plot the signals and perform FFT
+# Example 1: Read curves from tektronix scope csv file,
+#            shift 2 curves
+#            plot the signals and perform FFT
 # ------------------------------------------
 
 # Read curves from scope csv file
@@ -23,6 +25,15 @@ current_sec = pss.HandleScope.modify(current_sec, channel_data_factor=1.3, chann
 # Plot channels
 fig1 = pss.HandleScope.plot_channels([voltage_prim, voltage_sec], [current_prim, current_sec], timebase='us')
 pss.HandleScope.save(fig1, 'test')
+
+# Shift first two channels and plot the shift of these channels
+shiftlist = pss.HandleScope.plot_shiftchannels([voltage_prim, voltage_sec])
+
+# print the list
+ch_i=0
+for ch_shift in shiftlist:
+  print(f"shifts of channel {ch_i}=x->{ch_shift[0]},y->{ch_shift[1]}")
+  ch_i=ch_i+1
 
 # short channels to a single period, perform FFT for current waveforms
 current_prim = pss.HandleScope.short_to_period(current_prim, f0=200000)
