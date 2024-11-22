@@ -936,9 +936,12 @@ class HandleScope:
         The current value will be check according the given limits.
         If the value is within the limit the function provide True as return value.
 
-        :cur_value: value to check
-        :min_value: lowest valid value
-        :max_value: highest valid value
+        :param cur_value: value to check
+        :type cur_value: float
+        :param min_value: lowest valid value
+        :type min_value: float
+        :param max_value: highest valid value
+        :type max_value: float
 
         :return: condition result 'value is in range'
         :rtype: bool
@@ -972,6 +975,11 @@ class HandleScope:
         >>>     printf("Minimum difference could not be calculated")
         The minimum difference of a channel are calculated. A difference of 0 is ignored.
         The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
+
+        :param cur_channel: value to check
+        :type cur_channel: np.array
+        :param ch_id: lowest valid value
+        :type ch_id: any
 
         :return: [Validity of the minimum value, minimum value]
         :rtype: bool,float
@@ -1021,9 +1029,8 @@ class HandleScope:
         The parameters has to fullfill conditions:
         Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
 
-
-        :param channel: list of datasets
-        :type channel: list[Scope]
+        :param channels: list of datasets
+        :type channels: list[Scope]
         :param shiftstep_x: shift step in x-direction (optional parameter)
                             Has to be in range 'minimal difference of 2 points of the channels'
                             to ('displayed maximal x-value minus displayed minimal x-value')/10
@@ -1311,8 +1318,6 @@ class HandleScope:
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
-
-        :return: none
         """
         # Increment the index of the selekted channel
         HandleScope.chn_index = HandleScope.chn_index+1
@@ -1348,8 +1353,6 @@ class HandleScope:
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
-
-        :return: none
         """
         # Check shift direction
         if HandleScope.shift_dir == 1:
@@ -1383,8 +1386,6 @@ class HandleScope:
 
         :param text: Updated text
         :type text: string
-
-        :return: none
         """
         # Check shift direction
         if HandleScope.shift_dir == 1:
@@ -1445,8 +1446,6 @@ class HandleScope:
 
         :param val: Current slider position
         :type val: float
-
-        :return: none
         """
         # Check shift direction
         if HandleScope.shift_dir == 1:
@@ -1485,8 +1484,6 @@ class HandleScope:
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
-
-        :return: none
         """
         HandleScope.last_val = 0
         HandleScope.shift_slider.set_val(0)
@@ -1509,8 +1506,6 @@ class HandleScope:
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
-
-        :return: none
         """
         # Check, if the button press was within the area
         if event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y):
@@ -1552,8 +1547,6 @@ class HandleScope:
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
-
-        :return: none
         """
         # Check Zoomstate
         if HandleScope.zoom_state == HandleScope.Zoom_State.ZoomSelect:
@@ -1582,8 +1575,6 @@ class HandleScope:
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
-
-        :return: none
         """
         # Check, if the left button was released
         if event.button == 1:
