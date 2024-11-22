@@ -61,16 +61,17 @@ class HandleScope:
     shiftstep_x = None
     shiftstep_y = None
     # Limits of shift steps
+    shiftstep_x: List[float] = [0, 0]
     min_shiftstep_x = None
     max_shiftstep_x = None
     min_shiftstep_y = None
     max_shiftstep_y = None
 
     # Maximal values
-    global_min_y = None
-    global_max_x = None
-    global_min_y = None
-    global_max_y = None
+    display_min_y = None
+    display_max_x = None
+    display_min_y = None
+    display_max_y = None
 
     # Minimal zoom values
     zoom_delta_y = None
@@ -924,27 +925,23 @@ class HandleScope:
         """
         Check if the current value is within the given range.
 
-        Examples:
-        >>> import pysignalscope as pss
-        >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
-        >>> pss.HandleScope.plot_channels([ch1, ch2, ch3],[ch4])
-        Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
+        Example for a valid value:
+        >>> bool valid
+        >>> value = 10.2
+        >>> valid = HandleScope.check_limits(value, 3.2,11.3)
+        >>> if valid:
+        >>>     print(f"{value} is within the limit")
+        >>> else:
+        >>>     printf(f"{value} is invalid")
+        The current value will be check according the given limits.
+        If the value is within the limit the function provide True as return value.
 
-        Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
-        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
-        Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
+        :cur_value: value to check
+        :min_value: lowest valid value
+        :max_value: highest valid value
 
-        :param channel: list of datasets
-        :type channel: list[Scope]
-        :param timebase: timebase, can be 's', 'ms', 'us', 'ns' or 'ps'
-        :type timebase: str
-        :param figure_size: None for auto-fit; fig_size for matplotlib (width, length in mm)
-        :type figure_size: Tuple
-        :param figure_directory: full path with file extension
-        :type figure_directory: str
-
-        :return: Plots
-        :rtype: None
+        :return: condition result 'value is in range'
+        :rtype: bool
         """
         # Init return variable
         ret_val = True
@@ -959,6 +956,48 @@ class HandleScope:
         return ret_val
 
     @staticmethod
+    def calculate_min_diff(cur_channel: np.array, ch_id: any) -> [bool, float]:
+        """
+        Check if the current value is within the given range.
+
+        Calculate the minimal absolute differene of the values within the array (values will not be sorted).
+
+        Example for a valid value:
+        >>> bool valid
+        >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
+        >>> valid,mindiff = HandleScope.calculate_min_diff(channel5,5)
+        >>> if valid:
+        >>>     print(f"{mindiff} is the minimum difference")
+        >>> else:
+        >>>     printf("Minimum difference could not be calculated")
+        The minimum difference of a channel are calculated. A difference of 0 is ignored.
+        The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
+
+        :return: [Validity of the minimum value, minimum value]
+        :rtype: bool,float
+        """
+        # Search minimal difference
+        min_diff = 0
+        validity = False
+
+        # Check, if channel has got more, than one entry
+        if cur_channel.size > 1:
+            diff_channel = np.diff(cur_channel)
+            if np.min(diff_channel) <= 0 or np.max(diff_channel) == 0:
+                # Channel has got less equal on entry
+                logging.warning(f"Channel {ch_id} is invalid (no ascending order or multiple values assigned to one coordinate")
+            else:
+                min_diff = np.min(diff_channel[diff_channel > 0])
+                # Return value is valid
+                validity = True
+        else:
+            # Channel has got less equal on entry
+            logging.warning(f"Channel {ch_id} has got less equal on entry and will not be considered")
+
+        # Return validity and minimal difference
+        return [validity, min_diff]
+
+    @staticmethod
     def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None, \
                            displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None):
         """
@@ -967,22 +1006,45 @@ class HandleScope:
         Examples:
         >>> import pysignalscope as pss
         >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
-        >>> pss.HandleScope.plot_shiftchannels([ch1, ch2, ch3],[ch4])
-        Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
+        >>> pss.HandleScope.plot_shiftchannels([ch1, ch2])
+        Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
+        left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
+        If you release the left mouse button the area is marked. By moving the mouse within the area an perform
+        a button press, you confirm and you zoom in the area. If you perform the left mouse button click outside
+        of the marked area, you reject the selection. By clicking the right mouse button you zoom out.
+        There is a zoom limit in both directions. In this case, the rectangle shows the possible area (becomes larger),
+        after you have release the left mouse button.
 
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
         For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
         Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
+        The parameters has to fullfill conditions:
+        Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
+
 
         :param channel: list of datasets
         :type channel: list[Scope]
         :param shiftstep_x: shift step in x-direction (optional parameter)
+                            Has to be in range 'minimal difference of 2 points of the channels'
+                            to ('displayed maximal x-value minus displayed minimal x-value')/10
         :type shiftstep_x: float
         :param shiftstep_y: shift step in y-direction (optional parameter)
+                            Has to be in range ('displayed maximal y-value minus displayed minimal y-value')/200
+                            to ('displayed maximal y-value minus displayed minimal y-value')/10
         :type shiftstep_y: float
         :param displayrange_x: Display range limits in x-direction (min_x, max_x)  (optional parameter)
+                            Definition: delta_min_x = 100 * 'minimum distance between 2 samples', min_x = 'minimal x-value (of all channels)',
+                                        max_x = 'maximal x-value (of all channels)',  delta_x = max_x-min_x
+                            The range for displayrange_x[0]: From min_x-delta_x to max_x-delta_min_x
+                            The range for displayrange_x[1]: From min_x+delta_min_x to max_x+delta_x
+                            and displayrange_x[1]-displayrange_x[0]>=delta_min_x
         :type displayrange_x: tuple of float
-        :param displayrange_y: Display range limits in x-direction (min_y, max_y) (optional parameter)
+        :param displayrange_y: Display range limits in y-direction (min_y, max_y) (optional parameter)
+                            Definition: delta_y = max_y-min_y, min_y = 'minimal y-value (of all channels)',
+                                        max_y = 'maximal y-value (of all channels)',  delta_min_y = delta_y/100
+                            The range for displayrange_y[0]: From min_y-delta_y to max_y-delta_min_y*50
+                            The range for displayrange_y[1]: From min_y+delta_min_y*50 to max_y-delta_y
+                            and displayrange_y[1]-displayrange_y[0]>=delta_min_y*50
         :type displayrange_y: tuple of float
 
         :return: List of x and y-shifts per channel
@@ -996,85 +1058,92 @@ class HandleScope:
 
         # For-loop over channels
         for channel in channels[1:]:
-            HandleScope.global_min_x = np.min([global_min_x, np.min(channel.channel_time)])
-            HandleScope.global_max_x = np.max([global_max_x, np.max(channel.channel_time)])
-            HandleScope.global_min_y = np.min([global_min_y, np.min(channel.channel_data)])
-            HandleScope.global_max_y = np.max([global_max_y, np.max(channel.channel_data)])
+            global_min_x = np.min([global_min_x, np.min(channel.channel_time)])
+            global_max_x = np.max([global_max_x, np.max(channel.channel_time)])
+            global_min_y = np.min([global_min_y, np.min(channel.channel_data)])
+            global_max_y = np.max([global_max_y, np.max(channel.channel_data)])
 
-        # Calculate max_shiftstepx as delta_max/10, min_shiftstepx as delta_max/200  and
+        # Search minimal difference
+        min_diff_channel = 0
+        # For-loop over channels to calculate the minimum distance between the values
+        for channel_id, channel in enumerate(channels[1:], start=1):
+            validity, min_diff = HandleScope.calculate_min_diff(channel.channel_time, channel_id)
+            # Check, if the value is valid
+            if validity:
+                # Check, if a minimum is not set (min_diff_channel == 0
+                if min_diff_channel == 0:
+                    # First entry
+                    min_diff_channel = min_diff
+                else:
+                    # Additinal entries
+                    min_diff_channel = np.min([min_diff_channel, min_diff])
+            # Check if no channel provides a minimum
+            if min_diff_channel == 0:
+                # Invalid type of shift step x
+                logging.error("Any channel has got invalid values (no ascending order or multiple values for x.")
+                # Stop the programm
+                raise ValueError("Any channel has got invalid values (no ascending order or multiple values for x.")
+
+        # Calculate max_shiftstepx as delta_max/10, min_shiftstepx as min_diff_channel  and
         # default value as delta_max/100
-        delta_x = (HandleScope.global_max_x-HandleScope.global_min_x)
-        # Prüfe auf 0
+        delta_x = (global_max_x-global_min_x)
+        # Check, if delta_x=0
         if delta_x == 0:
-            delta_x = HandleScope.global_max_x
+            delta_x = global_max_x
+        # Set the shift steps in x-direction
         HandleScope.max_shiftstep_x = delta_x/10
-        HandleScope.min_shiftstep_x = delta_x/200
-        def_shiftstep_x = delta_x/100
+        HandleScope.min_shiftstep_x = min_diff_channel
+        def_shiftstep_x = HandleScope.max_shiftstep_x/50
+        # Check, if default shift is less mimimum shift
+        if def_shiftstep_x < HandleScope.min_shiftstep_x:
+            def_shiftstep_x = HandleScope.min_shiftstep_x
+
         # Calculate max_shiftstepy as delta_max/10, min_shiftstepx as delta_max/200  and
         # default value as delta_max/100
-        delta_y = (HandleScope.global_max_y-HandleScope.global_min_y)
-        # Prüfe auf 0
+        delta_y = (global_max_y-global_min_y)
+        # Check, if delta_y=0
         if delta_y == 0:
-            delta_y = HandleScope.global_max_y
+            delta_y = global_max_y
+        # Set the shift steps in y-direction
         HandleScope.max_shiftstep_y = delta_y/10
         HandleScope.min_shiftstep_y = delta_y/200
-        def_shiftstep_y = delta_y/100
+        def_shiftstep_y = HandleScope.max_shiftstep_y/100
 
         # Initialize values
         # Shift steps x
         if isinstance(shiftstep_x, float) or isinstance(shiftstep_x, int):
             if not HandleScope.check_limits(shiftstep_x, HandleScope.min_shiftstep_x, HandleScope.max_shiftstep_x):
                 HandleScope.shiftstep_x = def_shiftstep_x
-                # logging
+                # Shift step in x-Direction is out of range
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                                f"The range isn from {HandleScope.min_shiftstep_x} to {HandleScope.max_shiftstep_x}")
             else:
                 HandleScope.shiftstep_x = shiftstep_x
         elif shiftstep_x is None:
             HandleScope.shiftstep_x = def_shiftstep_x
+        else:
+            # Invalid type of shift step x
+            logging.error("Type of optional parameter 'shiftstep_x' has to be 'float'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'shiftstep_x' has to be 'float'.")
 
         # Shift steps y
         if isinstance(shiftstep_y, float) or isinstance(shiftstep_y, int):
             if not HandleScope.check_limits(shiftstep_y, HandleScope.min_shiftstep_y, HandleScope.max_shiftstep_y):
                 HandleScope.shiftstep_y = def_shiftstep_y
-                # logging
+                # Shift step in y-Direction is out of range
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                                f"The range isn from {HandleScope.min_shiftstep_x} to {HandleScope.max_shiftstep_x}")
             else:
                 HandleScope.shiftstep_y = shiftstep_y
                 # logging
         elif shiftstep_y is None:
             HandleScope.shiftstep_y = def_shiftstep_y
-
-        # Display range x
-        if isinstance(displayrange_x, tuple) and len(displayrange_x) == 2 \
-           and isinstance(displayrange_x[0], (float, int)) and isinstance(displayrange_x[1], (float, int)):
-            # Allow +-100 Percent: Calculate the delta
-            global_delta = HandleScope.global_max_x-HandleScope.global_min_x
-            if (displayrange_y[0] < HandleScope.global_min_x-HandleScope.global_delta_x) \
-               or (displayrange_x[1] > HandleScope.global_max_x+HandleScope.global_delta_x) \
-               or global_delta < (HandleScope.min_shiftstep_x * 5):
-                # logging error
-                pass
-            else:
-                # Overtake the limits
-                HandleScope.global_min_y = displayrange_y[0]
-                HandleScope.global_max_y = displayrange_y[1]
-
-        # Display range y
-        if isinstance(displayrange_y, tuple) and len(displayrange_y) == 2 \
-           and isinstance(displayrange_y[0], (float, int)) and isinstance(displayrange_y[1], (float, int)):
-            # Allow +-100 Percent: Calculate the delta
-            global_delta = HandleScope.global_max_y-HandleScope.global_min_y
-            if (displayrange_y[0] < (HandleScope.global_min_y - HandleScope.global_delta_y)) \
-               or (displayrange_y[1] > (HandleScope.global_max_y+HandleScope.global_delta_y)) \
-               or (global_delta < (HandleScope.min_shiftstep_y*5)):
-                # logging error
-                pass
-            else:
-                # Overtake the limits
-                HandleScope.global_min_y = displayrange_y[0]
-                HandleScope.global_max_y = displayrange_y[1]
-
-        # Define mimimum zoom window as min_shiftstep_[xy]*5
-        HandleScope.zoom_delta_y = HandleScope.min_shiftstep_y*5
-        HandleScope.zoom_delta_x = HandleScope.min_shiftstep_x*5
+        else:
+            # Invalid type of shift step y
+            logging.error("Type of optional parameter 'shiftstep_y' has to be 'float'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'shiftstep_y' has to be 'float'.")
 
         # Create plot and clear lists
         HandleScope.shiftfig, HandleScope.zoom_ax = plt.subplots()
@@ -1086,6 +1155,78 @@ class HandleScope:
             cur_channelplot, = HandleScope.zoom_ax.plot(channel.channel_time, channel.channel_data, label=channel.channel_label, color=channel.channel_color)
             HandleScope.channelplotlist.append(cur_channelplot)
             HandleScope.shiftlist.append([0, 0])
+
+        # Init minimum and maximum values of the display window if required
+        HandleScope.display_min_x, HandleScope.display_max_x = HandleScope.zoom_ax.get_xlim()
+        HandleScope.display_min_y, HandleScope.display_max_y = HandleScope.zoom_ax.get_ylim()
+
+        # Overtake the default display range as max zoom out range.
+        HandleScope.zoom_ax.set_ylim(HandleScope.display_min_y, HandleScope.display_max_y)
+
+        # Display range x
+        if isinstance(displayrange_x, tuple) and len(displayrange_x) == 2 \
+           and isinstance(displayrange_x[0], (float, int)) and isinstance(displayrange_x[1], (float, int)):
+            # Allow +-100 Percent: Calculate the delta
+            global_delta = global_max_x-global_min_x
+            display_delta = displayrange_x[1]-displayrange_x[0]
+            if (displayrange_x[0] < global_min_x-global_delta) \
+               or (displayrange_x[1] > global_max_x+global_delta) \
+               or global_delta < (HandleScope.min_shiftstep_x * 5):
+                # Display range in x-direction exeeds the limit
+                logging.warning(f"Display range in x-direction of min,max: {displayrange_x[0]},{displayrange_x[1]}  exeeds the limit "
+                                f"min,max: {global_min_x-global_delta},{global_max_x+global_delta}.")
+            elif display_delta < 100*HandleScope.min_shiftstep_x:
+                # Display range in x-direction exeeds the limit
+                logging.warning(f"Display range in x-direction of max-min: {display_delta} is to small (should be {100*HandleScope.min_shiftstep_x})"
+                                f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+            else:
+                # Overtake the limits tp current zoom window
+                HandleScope.zoom_ax.set_xlim(displayrange_x[0], displayrange_x[1])
+                # Overtake values as new display range, if the range becomes higher
+                if displayrange_x[0] < HandleScope.display_min_x:
+                    HandleScope.display_min_x = displayrange_x[0]
+                if displayrange_x[1] > HandleScope.display_max_x:
+                    HandleScope.display_max_x = displayrange_x[1]
+        elif displayrange_x is not None:
+            # Invalid type of Display range x
+            logging.error("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
+
+        # Display range y
+        if isinstance(displayrange_y, tuple) and len(displayrange_y) == 2 \
+           and isinstance(displayrange_y[0], (float, int)) and isinstance(displayrange_y[1], (float, int)):
+            # Allow +-100 Percent: Calculate the delta
+            global_delta = global_max_y-global_min_y
+            display_delta = displayrange_y[1] - displayrange_y[0]
+            if (displayrange_y[0] < (global_min_y - global_delta)) \
+               or (displayrange_y[1] > (global_max_y+global_delta)) \
+               or (global_delta < (HandleScope.min_shiftstep_y*5)):
+                # Display range in y-direction exeeds the limit
+                logging.warning(f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exeeds the limit "
+                                f"min,max: {global_min_y-global_delta},{global_max_y+global_delta}.")
+            elif display_delta < global_delta/100:
+                # Display range in x-direction exeeds the limit
+                logging.warning(f"Display range in y-direction of max-min: {display_delta} is to small (should be {global_delta/100})"
+                                f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+            else:
+                # Overtake the limits
+                HandleScope.zoom_ax.set_ylim(displayrange_y[0], displayrange_y[1])
+                # Overtake values as new display range, if the range becomes higher
+                if displayrange_y[0] < HandleScope.display_min_y:
+                    HandleScope.display_min_y = displayrange_y[0]
+                if displayrange_y[1] > HandleScope.display_max_y:
+                    HandleScope.display_max_y = displayrange_y[1]
+
+        elif displayrange_y is not None:
+            # Invalid type of Display range y
+            logging.error("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
+
+        # Define mimimum zoom window as min_shiftstep_[xy]*5
+        HandleScope.zoom_delta_y = HandleScope.min_shiftstep_y*5
+        HandleScope.zoom_delta_x = HandleScope.min_shiftstep_x*5
 
         # Reset current channel index
         HandleScope.chn_index = 0
@@ -1140,8 +1281,15 @@ class HandleScope:
         HandleScope.shift_slider = Slider(slider_ax, 'Shift', -10.0, 10.0, valinit=0)  # Slider values
         # Link slider with callback
         HandleScope.shift_slider.on_changed(HandleScope.shiftchannel)
-
+        # Get the figure box object for check purpose
         HandleScope.shiftfigbox = HandleScope.zoom_ax.get_window_extent()
+
+        # Log flow control
+        logging.debug(f"{class_modulename} :\nDisplay range x:{HandleScope.display_min_x},{HandleScope.display_max_x} " 
+                      f"Display range y:{HandleScope.display_min_y},{HandleScope.display_max_y}\n"                    
+                      f"Shift step x min,def,max:{HandleScope.min_shiftstep_x}, {def_shiftstep_x},{HandleScope.max_shiftstep_x}\n" 
+                      f"Shift step y min,def,max:{HandleScope.min_shiftstep_y}, {def_shiftstep_y},{HandleScope.max_shiftstep_y}\n" 
+                      f"Zoom area x,y:{HandleScope.zoom_delta_x}, {HandleScope.zoom_delta_y}")
 
         plt.show()
 
@@ -1186,6 +1334,9 @@ class HandleScope:
         HandleScope.last_val = 0
         HandleScope.shift_slider.set_val(0)
 
+        # Log flow control
+        logging.debug(f"{class_modulename} :Channel number {HandleScope.chn_index} is selected.")
+
     # Callback-Funktion für das Aktualisieren des Plots
     @staticmethod
     def toggle_xy_plot(event):
@@ -1213,12 +1364,15 @@ class HandleScope:
             # Set button text
             HandleScope.dir_shift_button.label.set_text("Shift y")
             HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_y))
-
+        # Reset the values
         HandleScope.last_val = 0
         HandleScope.shift_slider.set_val(0)
-        HandleScope.shiftfig.canvas.draw_idle()  # Aktualisiert die Darstellung
+        # Update the plot
+        HandleScope.shiftfig.canvas.draw_idle()
 
-    # Callbackfunktion for text update
+        # Log flow control
+        logging.debug(f"{class_modulename} :Shift direction is toogled to {HandleScope.shift_dir} (0=x, 1=y).")
+
     @staticmethod
     def submit(text):
         """
@@ -1236,23 +1390,49 @@ class HandleScope:
         if HandleScope.shift_dir == 1:
             HandleScope.shiftstep_y = float(text)
             if HandleScope.shiftstep_y > HandleScope.max_shiftstep_y:
+                # Shift step x too high
+                logging.info(f"{class_modulename} :Shift step y {HandleScope.shiftstep_y} too high and set to {HandleScope.max_shiftstep_y}")
+                # Correct the value
                 HandleScope.shiftstep_y = HandleScope.max_shiftstep_y
                 HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_y))
+                # Log flow control
+                logging.info(f"{class_modulename} :Shift step y too small.{HandleScope.shiftstep_y}")
             elif HandleScope.shiftstep_y < HandleScope.min_shiftstep_y:
+                # Shift step x too small
+                logging.info(f"{class_modulename} :Shift step y {HandleScope.shiftstep_y} too small and set to {HandleScope.min_shiftstep_y}")
+                # Correct the value
                 HandleScope.shiftstep_y = HandleScope.min_shiftstep_y
                 HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_y))
+
+            # Log flow control
+            logging.debug(f"{class_modulename} :Shift step y = {HandleScope.shiftstep_y}")
+
         else:
             HandleScope.shiftstep_x = float(text)
             if HandleScope.shiftstep_x > HandleScope.max_shiftstep_x:
+                # Shift step x too high
+                logging.info(f"{class_modulename} :Shift step x {HandleScope.shiftstep_y} too high and set to {HandleScope.max_shiftstep_x}")
+                # Correct the value
                 HandleScope.shiftstep_x = HandleScope.max_shiftstep_x
                 HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_x))
             elif HandleScope.shiftstep_x < HandleScope.min_shiftstep_x:
+                # Shift step x too small
+                logging.info(f"{class_modulename} :Shift step x {HandleScope.shiftstep_x} too small and set to {HandleScope.min_shiftstep_x}")
+                # Correct the value
                 HandleScope.shiftstep_x = HandleScope.min_shiftstep_x
                 HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_x))
 
+        # Log flow control
+        logging.debug(f"{class_modulename}: Shift step x = {HandleScope.shiftstep_x},Shift step y = {HandleScope.shiftstep_y}")
+
+        # Reset the values
         HandleScope.last_val = 0
         HandleScope.shift_slider.set_val(0)
+        # Update the plot
         HandleScope.shiftfig.canvas.draw_idle()
+
+        # Log flow control
+        logging.debug(f"{class_modulename} :Text is overtaken {HandleScope.shift_dir} (0=x, 1=y).")
 
     # Callback-Funktion for shift the channel by movement of the slider
     @staticmethod
@@ -1313,6 +1493,9 @@ class HandleScope:
         # Update the plot
         HandleScope.shiftfig.canvas.draw_idle()
 
+        # Log flow control
+        logging.debug(f"{class_modulename} :Slider reset was called.")
+
     # -- Zoomcallbacks ------------------------------------------------------------------------------------
 
     # Callback for mouse button pressed
@@ -1343,8 +1526,21 @@ class HandleScope:
                     HandleScope.zoom_state = HandleScope.Zoom_State.ZoomSelect
                     # Draw rectangle
                     HandleScope.zoom_ax.add_patch(HandleScope.zoom_rect)
+                    # Log flow control
+                    logging.debug(f"Start zoom at x: {HandleScope.zoom_start_x} y:{HandleScope.zoom_start_y}.")
                     # Update plot
                     plt.draw()
+                else:
+                    # Log flow control
+                    logging.debug(f"Button no. {event.button} is pressed when zoom state is {HandleScope.zoom_state}.")
+
+            else:
+                # Log flow control
+                logging.debug(f"Button no. {event.button} is pressed inside the plot.")
+
+        else:
+            # Log flow control
+            logging.debug("Button press outside of the plot.")
 
     @staticmethod
     def on_motion(event):
@@ -1413,18 +1609,23 @@ class HandleScope:
                         # Overtake rect
                         HandleScope.zoom_end_x = cur_end_x
                         HandleScope.zoom_start_x = cur_start_x
+                        # Log flow control
+                        logging.debug("Mimimum zoom in x-direction is reached. Zooming in x-direction is denied.")
                     elif cur_zoom_delta < HandleScope.zoom_delta_x:
+                        logging.debug(f"Selected range in x-direction {HandleScope.zoom_start_x} to {event.xdata} is too small.")
                         HandleScope.zoom_end_x = HandleScope.zoom_end_x+(HandleScope.zoom_delta_x-cur_zoom_delta)/2
                         # Check, if maximum limit is exceed
-                        if HandleScope.zoom_end_x > HandleScope.global_max_x:
-                            HandleScope.zoom_end_x = HandleScope.global_max_x
+                        if HandleScope.zoom_end_x > HandleScope.display_max_x:
+                            HandleScope.zoom_end_x = HandleScope.display_max_x
                             HandleScope.zoom_start_x = HandleScope.zoom_end_x-HandleScope.zoom_delta_x
                         else:  # Calculate mimimum window value
                             HandleScope.zoom_start_x = HandleScope.zoom_start_x-(HandleScope.zoom_delta_x - cur_zoom_delta)/2
                         # Check, if minimum limit is exceed
-                        if HandleScope.zoom_start_x < HandleScope.global_min_x:
-                            HandleScope.zoom_start_x = HandleScope.global_mix_x
+                        if HandleScope.zoom_start_x < HandleScope.display_min_x:
+                            HandleScope.zoom_start_x = HandleScope.display_mix_x
                             HandleScope.zoom_end_x = HandleScope.zoom_end_x+HandleScope.zoom_delta_x
+                        # Log flow control
+                        logging.debug(f"Range in x-direction is corrected to {HandleScope.zoom_start_x} to {HandleScope.zoom_end_x}.")
                     # Check minimum zoom limits of y-axe
                     cur_zoom_delta = HandleScope.zoom_end_y-HandleScope.zoom_start_y
                     # Read current range
@@ -1434,21 +1635,25 @@ class HandleScope:
                         # Overtake rect
                         HandleScope.zoom_end_y = cur_end_y
                         HandleScope.zoom_start_y = cur_start_y
+                        # Log flow control
+                        logging.debug("Mimimum zoom in y-direction is reached. Zooming in y-direction is denied.")
                     elif cur_zoom_delta < HandleScope.zoom_delta_y:
+                        logging.debug(f"Selected range in y-direction {HandleScope.zoom_start_y} to {event.ydata} is too small.")
                         HandleScope.zoom_end_y = HandleScope.zoom_end_y+(HandleScope.zoom_delta_y-cur_zoom_delta)/2
                         # Check, if maximum limit is exceed
-                        if HandleScope.zoom_end_y > HandleScope.global_max_y:
-                            HandleScope.zoom_end_y = HandleScope.global_max_y
+                        if HandleScope.zoom_end_y > HandleScope.display_max_y:
+                            HandleScope.zoom_end_y = HandleScope.display_max_y
                             HandleScope.zoom_start_y = HandleScope.zoom_end_y-HandleScope.zoom_delta_y
                         else:  # Calculate mimimum window value
                             HandleScope.zoom_start_y = (
                                 HandleScope.zoom_start_y - (HandleScope.zoom_delta_y - cur_zoom_delta) / 2
                             )
                         # Check, if minimum limit is exceed
-                        if HandleScope.zoom_start_y < HandleScope.global_min_y:
-                            HandleScope.zoom_start_y = HandleScope.global_mix_y
+                        if HandleScope.zoom_start_y < HandleScope.display_min_y:
+                            HandleScope.zoom_start_y = HandleScope.display_mix_y
                             HandleScope.zoom_end_y = HandleScope.zoom_end_y+HandleScope.zoom_delta_y
-                    # Redraw Zoom rectangle
+                        # Log flow control
+                        logging.debug(f"Range in y-direction is corrected to {HandleScope.zoom_start_y} to {HandleScope.zoom_end_y}.")
                     width = HandleScope.zoom_end_x - HandleScope.zoom_start_x
                     height = HandleScope.zoom_end_y - HandleScope.zoom_start_y
                     HandleScope.zoom_rect.set_width(width)
@@ -1465,9 +1670,12 @@ class HandleScope:
                     HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
                     # Update plot
                     plt.draw()
+                    # Log flow control
+                    logging.debug("Rectangle removed and reset zoom state to 'NoZoom'.")
+            # Check if Zoomstate is ZoomConfirm
             elif HandleScope.zoom_state == HandleScope.Zoom_State.ZoomConfirm:
                 # Check, if the button was pressed within the area
-                if HandleScope.zoom_rect is not None and event.inaxes:
+                if HandleScope.zoom_rect is not None and event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y):
                     if (event.xdata > HandleScope.zoom_start_x) and (event.ydata > HandleScope.zoom_start_y) and \
                        (event.xdata < HandleScope.zoom_end_x) and (event.ydata < HandleScope.zoom_end_y):
                         # Zoom into area
@@ -1481,6 +1689,8 @@ class HandleScope:
                     HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
                     # Update plot
                     plt.draw()
+                    # Log flow control
+                    logging.debug(f"Confirmed with button release at x,y: {event.xdata},{event.ydata}.")
         # Check if left button was released and Zoomstate was NoZoom and it was within area
         elif (event.button == 3 and HandleScope.zoom_state == HandleScope.Zoom_State.NoZoom) and \
              (event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y)):
@@ -1492,24 +1702,26 @@ class HandleScope:
             cur_y_start = cur_y_start-delta_half
             cur_y_end = cur_y_end + delta_half
             # Check maximal limits
-            if cur_y_start < HandleScope.global_min_y:
-                cur_y_start = HandleScope.global_min_y
-            if cur_y_end > HandleScope.global_max_y:
-                cur_y_end = HandleScope.global_max_y
+            if cur_y_start < HandleScope.display_min_y:
+                cur_y_start = HandleScope.display_min_y
+            if cur_y_end > HandleScope.display_max_y:
+                cur_y_end = HandleScope.display_max_y
             # Calculate factor 2 for x dimension
             delta_half = (cur_x_end-cur_x_start)/2
             cur_x_start = cur_x_start-delta_half
             cur_x_end = cur_x_end + delta_half
             # Check maximal limits
-            if cur_x_start < HandleScope.global_min_x:
-                cur_x_start = HandleScope.global_min_x
-            if cur_x_end > HandleScope.global_max_x:
-                cur_x_end = HandleScope.global_max_x
+            if cur_x_start < HandleScope.display_min_x:
+                cur_x_start = HandleScope.display_min_x
+            if cur_x_end > HandleScope.display_max_x:
+                cur_x_end = HandleScope.display_max_x
             # Zoom out
             HandleScope.zoom_ax.set_xlim(cur_x_start, cur_x_end)
             HandleScope.zoom_ax.set_ylim(cur_y_start, cur_y_end)
             # Update plot
             plt.draw()
+            # Log flow control
+            logging.debug(f"Zoom out to x-range: {cur_x_start} to {cur_x_end} and y-range:{cur_y_start} to {cur_y_end}.")
 
     @staticmethod
     def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's', \
@@ -1536,7 +1748,7 @@ class HandleScope:
             channel_list = HandleScope.from_lecroy(csv_file)
         else:
             # Log user warning
-            logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope", class_modulename, scope)
+            logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope")
             # Display message
             warnings.warn('Can not detect scope type. Set to Tektronix scope', stacklevel=2)
             channel_list = HandleScope.from_tektronix(csv_file)
