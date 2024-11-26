@@ -1309,7 +1309,7 @@ class HandleScope:
     # HandleScope.channelplotlist    HandleScope.shiftfig
     @staticmethod
     # Callback-Funktion to select the next channel
-    def next_channel(event):
+    def next_channel(event: any):
         """
         Callback-Funktion to select the next channel.
 
@@ -1377,7 +1377,7 @@ class HandleScope:
         logging.debug(f"{class_modulename} :Shift direction is toogled to {HandleScope.shift_dir} (0=x, 1=y).")
 
     @staticmethod
-    def submit(text):
+    def submit(text: str):
         """
         Callback-Funktion to notify the change of the shift step size.
 
@@ -1437,7 +1437,7 @@ class HandleScope:
 
     # Callback-Funktion for shift the channel by movement of the slider
     @staticmethod
-    def shiftchannel(val):
+    def shiftchannel(val: float):
         """
         Callback-Funktion for shift the channel by movement of the slider.
 
@@ -1475,7 +1475,7 @@ class HandleScope:
         HandleScope.last_val = val
 
     @staticmethod
-    def reset_slider(event):
+    def reset_slider(event: any):
         """
         Callback-Funktion to reset slider position to zero without movement of the channel.
 
@@ -1497,7 +1497,7 @@ class HandleScope:
 
     # Callback for mouse button pressed
     @staticmethod
-    def on_press(event):
+    def on_press(event: any):
         """
         Callback-Funktion to notify the mouse event if a pressed button.
 
@@ -1538,7 +1538,7 @@ class HandleScope:
             logging.debug("Button press outside of the plot.")
 
     @staticmethod
-    def on_motion(event):
+    def on_motion(event: any):
         """
         Callback-Funktion to notify the mouse movement.
 
@@ -1566,7 +1566,7 @@ class HandleScope:
                 HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
 
     @staticmethod
-    def on_release(event):
+    def on_release(event: any):
         """
         Callback-Funktion to notify the mouse event if a button is released.
 
