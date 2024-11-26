@@ -19,8 +19,8 @@ from pysignalscope.scope_dataclass import Scope
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()
 
-# Modul name für static methods
-class_modulename = "TransformerCalculation"
+# Modul name for static methods
+class_modulename = "Scope"
 
 # - Class definition ------------------------------------------------------------------------------
 
