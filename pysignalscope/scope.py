@@ -1307,19 +1307,19 @@ class HandleScope:
     # Callback methods for interactive shifting of plots
     ##############################################################################
     # HandleScope.channelplotlist    HandleScope.shiftfig
+
     @staticmethod
-    # Callback method to select the next channel
     def __next_channel(event: any):
         """
-        Callback method to select the next channel.
+        Select the next channel.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to a button.
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
-        # Increment the index of the selekted channel
+        # Increment the index of the selected channel
         HandleScope.chn_index = HandleScope.chn_index+1
         # Check on overflow
         if HandleScope.chn_index >= len(HandleScope.channelplotlist):
@@ -1346,9 +1346,9 @@ class HandleScope:
     @staticmethod
     def __toggle_xy_plot(event):
         """
-        Callback method to select the shift direction.
+        Toggle the shift direction.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to a button.
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1379,9 +1379,9 @@ class HandleScope:
     @staticmethod
     def __submit(text: str):
         """
-        Callback method to notify the change of the shift step size.
+        Change the shift-step size.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to an update of text.
 
         :param text: Updated text
@@ -1439,9 +1439,9 @@ class HandleScope:
     @staticmethod
     def __shiftchannel(val: float):
         """
-        Callback method for shift the channel by movement of the slider.
+        Shift the channel by movement of the slider.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to the slider
 
         :param val:  slider position
@@ -1477,7 +1477,7 @@ class HandleScope:
     @staticmethod
     def __reset_slider(event: any):
         """
-        Callback method to reset slider position to zero without movement of the channel.
+        Recalibrate the slider position to zero without movement of the channel.
 
         This method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to a button
@@ -1499,9 +1499,9 @@ class HandleScope:
     @staticmethod
     def __on_press(event: any):
         """
-        Callback method to notify the mouse event if a pressed button.
+        Notification event if a mouse button is pressed.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event on button press
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1540,9 +1540,9 @@ class HandleScope:
     @staticmethod
     def __on_motion(event: any):
         """
-        Callback method to notify the mouse movement.
+        Provide the current mouse position in case of mouse movement.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event on button press
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1568,9 +1568,9 @@ class HandleScope:
     @staticmethod
     def __on_release(event: any):
         """
-        Callback method to notify the mouse event if a button is released.
+        Notify the mouse button release.
 
-        This method is private (only for internal usage)
+        This callback method is private (only for internal usage)
         Called by mathplotlib-Event on button press
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
