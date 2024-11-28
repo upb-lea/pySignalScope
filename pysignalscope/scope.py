@@ -166,7 +166,7 @@ class HandleScope:
                      channel_linestyle=channel_linestyle,
                      modulename=class_modulename)
 
-    # - Function modify ------------------------------------------------------------------------------
+    # - Method modify ------------------------------------------------------------------------------
 
     @staticmethod
     def modify(channel: Scope, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
@@ -923,7 +923,7 @@ class HandleScope:
     @staticmethod
     def check_limits(cur_value: float, min_value: float, max_value: float) -> bool:
         """
-        Check if the current value is within the given range.
+        Check if the  value is within the given range.
 
         Example for a valid value:
         >>> bool valid
@@ -933,8 +933,8 @@ class HandleScope:
         >>>     print(f"{value} is within the limit")
         >>> else:
         >>>     printf(f"{value} is invalid")
-        The current value will be check according the given limits.
-        If the value is within the limit the function provide True as return value.
+        The  value will be check according the given limits.
+        If the value is within the limit the method provide True as return value.
 
         :param cur_value: value to check
         :type cur_value: float
@@ -961,7 +961,7 @@ class HandleScope:
     @staticmethod
     def calculate_min_diff(cur_channel: np.array, ch_id: any) -> [bool, float]:
         """
-        Check if the current value is within the given range.
+        Check if the  value is within the given range.
 
         Calculate the minimal absolute differene of the values within the array (values will not be sorted).
 
@@ -1114,7 +1114,7 @@ class HandleScope:
         # Set the shift steps in y-direction
         HandleScope.max_shiftstep_y = delta_y/10
         HandleScope.min_shiftstep_y = delta_y/200
-        def_shiftstep_y = HandleScope.max_shiftstep_y/100
+        def_shiftstep_y = delta_y/100
 
         # Initialize values
         # Shift steps x
@@ -1187,7 +1187,7 @@ class HandleScope:
                 logging.warning(f"Display range in x-direction of max-min: {display_delta} is to small (should be {100*HandleScope.min_shiftstep_x})"
                                 f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
             else:
-                # Overtake the limits tp current zoom window
+                # Overtake the limits tp  zoom window
                 HandleScope.zoom_ax.set_xlim(displayrange_x[0], displayrange_x[1])
                 # Overtake values as new display range, if the range becomes higher
                 if displayrange_x[0] < HandleScope.display_min_x:
@@ -1235,7 +1235,7 @@ class HandleScope:
         HandleScope.zoom_delta_y = HandleScope.min_shiftstep_y*5
         HandleScope.zoom_delta_x = HandleScope.min_shiftstep_x*5
 
-        # Reset current channel index
+        # Reset  channel index
         HandleScope.chn_index = 0
         # Set shift direction 0=x, 1=y
         HandleScope.shift_dir = 1
@@ -1250,22 +1250,22 @@ class HandleScope:
         # Button for selection of shift direction (x or y)
         button_ax = plt.axes([0.1, 0.15, 0.3, 0.075])  # Position and size of button
         HandleScope.dir_shift_button = Button(button_ax, 'Shift y')
-        HandleScope.dir_shift_button.on_clicked(HandleScope.toggle_xy_plot)  # Link to callback
+        HandleScope.dir_shift_button.on_clicked(HandleScope.__toggle_xy_plot)  # Link to callback
 
         # Button for selection of graph
         button_ax = plt.axes([0.1, 0.25, 0.3, 0.075])  # Position and size of button
         HandleScope.chn_sel_button = Button(button_ax, 'Sel. Plot')
-        HandleScope.chn_sel_button.on_clicked(HandleScope.next_channel)  # Verknüpft die Schaltfläche mit der Funktion
+        HandleScope.chn_sel_button.on_clicked(HandleScope.__next_channel)  # Verknüpft die Schaltfläche mit der Funktion
 
         # Button for reset slider position
-        button_ax = plt.axes([0.85, 0.1, 0.075, 0.05])  # Position and size of button
-        HandleScope.shsl_reset_button = Button(button_ax, 'Reset')
-        HandleScope.shsl_reset_button.on_clicked(HandleScope.reset_slider)  # Verknüpft die Schaltfläche mit der Funktion
+        button_ax = plt.axes([0.85, 0.1, 0.14, 0.1])  # Position and size of button
+        HandleScope.shsl_reset_button = Button(button_ax, 'Re-calibrate\nslider')
+        HandleScope.shsl_reset_button.on_clicked(HandleScope.__reset_slider)  # Verknüpft die Schaltfläche mit der Funktion
 
         # Textbox for step size
         text_box_ax = plt.axes([0.6, 0.15, 0.2, 0.05])
-        HandleScope.shift_text_box = TextBox(text_box_ax, 'Shiftstep:', initial="1")
-        HandleScope.shift_text_box.on_submit(HandleScope.submit)
+        HandleScope.shift_text_box = TextBox(text_box_ax, 'Shiftstep:', initial=str(HandleScope.shiftstep_y))
+        HandleScope.shift_text_box.on_submit(HandleScope.__submit)
 
         # Selected dataset (Show label)
         labeltext = HandleScope.channelplotlist[0].get_label()
@@ -1279,15 +1279,15 @@ class HandleScope:
         HandleScope.selplotlabel.set_color(HandleScope.channelplotlist[HandleScope.chn_index].get_color())
 
         # Register eventhandler
-        HandleScope.shiftfig.canvas.mpl_connect('button_press_event', HandleScope.on_press)
-        HandleScope.shiftfig.canvas.mpl_connect('motion_notify_event', HandleScope.on_motion)
-        HandleScope.shiftfig.canvas.mpl_connect('button_release_event', HandleScope.on_release)
+        HandleScope.shiftfig.canvas.mpl_connect('button_press_event', HandleScope.__on_press)
+        HandleScope.shiftfig.canvas.mpl_connect('motion_notify_event', HandleScope.__on_motion)
+        HandleScope.shiftfig.canvas.mpl_connect('button_release_event', HandleScope.__on_release)
 
-        # Slider for shift function
+        # Slider for shift method
         slider_ax = plt.axes([0.25, 0.1, 0.55, 0.03], facecolor="lightgoldenrodyellow")  # Position and size of sliders
         HandleScope.shift_slider = Slider(slider_ax, 'Shift', -10.0, 10.0, valinit=0)  # Slider values
         # Link slider with callback
-        HandleScope.shift_slider.on_changed(HandleScope.shiftchannel)
+        HandleScope.shift_slider.on_changed(HandleScope.__shiftchannel)
         # Get the figure box object for check purpose
         HandleScope.shiftfigbox = HandleScope.zoom_ax.get_window_extent()
 
@@ -1304,16 +1304,16 @@ class HandleScope:
         return HandleScope.shiftlist
 
     ##############################################################################
-    # Callback functions for interactive shifting of plots
+    # Callback methods for interactive shifting of plots
     ##############################################################################
     # HandleScope.channelplotlist    HandleScope.shiftfig
     @staticmethod
-    # Callback-Funktion to select the next channel
-    def next_channel(event: any):
+    # Callback method to select the next channel
+    def __next_channel(event: any):
         """
-        Callback-Funktion to select the next channel.
+        Callback method to select the next channel.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to a button.
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1342,13 +1342,13 @@ class HandleScope:
         # Log flow control
         logging.debug(f"{class_modulename} :Channel number {HandleScope.chn_index} is selected.")
 
-    # Callback-Funktion für das Aktualisieren des Plots
+    # Callback method für das Aktualisieren des Plots
     @staticmethod
-    def toggle_xy_plot(event):
+    def __toggle_xy_plot(event):
         """
-        Callback-Funktion to select the shift direction.
+        Callback method to select the shift direction.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to a button.
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1377,11 +1377,11 @@ class HandleScope:
         logging.debug(f"{class_modulename} :Shift direction is toogled to {HandleScope.shift_dir} (0=x, 1=y).")
 
     @staticmethod
-    def submit(text: str):
+    def __submit(text: str):
         """
-        Callback-Funktion to notify the change of the shift step size.
+        Callback method to notify the change of the shift step size.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to an update of text.
 
         :param text: Updated text
@@ -1395,7 +1395,6 @@ class HandleScope:
                 logging.info(f"{class_modulename} :Shift step y {HandleScope.shiftstep_y} too high and set to {HandleScope.max_shiftstep_y}")
                 # Correct the value
                 HandleScope.shiftstep_y = HandleScope.max_shiftstep_y
-                HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_y))
                 # Log flow control
                 logging.info(f"{class_modulename} :Shift step y too small.{HandleScope.shiftstep_y}")
             elif HandleScope.shiftstep_y < HandleScope.min_shiftstep_y:
@@ -1403,8 +1402,8 @@ class HandleScope:
                 logging.info(f"{class_modulename} :Shift step y {HandleScope.shiftstep_y} too small and set to {HandleScope.min_shiftstep_y}")
                 # Correct the value
                 HandleScope.shiftstep_y = HandleScope.min_shiftstep_y
-                HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_y))
 
+            HandleScope.shift_text_box.set_val(f"{HandleScope.shiftstep_y:.7g}")
             # Log flow control
             logging.debug(f"{class_modulename} :Shift step y = {HandleScope.shiftstep_y}")
 
@@ -1415,13 +1414,14 @@ class HandleScope:
                 logging.info(f"{class_modulename} :Shift step x {HandleScope.shiftstep_y} too high and set to {HandleScope.max_shiftstep_x}")
                 # Correct the value
                 HandleScope.shiftstep_x = HandleScope.max_shiftstep_x
-                HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_x))
             elif HandleScope.shiftstep_x < HandleScope.min_shiftstep_x:
                 # Shift step x too small
                 logging.info(f"{class_modulename} :Shift step x {HandleScope.shiftstep_x} too small and set to {HandleScope.min_shiftstep_x}")
                 # Correct the value
                 HandleScope.shiftstep_x = HandleScope.min_shiftstep_x
-                HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_x))
+
+            # Update the format if necessary
+            HandleScope.shift_text_box.set_val(f"{HandleScope.shiftstep_x:.7g}")
 
         # Log flow control
         logging.debug(f"{class_modulename}: Shift step x = {HandleScope.shiftstep_x},Shift step y = {HandleScope.shiftstep_y}")
@@ -1435,16 +1435,16 @@ class HandleScope:
         # Log flow control
         logging.debug(f"{class_modulename} :Text is overtaken {HandleScope.shift_dir} (0=x, 1=y).")
 
-    # Callback-Funktion for shift the channel by movement of the slider
+    # Callback method for shift the channel by movement of the slider
     @staticmethod
-    def shiftchannel(val: float):
+    def __shiftchannel(val: float):
         """
-        Callback-Funktion for shift the channel by movement of the slider.
+        Callback method for shift the channel by movement of the slider.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to the slider
 
-        :param val: Current slider position
+        :param val:  slider position
         :type val: float
         """
         # Check shift direction
@@ -1471,15 +1471,15 @@ class HandleScope:
             # Update the plot
             HandleScope.shiftfig.canvas.draw_idle()
 
-        # Store current slider value
+        # Store  slider value
         HandleScope.last_val = val
 
     @staticmethod
-    def reset_slider(event: any):
+    def __reset_slider(event: any):
         """
-        Callback-Funktion to reset slider position to zero without movement of the channel.
+        Callback method to reset slider position to zero without movement of the channel.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event and assigned to a button
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1497,11 +1497,11 @@ class HandleScope:
 
     # Callback for mouse button pressed
     @staticmethod
-    def on_press(event: any):
+    def __on_press(event: any):
         """
-        Callback-Funktion to notify the mouse event if a pressed button.
+        Callback method to notify the mouse event if a pressed button.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event on button press
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1538,11 +1538,11 @@ class HandleScope:
             logging.debug("Button press outside of the plot.")
 
     @staticmethod
-    def on_motion(event: any):
+    def __on_motion(event: any):
         """
-        Callback-Funktion to notify the mouse movement.
+        Callback method to notify the mouse movement.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event on button press
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1566,11 +1566,11 @@ class HandleScope:
                 HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
 
     @staticmethod
-    def on_release(event: any):
+    def __on_release(event: any):
         """
-        Callback-Funktion to notify the mouse event if a button is released.
+        Callback method to notify the mouse event if a button is released.
 
-        This function is private (only for internal usage)
+        This method is private (only for internal usage)
         Called by mathplotlib-Event on button press
 
         :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
@@ -1593,7 +1593,7 @@ class HandleScope:
                         HandleScope.zoom_start_y = event.ydata
                     # Check minimum zoom limits of x-axe
                     cur_zoom_delta = HandleScope.zoom_end_x-HandleScope.zoom_start_x
-                    # Read current range
+                    # Read  range
                     cur_start_x, cur_end_x = HandleScope.zoom_ax.get_xlim()
                     # Check if the mimimum zoom is reached
                     if cur_end_x - cur_start_x <= HandleScope.zoom_delta_x:
@@ -1619,7 +1619,7 @@ class HandleScope:
                         logging.debug(f"Range in x-direction is corrected to {HandleScope.zoom_start_x} to {HandleScope.zoom_end_x}.")
                     # Check minimum zoom limits of y-axe
                     cur_zoom_delta = HandleScope.zoom_end_y-HandleScope.zoom_start_y
-                    # Read current range
+                    # Read  range
                     cur_start_y, cur_end_y = HandleScope.zoom_ax.get_ylim()
                     # Check if the mimimum zoom is reached
                     if cur_end_y-cur_start_y <= HandleScope.zoom_delta_y:
@@ -1685,7 +1685,7 @@ class HandleScope:
         # Check if left button was released and Zoomstate was NoZoom and it was within area
         elif (event.button == 3 and HandleScope.zoom_state == HandleScope.Zoom_State.NoZoom) and \
              (event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y)):
-            # Zoom out: Get current zoom
+            # Zoom out: Get  zoom
             cur_y_start, cur_y_end = HandleScope.zoom_ax.get_ylim()
             cur_x_start, cur_x_end = HandleScope.zoom_ax.get_xlim()
             # Calculate factor 2 for y dimension
