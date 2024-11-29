@@ -1,5 +1,4 @@
 """Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
-from enum import Enum
 from typing import Union, List, Tuple, Optional, Any
 # 3rd party libraries
 import numpy as np
@@ -15,85 +14,18 @@ import os.path
 import warnings
 import logging
 # Interactive shift plot
-import matplotlib
-import matplotlib.patches as patches
-from matplotlib.widgets import Button, TextBox
-from matplotlib.widgets import Slider
-matplotlib.use('TkAgg')
-
+from pysignalscope.channelshift import ScopeChShift as scope_ch_shift
 
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()
 
 # Modul name für static methods
-class_modulename = "TransformerCalculation"
+class_modulename = "scope"
 
 # - Class definition ------------------------------------------------------------------------------
 
 class HandleScope:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
-
-    # - private members ------------------------------------------------------------------------------
-
-    # Index of selected channel
-    chn_index = 0
-    last_val = 0
-    shift_dir = 1
-
-    # Shiftfigure
-    shiftfig = None
-    # Zoom axe
-    zoom_ax = None
-    # Reference channels to plot
-    channelplotlist = list()
-    # List of shift of channels
-    shiftlist = list()
-
-    # Widget container variables
-    shift_text_box = None
-    shsl_reset_button = None
-    chn_sel_button = None
-    dir_shift_button = None
-    shift_slider = None
-    selplotlabel = None
-
-    # Shift step variables
-    shiftstep_x = None
-    shiftstep_y = None
-    # Limits of shift steps
-    shiftstep_x: List[float] = [0, 0]
-    min_shiftstep_x = None
-    max_shiftstep_x = None
-    min_shiftstep_y = None
-    max_shiftstep_y = None
-
-    # Maximal values
-    display_min_y = None
-    display_max_x = None
-    display_min_y = None
-    display_max_y = None
-
-    # Minimal zoom values
-    zoom_delta_y = None
-    zoom_delta_x = None
-
-    # Shift zoom variables
-    zoom_start_x = None
-    zoom_start_y = None
-    # Pixelbox for the graphic
-    shiftfigbox = None
-    # Zoomrect
-    zoom_rect = None
-    # Zoom state variabe
-
-    class Zoom_State(Enum):
-        """Enumeration to control the zoom state."""
-
-        NoZoom = 0
-        ZoomSelect = 1
-        ZoomConfirm = 2
-
-    zoom_state = Zoom_State.NoZoom
 
     @staticmethod
     def generate_scope_object(channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
@@ -1019,7 +951,8 @@ class HandleScope:
         left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
         If you release the left mouse button the area is marked. By moving the mouse within the area an perform
         a button press, you confirm and you zoom in the area. If you perform the left mouse button click outside
-        of the marked area, you reject the selection. By clicking the right mouse button you zoom out.
+        of the marked area, you reject the selection. You reject the selection always by clicking the right mouse button independent you zoom out.
+        button. If no area is selected or wait for confirmation, the click on the right mouse button leads to zooming out.
         There is a zoom limit in both directions. In this case, the rectangle shows the possible area (becomes larger),
         after you have release the left mouse button.
 
@@ -1098,12 +1031,12 @@ class HandleScope:
         if delta_x == 0:
             delta_x = global_max_x
         # Set the shift steps in x-direction
-        HandleScope.max_shiftstep_x = delta_x/10
-        HandleScope.min_shiftstep_x = min_diff_channel
-        def_shiftstep_x = HandleScope.max_shiftstep_x/50
+        max_shiftstep_x = delta_x/10
+        min_shiftstep_x = min_diff_channel
+        def_shiftstep_x = max_shiftstep_x/50
         # Check, if default shift is less mimimum shift
-        if def_shiftstep_x < HandleScope.min_shiftstep_x:
-            def_shiftstep_x = HandleScope.min_shiftstep_x
+        if def_shiftstep_x < min_shiftstep_x:
+            def_shiftstep_x = min_shiftstep_x
 
         # Calculate max_shiftstepy as delta_max/10, min_shiftstepx as delta_max/200  and
         # default value as delta_max/100
@@ -1112,22 +1045,20 @@ class HandleScope:
         if delta_y == 0:
             delta_y = global_max_y
         # Set the shift steps in y-direction
-        HandleScope.max_shiftstep_y = delta_y/10
-        HandleScope.min_shiftstep_y = delta_y/200
+        max_shiftstep_y = delta_y/10
+        min_shiftstep_y = delta_y/200
         def_shiftstep_y = delta_y/100
 
         # Initialize values
         # Shift steps x
         if isinstance(shiftstep_x, float) or isinstance(shiftstep_x, int):
-            if not HandleScope.check_limits(shiftstep_x, HandleScope.min_shiftstep_x, HandleScope.max_shiftstep_x):
-                HandleScope.shiftstep_x = def_shiftstep_x
+            if not HandleScope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
+                shiftstep_x = def_shiftstep_x
                 # Shift step in x-Direction is out of range
                 logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
-                                f"The range isn from {HandleScope.min_shiftstep_x} to {HandleScope.max_shiftstep_x}")
-            else:
-                HandleScope.shiftstep_x = shiftstep_x
+                                f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
         elif shiftstep_x is None:
-            HandleScope.shiftstep_x = def_shiftstep_x
+            shiftstep_x = def_shiftstep_x
         else:
             # Invalid type of shift step x
             logging.error("Type of optional parameter 'shiftstep_x' has to be 'float'.")
@@ -1136,583 +1067,88 @@ class HandleScope:
 
         # Shift steps y
         if isinstance(shiftstep_y, float) or isinstance(shiftstep_y, int):
-            if not HandleScope.check_limits(shiftstep_y, HandleScope.min_shiftstep_y, HandleScope.max_shiftstep_y):
-                HandleScope.shiftstep_y = def_shiftstep_y
+            if not HandleScope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
+                shiftstep_y = def_shiftstep_y
                 # Shift step in y-Direction is out of range
                 logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
-                                f"The range isn from {HandleScope.min_shiftstep_x} to {HandleScope.max_shiftstep_x}")
-            else:
-                HandleScope.shiftstep_y = shiftstep_y
+                                f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
                 # logging
         elif shiftstep_y is None:
-            HandleScope.shiftstep_y = def_shiftstep_y
+            shiftstep_y = def_shiftstep_y
         else:
             # Invalid type of shift step y
             logging.error("Type of optional parameter 'shiftstep_y' has to be 'float'.")
             # Stop the programm
             raise TypeError("Type of optional parameter 'shiftstep_y' has to be 'float'.")
 
-        # Create plot and clear lists
-        HandleScope.shiftfig, HandleScope.zoom_ax = plt.subplots()
-        HandleScope.channelplotlist = list()
-        HandleScope.shiftlist = list()
-
-        # Read channel data for the plot
-        for channel in channels:
-            cur_channelplot, = HandleScope.zoom_ax.plot(channel.channel_time, channel.channel_data, label=channel.channel_label, color=channel.channel_color)
-            HandleScope.channelplotlist.append(cur_channelplot)
-            HandleScope.shiftlist.append([0, 0])
-
-        # Init minimum and maximum values of the display window if required
-        HandleScope.display_min_x, HandleScope.display_max_x = HandleScope.zoom_ax.get_xlim()
-        HandleScope.display_min_y, HandleScope.display_max_y = HandleScope.zoom_ax.get_ylim()
-
-        # Overtake the default display range as max zoom out range.
-        HandleScope.zoom_ax.set_ylim(HandleScope.display_min_y, HandleScope.display_max_y)
-
-        # Display range x
+        # Initialize the actual display range y with an invalid value
+        act_displayrange_x = [0.0, 0.0]
+        # Evaluate display range x
         if isinstance(displayrange_x, tuple) and len(displayrange_x) == 2 \
            and isinstance(displayrange_x[0], (float, int)) and isinstance(displayrange_x[1], (float, int)):
             # Allow +-100 Percent: Calculate the delta
-            global_delta = global_max_x-global_min_x
-            display_delta = displayrange_x[1]-displayrange_x[0]
-            if (displayrange_x[0] < global_min_x-global_delta) \
-               or (displayrange_x[1] > global_max_x+global_delta) \
-               or global_delta < (HandleScope.min_shiftstep_x * 5):
+            global_delta = global_max_x - global_min_x
+            display_delta = displayrange_x[1] - displayrange_x[0]
+            if (displayrange_x[0] < global_min_x - global_delta) \
+               or (displayrange_x[1] > global_max_x + global_delta) \
+               or global_delta < (min_shiftstep_x * 5):
                 # Display range in x-direction exeeds the limit
-                logging.warning(f"Display range in x-direction of min,max: {displayrange_x[0]},{displayrange_x[1]}  exeeds the limit "
-                                f"min,max: {global_min_x-global_delta},{global_max_x+global_delta}.")
-            elif display_delta < 100*HandleScope.min_shiftstep_x:
+                logging.warning(
+                    f"Display range in x-direction of min,max: {act_displayrange_x[0]},{act_displayrange_x[1]}  exeeds the limit "
+                    f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+            elif display_delta < 100 * min_shiftstep_x:
                 # Display range in x-direction exeeds the limit
-                logging.warning(f"Display range in x-direction of max-min: {display_delta} is to small (should be {100*HandleScope.min_shiftstep_x})"
-                                f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+                logging.warning(
+                    f"Display range in x-direction of max-min: {display_delta} is to small (should be {100 * min_shiftstep_x})"
+                    f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
             else:
-                # Overtake the limits tp  zoom window
-                HandleScope.zoom_ax.set_xlim(displayrange_x[0], displayrange_x[1])
-                # Overtake values as new display range, if the range becomes higher
-                if displayrange_x[0] < HandleScope.display_min_x:
-                    HandleScope.display_min_x = displayrange_x[0]
-                if displayrange_x[1] > HandleScope.display_max_x:
-                    HandleScope.display_max_x = displayrange_x[1]
+                # Overtake display range in x-direction
+                act_displayrange_x[0] = displayrange_x[0]
+                act_displayrange_x[1] = displayrange_x[1]
         elif displayrange_x is not None:
             # Invalid type of Display range x
             logging.error("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
             # Stop the programm
             raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
 
-        # Display range y
+        # Initialize the actual display range y with an invalid value
+        act_displayrange_y = [0.0, 0.0]
+        # Evaluate display range y
         if isinstance(displayrange_y, tuple) and len(displayrange_y) == 2 \
            and isinstance(displayrange_y[0], (float, int)) and isinstance(displayrange_y[1], (float, int)):
             # Allow +-100 Percent: Calculate the delta
-            global_delta = global_max_y-global_min_y
+            global_delta = global_max_y - global_min_y
             display_delta = displayrange_y[1] - displayrange_y[0]
             if (displayrange_y[0] < (global_min_y - global_delta)) \
-               or (displayrange_y[1] > (global_max_y+global_delta)) \
-               or (global_delta < (HandleScope.min_shiftstep_y*5)):
+               or (displayrange_y[1] > (global_max_y + global_delta)) \
+               or (global_delta < (min_shiftstep_y * 5)):
                 # Display range in y-direction exeeds the limit
-                logging.warning(f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exeeds the limit "
-                                f"min,max: {global_min_y-global_delta},{global_max_y+global_delta}.")
-            elif display_delta < global_delta/100:
-                # Display range in x-direction exeeds the limit
-                logging.warning(f"Display range in y-direction of max-min: {display_delta} is to small (should be {global_delta/100})"
-                                f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+                logging.warning(
+                    f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exeeds the limit "
+                    f"min,max: {global_min_y - global_delta},{global_max_y + global_delta}.")
+            elif display_delta < global_delta / 100:
+                # Display range in y-direction exeeds the limit
+                logging.warning(
+                    f"Display range in y-direction of max-min: {display_delta} is to small (should be {global_delta / 100})"
+                    f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+                # Set Display range in y-direction to max y-value
             else:
-                # Overtake the limits
-                HandleScope.zoom_ax.set_ylim(displayrange_y[0], displayrange_y[1])
-                # Overtake values as new display range, if the range becomes higher
-                if displayrange_y[0] < HandleScope.display_min_y:
-                    HandleScope.display_min_y = displayrange_y[0]
-                if displayrange_y[1] > HandleScope.display_max_y:
-                    HandleScope.display_max_y = displayrange_y[1]
-
+                # Overtake display range in y-direction
+                act_displayrange_y[0] = displayrange_y[0]
+                act_displayrange_y[1] = displayrange_y[1]
         elif displayrange_y is not None:
             # Invalid type of Display range y
             logging.error("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
             # Stop the programm
             raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
 
-        # Define mimimum zoom window as min_shiftstep_[xy]*5
-        HandleScope.zoom_delta_y = HandleScope.min_shiftstep_y*5
-        HandleScope.zoom_delta_x = HandleScope.min_shiftstep_x*5
+        # Create instance variable
+        ch_shift = scope_ch_shift()
 
-        # Reset  channel index
-        HandleScope.chn_index = 0
-        # Set shift direction 0=x, 1=y
-        HandleScope.shift_dir = 1
-        # Set slider value
-        HandleScope.last_val = 0
-        # Hint for the user
-        HandleScope.zoom_ax.set_title("Move the slider to move the selected channel curve")
-        plt.subplots_adjust(bottom=0.45)  # Platz für den Slider schaffen
-
-        # -- Create the widgets
-
-        # Button for selection of shift direction (x or y)
-        button_ax = plt.axes([0.1, 0.15, 0.3, 0.075])  # Position and size of button
-        HandleScope.dir_shift_button = Button(button_ax, 'Shift y')
-        HandleScope.dir_shift_button.on_clicked(HandleScope.__toggle_xy_plot)  # Link to callback
-
-        # Button for selection of graph
-        button_ax = plt.axes([0.1, 0.25, 0.3, 0.075])  # Position and size of button
-        HandleScope.chn_sel_button = Button(button_ax, 'Sel. Plot')
-        HandleScope.chn_sel_button.on_clicked(HandleScope.__next_channel)  # Verknüpft die Schaltfläche mit der Funktion
-
-        # Button for reset slider position
-        button_ax = plt.axes([0.85, 0.1, 0.14, 0.1])  # Position and size of button
-        HandleScope.shsl_reset_button = Button(button_ax, 'Re-calibrate\nslider')
-        HandleScope.shsl_reset_button.on_clicked(HandleScope.__reset_slider)  # Verknüpft die Schaltfläche mit der Funktion
-
-        # Textbox for step size
-        text_box_ax = plt.axes([0.6, 0.15, 0.2, 0.05])
-        HandleScope.shift_text_box = TextBox(text_box_ax, 'Shiftstep:', initial=str(HandleScope.shiftstep_y))
-        HandleScope.shift_text_box.on_submit(HandleScope.__submit)
-
-        # Selected dataset (Show label)
-        labeltext = HandleScope.channelplotlist[0].get_label()
-        # Check, if label text is not set
-        if labeltext is None:
-            labeltext = "●"
-        else:
-            labeltext = "● "+labeltext
-        # Set labeltext in figure
-        HandleScope.selplotlabel = HandleScope.shiftfig.text(0.6, 0.3, labeltext, ha='left', va='top', fontsize=12)
-        HandleScope.selplotlabel.set_color(HandleScope.channelplotlist[HandleScope.chn_index].get_color())
-
-        # Register eventhandler
-        HandleScope.shiftfig.canvas.mpl_connect('button_press_event', HandleScope.__on_press)
-        HandleScope.shiftfig.canvas.mpl_connect('motion_notify_event', HandleScope.__on_motion)
-        HandleScope.shiftfig.canvas.mpl_connect('button_release_event', HandleScope.__on_release)
-
-        # Slider for shift method
-        slider_ax = plt.axes([0.25, 0.1, 0.55, 0.03], facecolor="lightgoldenrodyellow")  # Position and size of sliders
-        HandleScope.shift_slider = Slider(slider_ax, 'Shift', -10.0, 10.0, valinit=0)  # Slider values
-        # Link slider with callback
-        HandleScope.shift_slider.on_changed(HandleScope.__shiftchannel)
-        # Get the figure box object for check purpose
-        HandleScope.shiftfigbox = HandleScope.zoom_ax.get_window_extent()
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :\nDisplay range x:{HandleScope.display_min_x},{HandleScope.display_max_x} " 
-                      f"Display range y:{HandleScope.display_min_y},{HandleScope.display_max_y}\n"                    
-                      f"Shift step x min,def,max:{HandleScope.min_shiftstep_x}, {def_shiftstep_x},{HandleScope.max_shiftstep_x}\n" 
-                      f"Shift step y min,def,max:{HandleScope.min_shiftstep_y}, {def_shiftstep_y},{HandleScope.max_shiftstep_y}\n" 
-                      f"Zoom area x,y:{HandleScope.zoom_delta_x}, {HandleScope.zoom_delta_y}")
-
-        plt.show()
-
+        # Set the limits of shiftstep and display-range
+        ch_shift.init_shiftstep_limits((min_shiftstep_x, max_shiftstep_x), (min_shiftstep_y, max_shiftstep_y))
         # Return the list of channel shifts
-        return HandleScope.shiftlist
-
-    ##############################################################################
-    # Callback methods for interactive shifting of plots
-    ##############################################################################
-    # HandleScope.channelplotlist    HandleScope.shiftfig
-
-    @staticmethod
-    def __next_channel(event: any):
-        """
-        Select the next channel.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to a button.
-
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
-        :type event: any
-        """
-        # Increment the index of the selected channel
-        HandleScope.chn_index = HandleScope.chn_index+1
-        # Check on overflow
-        if HandleScope.chn_index >= len(HandleScope.channelplotlist):
-            HandleScope.chn_index = 0
-        # Display the label
-        labeltext = HandleScope.channelplotlist[HandleScope.chn_index].get_label()
-        # Check, if label text is not set
-        if labeltext is None:
-            labeltext = "●"
-        else:
-            labeltext = "● "+labeltext
-
-        HandleScope.selplotlabel.set_text(labeltext)
-        HandleScope.selplotlabel.set_color(HandleScope.channelplotlist[HandleScope.chn_index].get_color())
-
-        HandleScope.shiftfig.canvas.draw_idle()  # Aktualisiert die Darstellung
-        HandleScope.last_val = 0
-        HandleScope.shift_slider.set_val(0)
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :Channel number {HandleScope.chn_index} is selected.")
-
-    # Callback method für das Aktualisieren des Plots
-    @staticmethod
-    def __toggle_xy_plot(event):
-        """
-        Toggle the shift direction.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to a button.
-
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
-        :type event: any
-        """
-        # Check shift direction
-        if HandleScope.shift_dir == 1:
-            # Toggle to x-direction
-            HandleScope.shift_dir = 0
-            # Set button text
-            HandleScope.dir_shift_button.label.set_text("Shift x")
-            HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_x))
-        else:
-            # Toggle to y-direction
-            HandleScope.shift_dir = 1
-            # Set button text
-            HandleScope.dir_shift_button.label.set_text("Shift y")
-            HandleScope.shift_text_box.set_val(str(HandleScope.shiftstep_y))
-        # Reset the values
-        HandleScope.last_val = 0
-        HandleScope.shift_slider.set_val(0)
-        # Update the plot
-        HandleScope.shiftfig.canvas.draw_idle()
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :Shift direction is toogled to {HandleScope.shift_dir} (0=x, 1=y).")
-
-    @staticmethod
-    def __submit(text: str):
-        """
-        Change the shift-step size.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to an update of text.
-
-        :param text: Updated text
-        :type text: string
-        """
-        # Check shift direction
-        if HandleScope.shift_dir == 1:
-            HandleScope.shiftstep_y = float(text)
-            if HandleScope.shiftstep_y > HandleScope.max_shiftstep_y:
-                # Shift step x too high
-                logging.info(f"{class_modulename} :Shift step y {HandleScope.shiftstep_y} too high and set to {HandleScope.max_shiftstep_y}")
-                # Correct the value
-                HandleScope.shiftstep_y = HandleScope.max_shiftstep_y
-                # Log flow control
-                logging.info(f"{class_modulename} :Shift step y too small.{HandleScope.shiftstep_y}")
-            elif HandleScope.shiftstep_y < HandleScope.min_shiftstep_y:
-                # Shift step x too small
-                logging.info(f"{class_modulename} :Shift step y {HandleScope.shiftstep_y} too small and set to {HandleScope.min_shiftstep_y}")
-                # Correct the value
-                HandleScope.shiftstep_y = HandleScope.min_shiftstep_y
-
-            HandleScope.shift_text_box.set_val(f"{HandleScope.shiftstep_y:.7g}")
-            # Log flow control
-            logging.debug(f"{class_modulename} :Shift step y = {HandleScope.shiftstep_y}")
-
-        else:
-            HandleScope.shiftstep_x = float(text)
-            if HandleScope.shiftstep_x > HandleScope.max_shiftstep_x:
-                # Shift step x too high
-                logging.info(f"{class_modulename} :Shift step x {HandleScope.shiftstep_y} too high and set to {HandleScope.max_shiftstep_x}")
-                # Correct the value
-                HandleScope.shiftstep_x = HandleScope.max_shiftstep_x
-            elif HandleScope.shiftstep_x < HandleScope.min_shiftstep_x:
-                # Shift step x too small
-                logging.info(f"{class_modulename} :Shift step x {HandleScope.shiftstep_x} too small and set to {HandleScope.min_shiftstep_x}")
-                # Correct the value
-                HandleScope.shiftstep_x = HandleScope.min_shiftstep_x
-
-            # Update the format if necessary
-            HandleScope.shift_text_box.set_val(f"{HandleScope.shiftstep_x:.7g}")
-
-        # Log flow control
-        logging.debug(f"{class_modulename}: Shift step x = {HandleScope.shiftstep_x},Shift step y = {HandleScope.shiftstep_y}")
-
-        # Reset the values
-        HandleScope.last_val = 0
-        HandleScope.shift_slider.set_val(0)
-        # Update the plot
-        HandleScope.shiftfig.canvas.draw_idle()
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :Text is overtaken {HandleScope.shift_dir} (0=x, 1=y).")
-
-    # Callback method for shift the channel by movement of the slider
-    @staticmethod
-    def __shiftchannel(val: float):
-        """
-        Shift the channel by movement of the slider.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to the slider
-
-        :param val:  slider position
-        :type val: float
-        """
-        # Check shift direction
-        if HandleScope.shift_dir == 1:
-            delta = val-HandleScope.last_val
-            dshift = (delta*HandleScope.shiftstep_y)
-            HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir] = \
-                (HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir]+dshift)
-            # Shift values in y-direction
-            new_y = [value + dshift for value in HandleScope.channelplotlist[HandleScope.chn_index].get_ydata()]
-            # Update dataset
-            HandleScope.channelplotlist[HandleScope.chn_index].set_ydata(new_y)
-        else:
-            delta = val-HandleScope.last_val
-            dshift = (delta*HandleScope.shiftstep_x)
-            shift = HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir]+dshift
-            # Shift in x-direction
-            new_x = [value + dshift for value in HandleScope.channelplotlist[HandleScope.chn_index].get_xdata()]
-            # Update dataset
-            HandleScope.channelplotlist[HandleScope.chn_index].set_xdata(new_x)
-
-            # Overtake the shift
-            HandleScope.shiftlist[HandleScope.chn_index][HandleScope.shift_dir] = shift
-            # Update the plot
-            HandleScope.shiftfig.canvas.draw_idle()
-
-        # Store  slider value
-        HandleScope.last_val = val
-
-    @staticmethod
-    def __reset_slider(event: any):
-        """
-        Recalibrate the slider position to zero without movement of the channel.
-
-        This method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to a button
-
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
-        :type event: any
-        """
-        HandleScope.last_val = 0
-        HandleScope.shift_slider.set_val(0)
-        # Update the plot
-        HandleScope.shiftfig.canvas.draw_idle()
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :Slider reset was called.")
-
-    # -- Zoomcallbacks ------------------------------------------------------------------------------------
-
-    # Callback for mouse button pressed
-    @staticmethod
-    def __on_press(event: any):
-        """
-        Notification event if a mouse button is pressed.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event on button press
-
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
-        :type event: any
-        """
-        # Check, if the button press was within the area
-        if event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y):
-            # Check, if the left button was pressed
-            if event.button == 1:
-                if HandleScope.zoom_state == HandleScope.Zoom_State.NoZoom:
-                    # Overtake values
-                    HandleScope.zoom_start_x, HandleScope.zoom_start_y = event.xdata, event.ydata
-                    # Create rectangle
-                    HandleScope.zoom_rect = patches.Rectangle((HandleScope.zoom_start_x, HandleScope.zoom_start_y), \
-                                                              0, 0, linewidth=1, edgecolor='red', facecolor='none')
-                    # Set Zoomstate
-                    HandleScope.zoom_state = HandleScope.Zoom_State.ZoomSelect
-                    # Draw rectangle
-                    HandleScope.zoom_ax.add_patch(HandleScope.zoom_rect)
-                    # Log flow control
-                    logging.debug(f"Start zoom at x: {HandleScope.zoom_start_x} y:{HandleScope.zoom_start_y}.")
-                    # Update plot
-                    plt.draw()
-                else:
-                    # Log flow control
-                    logging.debug(f"Button no. {event.button} is pressed when zoom state is {HandleScope.zoom_state}.")
-
-            else:
-                # Log flow control
-                logging.debug(f"Button no. {event.button} is pressed inside the plot.")
-
-        else:
-            # Log flow control
-            logging.debug("Button press outside of the plot.")
-
-    @staticmethod
-    def __on_motion(event: any):
-        """
-        Provide the current mouse position in case of mouse movement.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event on button press
-
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
-        :type event: any
-        """
-        # Check Zoomstate
-        if HandleScope.zoom_state == HandleScope.Zoom_State.ZoomSelect:
-            # Check, if movement is within area and button still pressed
-            if event.button == 1:
-                if HandleScope.zoom_rect is not None and event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y):
-                    # Overtake zoom end values
-                    width = event.xdata - HandleScope.zoom_start_x
-                    height = event.ydata - HandleScope.zoom_start_y
-                    HandleScope.zoom_rect.set_width(width)
-                    HandleScope.zoom_rect.set_height(height)
-                    HandleScope.zoom_rect.set_xy((HandleScope.zoom_start_x, HandleScope.zoom_start_y))
-                    # Update plot
-                    plt.draw()
-            else:
-                # Change Zoomstate to NoZoom
-                HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
-
-    @staticmethod
-    def __on_release(event: any):
-        """
-        Notify the mouse button release.
-
-        This callback method is private (only for internal usage)
-        Called by mathplotlib-Event on button press
-
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
-        :type event: any
-        """
-        # Check, if the left button was released
-        if event.button == 1:
-            # Check Zoomstate
-            if HandleScope.zoom_state == HandleScope.Zoom_State.ZoomSelect:
-                # Check, if the button was pressed within the area
-                if HandleScope.zoom_rect is not None and event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y):
-                    # Define the area for zoom
-                    HandleScope.zoom_end_x, HandleScope.zoom_end_y = event.xdata, event.ydata
-                    # Sort data
-                    if HandleScope.zoom_start_x > event.xdata:
-                        HandleScope.zoom_end_x = HandleScope.zoom_start_x
-                        HandleScope.zoom_start_x = event.xdata
-                    if HandleScope.zoom_start_y > event.ydata:
-                        HandleScope.zoom_end_y = HandleScope.zoom_start_y
-                        HandleScope.zoom_start_y = event.ydata
-                    # Check minimum zoom limits of x-axe
-                    cur_zoom_delta = HandleScope.zoom_end_x-HandleScope.zoom_start_x
-                    # Read  range
-                    cur_start_x, cur_end_x = HandleScope.zoom_ax.get_xlim()
-                    # Check if the mimimum zoom is reached
-                    if cur_end_x - cur_start_x <= HandleScope.zoom_delta_x:
-                        # Overtake rect
-                        HandleScope.zoom_end_x = cur_end_x
-                        HandleScope.zoom_start_x = cur_start_x
-                        # Log flow control
-                        logging.debug("Mimimum zoom in x-direction is reached. Zooming in x-direction is denied.")
-                    elif cur_zoom_delta < HandleScope.zoom_delta_x:
-                        logging.debug(f"Selected range in x-direction {HandleScope.zoom_start_x} to {event.xdata} is too small.")
-                        HandleScope.zoom_end_x = HandleScope.zoom_end_x+(HandleScope.zoom_delta_x-cur_zoom_delta)/2
-                        # Check, if maximum limit is exceed
-                        if HandleScope.zoom_end_x > HandleScope.display_max_x:
-                            HandleScope.zoom_end_x = HandleScope.display_max_x
-                            HandleScope.zoom_start_x = HandleScope.zoom_end_x-HandleScope.zoom_delta_x
-                        else:  # Calculate mimimum window value
-                            HandleScope.zoom_start_x = HandleScope.zoom_start_x-(HandleScope.zoom_delta_x - cur_zoom_delta)/2
-                        # Check, if minimum limit is exceed
-                        if HandleScope.zoom_start_x < HandleScope.display_min_x:
-                            HandleScope.zoom_start_x = HandleScope.display_mix_x
-                            HandleScope.zoom_end_x = HandleScope.zoom_end_x+HandleScope.zoom_delta_x
-                        # Log flow control
-                        logging.debug(f"Range in x-direction is corrected to {HandleScope.zoom_start_x} to {HandleScope.zoom_end_x}.")
-                    # Check minimum zoom limits of y-axe
-                    cur_zoom_delta = HandleScope.zoom_end_y-HandleScope.zoom_start_y
-                    # Read  range
-                    cur_start_y, cur_end_y = HandleScope.zoom_ax.get_ylim()
-                    # Check if the mimimum zoom is reached
-                    if cur_end_y-cur_start_y <= HandleScope.zoom_delta_y:
-                        # Overtake rect
-                        HandleScope.zoom_end_y = cur_end_y
-                        HandleScope.zoom_start_y = cur_start_y
-                        # Log flow control
-                        logging.debug("Mimimum zoom in y-direction is reached. Zooming in y-direction is denied.")
-                    elif cur_zoom_delta < HandleScope.zoom_delta_y:
-                        logging.debug(f"Selected range in y-direction {HandleScope.zoom_start_y} to {event.ydata} is too small.")
-                        HandleScope.zoom_end_y = HandleScope.zoom_end_y+(HandleScope.zoom_delta_y-cur_zoom_delta)/2
-                        # Check, if maximum limit is exceed
-                        if HandleScope.zoom_end_y > HandleScope.display_max_y:
-                            HandleScope.zoom_end_y = HandleScope.display_max_y
-                            HandleScope.zoom_start_y = HandleScope.zoom_end_y-HandleScope.zoom_delta_y
-                        else:  # Calculate mimimum window value
-                            HandleScope.zoom_start_y = (
-                                HandleScope.zoom_start_y - (HandleScope.zoom_delta_y - cur_zoom_delta) / 2
-                            )
-                        # Check, if minimum limit is exceed
-                        if HandleScope.zoom_start_y < HandleScope.display_min_y:
-                            HandleScope.zoom_start_y = HandleScope.display_mix_y
-                            HandleScope.zoom_end_y = HandleScope.zoom_end_y+HandleScope.zoom_delta_y
-                        # Log flow control
-                        logging.debug(f"Range in y-direction is corrected to {HandleScope.zoom_start_y} to {HandleScope.zoom_end_y}.")
-                    width = HandleScope.zoom_end_x - HandleScope.zoom_start_x
-                    height = HandleScope.zoom_end_y - HandleScope.zoom_start_y
-                    HandleScope.zoom_rect.set_width(width)
-                    HandleScope.zoom_rect.set_height(height)
-                    HandleScope.zoom_rect.set_xy((HandleScope.zoom_start_x, HandleScope.zoom_start_y))
-                    # Update zoom state
-                    HandleScope.zoom_state = HandleScope.Zoom_State.ZoomConfirm
-                    # Update plot
-                    plt.draw()
-                elif HandleScope.zoom_rect is not None:
-                    # Remove rectangle and reset zoom state
-                    HandleScope.zoom_rect.remove()
-                    HandleScope.zoom_rect = None
-                    HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
-                    # Update plot
-                    plt.draw()
-                    # Log flow control
-                    logging.debug("Rectangle removed and reset zoom state to 'NoZoom'.")
-            # Check if Zoomstate is ZoomConfirm
-            elif HandleScope.zoom_state == HandleScope.Zoom_State.ZoomConfirm:
-                # Check, if the button was pressed within the area
-                if HandleScope.zoom_rect is not None and event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y):
-                    if (event.xdata > HandleScope.zoom_start_x) and (event.ydata > HandleScope.zoom_start_y) and \
-                       (event.xdata < HandleScope.zoom_end_x) and (event.ydata < HandleScope.zoom_end_y):
-                        # Zoom into area
-                        HandleScope.zoom_ax.set_xlim(min(HandleScope.zoom_start_x, HandleScope.zoom_end_x), \
-                                                     max(HandleScope.zoom_start_x, HandleScope.zoom_end_x))
-                        HandleScope.zoom_ax.set_ylim(min(HandleScope.zoom_start_y, HandleScope.zoom_end_y), \
-                                                     max(HandleScope.zoom_start_y, HandleScope.zoom_end_y))
-                    # Remove rectangle and reset zoom state
-                    HandleScope.zoom_rect.remove()
-                    HandleScope.zoom_rect = None
-                    HandleScope.zoom_state = HandleScope.Zoom_State.NoZoom
-                    # Update plot
-                    plt.draw()
-                    # Log flow control
-                    logging.debug(f"Confirmed with button release at x,y: {event.xdata},{event.ydata}.")
-        # Check if left button was released and Zoomstate was NoZoom and it was within area
-        elif (event.button == 3 and HandleScope.zoom_state == HandleScope.Zoom_State.NoZoom) and \
-             (event.inaxes and HandleScope.shiftfigbox.contains(event.x, event.y)):
-            # Zoom out: Get  zoom
-            cur_y_start, cur_y_end = HandleScope.zoom_ax.get_ylim()
-            cur_x_start, cur_x_end = HandleScope.zoom_ax.get_xlim()
-            # Calculate factor 2 for y dimension
-            delta_half = (cur_y_end-cur_y_start)/2
-            cur_y_start = cur_y_start-delta_half
-            cur_y_end = cur_y_end + delta_half
-            # Check maximal limits
-            if cur_y_start < HandleScope.display_min_y:
-                cur_y_start = HandleScope.display_min_y
-            if cur_y_end > HandleScope.display_max_y:
-                cur_y_end = HandleScope.display_max_y
-            # Calculate factor 2 for x dimension
-            delta_half = (cur_x_end-cur_x_start)/2
-            cur_x_start = cur_x_start-delta_half
-            cur_x_end = cur_x_end + delta_half
-            # Check maximal limits
-            if cur_x_start < HandleScope.display_min_x:
-                cur_x_start = HandleScope.display_min_x
-            if cur_x_end > HandleScope.display_max_x:
-                cur_x_end = HandleScope.display_max_x
-            # Zoom out
-            HandleScope.zoom_ax.set_xlim(cur_x_start, cur_x_end)
-            HandleScope.zoom_ax.set_ylim(cur_y_start, cur_y_end)
-            # Update plot
-            plt.draw()
-            # Log flow control
-            logging.debug(f"Zoom out to x-range: {cur_x_start} to {cur_x_end} and y-range:{cur_y_start} to {cur_y_end}.")
+        return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
 
     @staticmethod
     def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's', \
