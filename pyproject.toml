@@ -17,7 +17,8 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = ["numpy",
-                "matplotlib"]
+                "matplotlib",
+                "lecroyutils"]
 
 [project.urls]
 Homepage = "https://github.com/upb-lea/pySignalScope"
