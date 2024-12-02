@@ -13,8 +13,6 @@ IS_TEST = True
 # own libraries
 import pysignalscope as pss
 
-
-
 def test_generate_scope_object():
     """Test generate_scope_object() method."""
     # no input or missing input channel_time and channel_data - raise type error
