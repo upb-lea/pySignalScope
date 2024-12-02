@@ -63,6 +63,13 @@ class HandleScope:
             channel_data = channel_data
         else:
             raise TypeError("channel_data must be type list or ArrayLike")
+        # check if channel_time and channel_data have the same length
+        if len(channel_time) != len(channel_data):
+            raise ValueError("channel_time and channel_data must be same lenght.")
+        # check if channel_time is strictly increasing
+        if not np.all(np.diff(channel_time) > 0):
+            raise ValueError("channel time not strictly increasing.")
+
         # check channel_label for a valid type
         if isinstance(channel_label, str) or channel_label is None:
             channel_label = channel_label
