@@ -1,5 +1,7 @@
 """Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
 from typing import Union, List, Tuple, Optional, Any
+import pickle
+
 # 3rd party libraries
 import numpy as np
 from matplotlib import pyplot as plt
@@ -1411,7 +1413,7 @@ class HandleScope:
         return channel_modified
 
     @staticmethod
-    def save(figure: plt.figure, fig_name: str):
+    def save_figure(figure: plt.figure, fig_name: str):
         """
         Save the given figure object as pdf.
 
@@ -1427,6 +1429,54 @@ class HandleScope:
 
         # Log flow control
         logging.debug(f"{class_modulename} :Name of file to save={fig_name}.pdf")
+
+    @staticmethod
+    def save(scope_object: Scope, filepath: str) -> None:
+        """
+        Save a scope object to hard disk.
+
+        :param scope_object: scope object
+        :type scope_object: Scope
+        :param filepath: filepath including file name
+        :type filepath: str
+        """
+        if not isinstance(filepath, str):
+            raise TypeError("filepath must be of type str.")
+        if ".pkl" not in filepath:
+            filepath = filepath + ".pkl"
+        file_path, file_name = os.path.split(filepath)
+        if file_path == "":
+            file_path = os.path.curdir
+        if not os.path.exists(file_path):
+            os.makedirs(file_path, exist_ok=True)
+        if not isinstance(scope_object, Scope):
+            raise TypeError("scope_object must be of type Scope.")
+
+        with open(filepath, 'wb') as handle:
+            pickle.dump(scope_object, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    @staticmethod
+    def load(filepath: str) -> Scope:
+        """
+        Load a scope file from the hard disk.
+
+        :param filepath: filepath
+        :type filepath: str
+        :return: loaded Scope object
+        :rtype: Scope
+        """
+        if not isinstance(filepath, str):
+            raise TypeError("filepath must be of type str.")
+        if ".pkl" not in filepath:
+            raise ValueError("filepath must end with .pkl")
+        if not os.path.exists(filepath):
+            raise ValueError(f"{filepath} does not exist.")
+        with open(filepath, 'rb') as handle:
+            loaded_scope_object: Scope = pickle.load(handle)
+        if not isinstance(loaded_scope_object, Scope):
+            raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
+
+        return loaded_scope_object
 
 
 if __name__ == '__main__':
