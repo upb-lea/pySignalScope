@@ -14,7 +14,7 @@ import matplotlib.patches as patches
 from matplotlib.widgets import Button, TextBox
 from matplotlib.widgets import Slider
 
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()

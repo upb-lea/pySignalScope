@@ -1,10 +1,11 @@
 """Unit tests for the scope module."""
-import numpy.testing
+
 # python libraries
 import pytest
 
 # 3rd party libraries
 import numpy as np
+import numpy.testing
 
 # own libraries
 import pysignalscope as pss
@@ -140,6 +141,10 @@ def test_from_numpy():
 
     with pytest.raises(ValueError):
         pss.HandleScope.from_numpy(period_vector_t_i, 100)
+
+    # wrong input data to see if generate_scope_object() is used
+    with pytest.raises(ValueError):
+        pss.HandleScope.generate_scope_object(channel_time=[-3.14, -4, 5.0], channel_data=[1, -2.1, -3.2], channel_linestyle=100.1)
 
     # set label
     label = "trail_label"
