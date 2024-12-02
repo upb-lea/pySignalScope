@@ -31,6 +31,15 @@ def test_generate_scope_object():
     with pytest.raises(ValueError):
         pss.HandleScope.generate_scope_object(channel_time=[-1, -3, 1], channel_data=[1, 2, 3])
 
+    # channel_time: non-equidistant values and negative valid values
+    scope_object = pss.HandleScope.generate_scope_object(channel_time=[-3.3, -2.2, -1.1, 0, 1.2], channel_data=[-1, -2.1, -3.2, 4.4, -2.7])
+    numpy.testing.assert_equal(scope_object.channel_time, [-3.3, -2.2, -1.1, 0, 1.2])
+    numpy.testing.assert_equal(scope_object.channel_data, [-1, -2.1, -3.2, 4.4, -2.7])
+
+    # channel_time: same x-data, should fail.
+    with pytest.raises(ValueError):
+        pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3, 3, 4, 5], channel_data=[-1, -2.1, -3.2, 4.4])
+
     # valid positive data, mixed int and float
     scope_object = pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, 2, 3.1])
     numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
