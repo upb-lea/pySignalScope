@@ -2,13 +2,13 @@
 
 # python libraries
 import pytest
+import os
 
 # 3rd party libraries
 import numpy as np
 import numpy.testing
 
-global IS_TEST
-IS_TEST = True
+os.environ["IS_TEST"] = "True"
 
 # own libraries
 import pysignalscope as pss
