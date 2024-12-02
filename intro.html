@@ -51,7 +51,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#changelog"><span class="sectnum">1.5 </span>Changelog</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#pysignalscope-function-documentation"><span class="sectnum">2 </span>pySignalScope function documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-pysignalscope.functions"><span class="sectnum">2 </span>pySignalScope function documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.functions.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -119,8 +122,51 @@
 <p>Find the changelog <a class="reference external" href="https://github.com/upb-lea/pySignalScope/blob/main/CHANGELOG.md">here</a>.</p>
 </section>
 </section>
-<section id="pysignalscope-function-documentation">
-<h1><span class="sectnum">2 </span>pySignalScope function documentation<a class="headerlink" href="#pysignalscope-function-documentation" title="Link to this heading"></a></h1>
+<section id="module-pysignalscope.functions">
+<span id="pysignalscope-function-documentation"></span><h1><span class="sectnum">2 </span>pySignalScope function documentation<a class="headerlink" href="#module-pysignalscope.functions" title="Link to this heading"></a></h1>
+<p>Functions uses by the scope, e.g. the fft-function.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysignalscope.functions.fft">
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.functions.</span></span><span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_vector_t_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ffT'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'factor'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_value_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_value_harmonic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.functions.fft" title="Link to this definition"></a></dt>
+<dd><p>Calculate the FFT for a given input signal. Input signal is in vector format and should include one period.</p>
+<p>Output vector includes only frequencies with amplitudes &gt; 1% of input signal</p>
+<dl class="field-list simple">
+<dt class="field-odd">Minimal Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_waveform</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.34</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">,</span> <span class="mf">4.48</span><span class="p">,</span> <span class="mf">6.28</span><span class="p">],[</span><span class="o">-</span><span class="mf">175.69</span><span class="p">,</span> <span class="mf">103.47</span><span class="p">,</span> <span class="mf">175.69</span><span class="p">,</span> <span class="o">-</span><span class="mf">103.47</span><span class="p">,</span><span class="o">-</span><span class="mf">175.69</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">example_waveform</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rad&#39;</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;ffT input current&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>period_vector_t_i</strong> (<em>np.array</em>) – numpy-array [[time-vector[,[current-vector]]. One period only</p></li>
+<li><p><strong>sample_factor</strong> (<em>int</em>) – f_sampling/f_period, defaults to 1000</p></li>
+<li><p><strong>plot</strong> (<em>str</em>) – insert anything else than “no” or ‘False’ to show a plot to visualize input and output</p></li>
+<li><p><strong>mode</strong> (<em>str</em>) – ‘rad’[default]: full period is 2*pi, ‘deg’: full period is 360°, ‘time’: time domain.</p></li>
+<li><p><strong>f0</strong> (<em>float</em>) – fundamental frequency. Needs to be set in ‘rad’- or ‘deg’-mode</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – plot window title, defaults to ‘ffT’</p></li>
+<li><p><strong>filter_type</strong> (<em>str</em>) – ‘factor’[default] or ‘harmonic’ or ‘disabled’.</p></li>
+<li><p><strong>filter_value_factor</strong> (<em>float</em>) – filters out amplitude-values below a certain factor of max. input amplitude.
+Should be 0…1, default to 0.01 (1%)</p></li>
+<li><p><strong>filter_value_harmonic</strong> (<em>int</em>) – filters out harmonics up to a certain number. Default value is 100.
+Note: count 1 is DC component, count 2 is the fundamental frequency</p></li>
+<li><p><strong>figure_directory</strong> (<em>Tuple</em>) – full path with file extension</p></li>
+<li><p><strong>figure_size</strong> (<em>Tuple</em>) – None for auto-fit; fig_size for matplotlib (width, length)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy-array [[frequency-vector],[amplitude-vector],[phase-vector]]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>npt.NDArray[list]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
