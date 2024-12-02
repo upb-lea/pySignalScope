@@ -7,8 +7,13 @@ import pytest
 import numpy as np
 import numpy.testing
 
+global IS_TEST
+IS_TEST = True
+
 # own libraries
 import pysignalscope as pss
+
+
 
 def test_generate_scope_object():
     """Test generate_scope_object() method."""

@@ -14,7 +14,10 @@ import matplotlib.patches as patches
 from matplotlib.widgets import Button, TextBox
 from matplotlib.widgets import Slider
 
-matplotlib.use('Agg')
+if 'IS_TEST' in globals():
+    matplotlib.use('Agg')
+else:
+    matplotlib.use('TkAgg')
 
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()
