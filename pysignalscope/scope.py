@@ -1,26 +1,26 @@
 """Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
+from typing import Union, List, Tuple, Optional, Any
+# 3rd party libraries
+import numpy as np
+from matplotlib import pyplot as plt
+from lecroyutils.control import LecroyScope
+# own libraries
+import pysignalscope.functions as functions
+from pysignalscope.logconfig import setup_logging
+from pysignalscope.scope_dataclass import Scope
 # python libraries
 import copy
 import os.path
 import warnings
 import logging
-from typing import Union, List, Tuple, Optional, Any
-
-# 3rd party libraries
-import numpy as np
-from matplotlib import pyplot as plt
-from lecroyutils.control import LecroyScope
-
-# own libraries
-import pysignalscope.functions as functions
-from pysignalscope.logconfig import setup_logging
-from pysignalscope.scope_dataclass import Scope
+# Interactive shift plot
+from pysignalscope.channelshift import ScopeChShift as scope_ch_shift
 
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()
 
-# Modul name for static methods
-class_modulename = "Scope"
+# Modul name für static methods
+class_modulename = "scope"
 
 # - Class definition ------------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ class HandleScope:
                      channel_linestyle=channel_linestyle,
                      modulename=class_modulename)
 
-    # - Function modify ------------------------------------------------------------------------------
+    # - Method modify ------------------------------------------------------------------------------
 
     @staticmethod
     def modify(channel: Scope, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
@@ -861,7 +861,305 @@ class HandleScope:
         return fig
 
     @staticmethod
-    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's',
+    def check_limits(cur_value: float, min_value: float, max_value: float) -> bool:
+        """
+        Check if the  value is within the given range.
+
+        Example for a valid value:
+        >>> bool valid
+        >>> value = 10.2
+        >>> valid = HandleScope.check_limits(value, 3.2,11.3)
+        >>> if valid:
+        >>>     print(f"{value} is within the limit")
+        >>> else:
+        >>>     printf(f"{value} is invalid")
+        The  value will be check according the given limits.
+        If the value is within the limit the method provide True as return value.
+
+        :param cur_value: value to check
+        :type cur_value: float
+        :param min_value: lowest valid value
+        :type min_value: float
+        :param max_value: highest valid value
+        :type max_value: float
+
+        :return: condition result 'value is in range'
+        :rtype: bool
+        """
+        # Init return variable
+        ret_val = True
+
+        # Check for maximum
+        if cur_value > max_value:
+            ret_val = False
+        # Check for maximum
+        if cur_value < min_value:
+            ret_val = False
+
+        return ret_val
+
+    @staticmethod
+    def calculate_min_diff(cur_channel: np.array, ch_id: any) -> [bool, float]:
+        """
+        Check if the  value is within the given range.
+
+        Calculate the minimal absolute differene of the values within the array (values will not be sorted).
+
+        Example for a valid value:
+        >>> bool valid
+        >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
+        >>> valid,mindiff = HandleScope.calculate_min_diff(channel5,5)
+        >>> if valid:
+        >>>     print(f"{mindiff} is the minimum difference")
+        >>> else:
+        >>>     printf("Minimum difference could not be calculated")
+        The minimum difference of a channel are calculated. A difference of 0 is ignored.
+        The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
+
+        :param cur_channel: value to check
+        :type cur_channel: np.array
+        :param ch_id: lowest valid value
+        :type ch_id: any
+
+        :return: [Validity of the minimum value, minimum value]
+        :rtype: bool,float
+        """
+        # Search minimal difference
+        min_diff = 0
+        validity = False
+
+        # Check, if channel has got more, than one entry
+        if cur_channel.size > 1:
+            diff_channel = np.diff(cur_channel)
+            if np.min(diff_channel) <= 0 or np.max(diff_channel) == 0:
+                # Channel has got less equal on entry
+                logging.warning(f"Channel {ch_id} is invalid (no ascending order or multiple values assigned to one coordinate")
+            else:
+                min_diff = np.min(diff_channel[diff_channel > 0])
+                # Return value is valid
+                validity = True
+        else:
+            # Channel has got less equal on entry
+            logging.warning(f"Channel {ch_id} has got less equal on entry and will not be considered")
+
+        # Return validity and minimal difference
+        return [validity, min_diff]
+
+    @staticmethod
+    def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None, \
+                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None):
+        """
+        Plot channel datasets.
+
+        Examples:
+        >>> import pysignalscope as pss
+        >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
+        >>> pss.HandleScope.plot_shiftchannels([ch1, ch2])
+        Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
+        left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
+        If you release the left mouse button the area is marked. By moving the mouse within the area an perform
+        a button press, you confirm and you zoom in the area. If you perform the left mouse button click outside
+        of the marked area, you reject the selection. You reject the selection always by clicking the right mouse button independent you zoom out.
+        button. If no area is selected or wait for confirmation, the click on the right mouse button leads to zooming out.
+        There is a zoom limit in both directions. In this case, the rectangle shows the possible area (becomes larger),
+        after you have release the left mouse button.
+
+        Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
+        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
+        Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
+        The parameters has to fullfill conditions:
+        Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
+
+        :param channels: list of datasets
+        :type channels: list[Scope]
+        :param shiftstep_x: shift step in x-direction (optional parameter)
+                            Has to be in range 'minimal difference of 2 points of the channels'
+                            to ('displayed maximal x-value minus displayed minimal x-value')/10
+        :type shiftstep_x: float
+        :param shiftstep_y: shift step in y-direction (optional parameter)
+                            Has to be in range ('displayed maximal y-value minus displayed minimal y-value')/200
+                            to ('displayed maximal y-value minus displayed minimal y-value')/10
+        :type shiftstep_y: float
+        :param displayrange_x: Display range limits in x-direction (min_x, max_x)  (optional parameter)
+                            Definition: delta_min_x = 100 * 'minimum distance between 2 samples', min_x = 'minimal x-value (of all channels)',
+                                        max_x = 'maximal x-value (of all channels)',  delta_x = max_x-min_x
+                            The range for displayrange_x[0]: From min_x-delta_x to max_x-delta_min_x
+                            The range for displayrange_x[1]: From min_x+delta_min_x to max_x+delta_x
+                            and displayrange_x[1]-displayrange_x[0]>=delta_min_x
+        :type displayrange_x: tuple of float
+        :param displayrange_y: Display range limits in y-direction (min_y, max_y) (optional parameter)
+                            Definition: delta_y = max_y-min_y, min_y = 'minimal y-value (of all channels)',
+                                        max_y = 'maximal y-value (of all channels)',  delta_min_y = delta_y/100
+                            The range for displayrange_y[0]: From min_y-delta_y to max_y-delta_min_y*50
+                            The range for displayrange_y[1]: From min_y+delta_min_y*50 to max_y-delta_y
+                            and displayrange_y[1]-displayrange_y[0]>=delta_min_y*50
+        :type displayrange_y: tuple of float
+
+        :return: List of x and y-shifts per channel
+        :rtype: list[float]
+        """
+        # Init minimum and maximum values
+        global_min_x = float(np.min(channels[0].channel_time))
+        global_max_x = np.max(channels[0].channel_time)
+        global_min_y = np.min(channels[0].channel_data)
+        global_max_y = np.max(channels[0].channel_data)
+
+        # For-loop over channels
+        for channel in channels[1:]:
+            global_min_x = np.min([global_min_x, np.min(channel.channel_time)])
+            global_max_x = np.max([global_max_x, np.max(channel.channel_time)])
+            global_min_y = np.min([global_min_y, np.min(channel.channel_data)])
+            global_max_y = np.max([global_max_y, np.max(channel.channel_data)])
+
+        # Search minimal difference
+        min_diff_channel = 0
+        # For-loop over channels to calculate the minimum distance between the values
+        for channel_id, channel in enumerate(channels[1:], start=1):
+            validity, min_diff = HandleScope.calculate_min_diff(channel.channel_time, channel_id)
+            # Check, if the value is valid
+            if validity:
+                # Check, if a minimum is not set (min_diff_channel == 0
+                if min_diff_channel == 0:
+                    # First entry
+                    min_diff_channel = min_diff
+                else:
+                    # Additinal entries
+                    min_diff_channel = np.min([min_diff_channel, min_diff])
+            # Check if no channel provides a minimum
+            if min_diff_channel == 0:
+                # Invalid type of shift step x
+                logging.error("Any channel has got invalid values (no ascending order or multiple values for x.")
+                # Stop the programm
+                raise ValueError("Any channel has got invalid values (no ascending order or multiple values for x.")
+
+        # Calculate max_shiftstepx as delta_max/10, min_shiftstepx as min_diff_channel  and
+        # default value as delta_max/100
+        delta_x = (global_max_x-global_min_x)
+        # Check, if delta_x=0
+        if delta_x == 0:
+            delta_x = global_max_x
+        # Set the shift steps in x-direction
+        max_shiftstep_x = delta_x/10
+        min_shiftstep_x = min_diff_channel
+        def_shiftstep_x = max_shiftstep_x/50
+        # Check, if default shift is less mimimum shift
+        if def_shiftstep_x < min_shiftstep_x:
+            def_shiftstep_x = min_shiftstep_x
+
+        # Calculate max_shiftstepy as delta_max/10, min_shiftstepx as delta_max/200  and
+        # default value as delta_max/100
+        delta_y = (global_max_y-global_min_y)
+        # Check, if delta_y=0
+        if delta_y == 0:
+            delta_y = global_max_y
+        # Set the shift steps in y-direction
+        max_shiftstep_y = delta_y/10
+        min_shiftstep_y = delta_y/200
+        def_shiftstep_y = delta_y/100
+
+        # Initialize values
+        # Shift steps x
+        if isinstance(shiftstep_x, float) or isinstance(shiftstep_x, int):
+            if not HandleScope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
+                shiftstep_x = def_shiftstep_x
+                # Shift step in x-Direction is out of range
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                                f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
+        elif shiftstep_x is None:
+            shiftstep_x = def_shiftstep_x
+        else:
+            # Invalid type of shift step x
+            logging.error("Type of optional parameter 'shiftstep_x' has to be 'float'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'shiftstep_x' has to be 'float'.")
+
+        # Shift steps y
+        if isinstance(shiftstep_y, float) or isinstance(shiftstep_y, int):
+            if not HandleScope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
+                shiftstep_y = def_shiftstep_y
+                # Shift step in y-Direction is out of range
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                                f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
+                # logging
+        elif shiftstep_y is None:
+            shiftstep_y = def_shiftstep_y
+        else:
+            # Invalid type of shift step y
+            logging.error("Type of optional parameter 'shiftstep_y' has to be 'float'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'shiftstep_y' has to be 'float'.")
+
+        # Initialize the actual display range y with an invalid value
+        act_displayrange_x = [0.0, 0.0]
+        # Evaluate display range x
+        if isinstance(displayrange_x, tuple) and len(displayrange_x) == 2 \
+           and isinstance(displayrange_x[0], (float, int)) and isinstance(displayrange_x[1], (float, int)):
+            # Allow +-100 Percent: Calculate the delta
+            global_delta = global_max_x - global_min_x
+            display_delta = displayrange_x[1] - displayrange_x[0]
+            if (displayrange_x[0] < global_min_x - global_delta) \
+               or (displayrange_x[1] > global_max_x + global_delta) \
+               or global_delta < (min_shiftstep_x * 5):
+                # Display range in x-direction exeeds the limit
+                logging.warning(
+                    f"Display range in x-direction of min,max: {act_displayrange_x[0]},{act_displayrange_x[1]}  exeeds the limit "
+                    f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+            elif display_delta < 100 * min_shiftstep_x:
+                # Display range in x-direction exeeds the limit
+                logging.warning(
+                    f"Display range in x-direction of max-min: {display_delta} is to small (should be {100 * min_shiftstep_x})"
+                    f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+            else:
+                # Overtake display range in x-direction
+                act_displayrange_x[0] = displayrange_x[0]
+                act_displayrange_x[1] = displayrange_x[1]
+        elif displayrange_x is not None:
+            # Invalid type of Display range x
+            logging.error("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
+
+        # Initialize the actual display range y with an invalid value
+        act_displayrange_y = [0.0, 0.0]
+        # Evaluate display range y
+        if isinstance(displayrange_y, tuple) and len(displayrange_y) == 2 \
+           and isinstance(displayrange_y[0], (float, int)) and isinstance(displayrange_y[1], (float, int)):
+            # Allow +-100 Percent: Calculate the delta
+            global_delta = global_max_y - global_min_y
+            display_delta = displayrange_y[1] - displayrange_y[0]
+            if (displayrange_y[0] < (global_min_y - global_delta)) \
+               or (displayrange_y[1] > (global_max_y + global_delta)) \
+               or (global_delta < (min_shiftstep_y * 5)):
+                # Display range in y-direction exeeds the limit
+                logging.warning(
+                    f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exeeds the limit "
+                    f"min,max: {global_min_y - global_delta},{global_max_y + global_delta}.")
+            elif display_delta < global_delta / 100:
+                # Display range in y-direction exeeds the limit
+                logging.warning(
+                    f"Display range in y-direction of max-min: {display_delta} is to small (should be {global_delta / 100})"
+                    f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
+                # Set Display range in y-direction to max y-value
+            else:
+                # Overtake display range in y-direction
+                act_displayrange_y[0] = displayrange_y[0]
+                act_displayrange_y[1] = displayrange_y[1]
+        elif displayrange_y is not None:
+            # Invalid type of Display range y
+            logging.error("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
+            # Stop the programm
+            raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
+
+        # Create instance variable
+        ch_shift = scope_ch_shift()
+
+        # Set the limits of shiftstep and display-range
+        ch_shift.init_shiftstep_limits((min_shiftstep_x, max_shiftstep_x), (min_shiftstep_y, max_shiftstep_y))
+        # Return the list of channel shifts
+        return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
+
+    @staticmethod
+    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's', \
                    channel_units: Optional[List[str]] = None, channel_labels: Optional[List[str]] = None):
         """
         Plot the scope signal.
@@ -885,7 +1183,7 @@ class HandleScope:
             channel_list = HandleScope.from_lecroy(csv_file)
         else:
             # Log user warning
-            logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope", class_modulename, scope)
+            logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope")
             # Display message
             warnings.warn('Can not detect scope type. Set to Tektronix scope', stacklevel=2)
             channel_list = HandleScope.from_tektronix(csv_file)
