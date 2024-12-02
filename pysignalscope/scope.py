@@ -65,6 +65,17 @@ class HandleScope:
             channel_data = channel_data
         else:
             raise TypeError("channel_data must be type list or ArrayLike")
+        if np.any(np.isnan(channel_data)):
+            raise ValueError("NaN is not allowed in channel_data.")
+        if np.any(np.isinf(channel_data)):
+            raise ValueError("inf is not allowed in channel_data.")
+        # check if channel_time and channel_data have the same length
+        if len(channel_time) != len(channel_data):
+            raise ValueError("channel_time and channel_data must be same lenght.")
+        # check if channel_time is strictly increasing
+        if not np.all(np.diff(channel_time) > 0):
+            raise ValueError("channel time not strictly increasing.")
+
         # check channel_label for a valid type
         if isinstance(channel_label, str) or channel_label is None:
             channel_label = channel_label
@@ -504,7 +515,7 @@ class HandleScope:
 
     @staticmethod
     def from_numpy(period_vector_t_i: np.ndarray, mode: str = 'rad', f0: Union[float, None] = None,
-                   channel_label=None, channel_unit=None) -> 'Scope':
+                   channel_label: Optional[str] = None, channel_unit: Optional[str] = None) -> 'Scope':
         """
         Bring a numpy or list array to an instance of Channel.
 
@@ -534,9 +545,6 @@ class HandleScope:
         # check for correct input parameter
         if (mode == 'rad' or mode == 'deg') and f0 is None:
             raise ValueError("if mode is 'rad' or 'deg', a fundamental frequency f0 must be set")
-        # check for input is list. Convert to numpy-array
-        if isinstance(period_vector_t_i, List):
-            period_vector_t_i = np.array(period_vector_t_i)
 
         # mode pre-calculation
         if mode == 'rad' and f0 is not None:
@@ -546,12 +554,12 @@ class HandleScope:
         elif mode != 'time':
             raise ValueError("Mode not available. Choose: 'rad', 'deg', 'time'")
 
-        single_dataset_channel = Scope(period_vector_t_i[0], period_vector_t_i[1],
-                                       channel_label=channel_label, channel_unit=channel_unit, channel_color=None,
-                                       channel_linestyle=None, modulename=class_modulename, channel_source=None)
+        single_dataset_channel = HandleScope.generate_scope_object(period_vector_t_i[0], period_vector_t_i[1],
+                                                                   channel_label=channel_label, channel_unit=channel_unit, channel_color=None,
+                                                                   channel_linestyle=None, channel_source=None)
 
         # Log flow control
-        logging.debug(f"{class_modulename} :FlCtl Amount of Data: {len(single_dataset_channel)}")
+        logging.debug(f"{class_modulename} :FlCtl Amount of Data: 1")
 
         return single_dataset_channel
 

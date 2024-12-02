@@ -1,6 +1,7 @@
 """Class supports shifting channels within displayed plot."""
 from enum import Enum
 from typing import List, Tuple
+import os
 # 3rd party libraries
 from matplotlib import pyplot as plt
 # own libraries
@@ -14,7 +15,11 @@ import matplotlib.patches as patches
 from matplotlib.widgets import Button, TextBox
 from matplotlib.widgets import Slider
 
-matplotlib.use('TkAgg')
+# in case of GitHubs CI, use Agg instead of TkAgg (normal usage)
+if "IS_TEST" in os.environ:
+    matplotlib.use('Agg')
+else:
+    matplotlib.use('TkAgg')
 
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()

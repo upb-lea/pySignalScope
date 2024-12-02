@@ -35,10 +35,22 @@ jobs:
             ruff check $(git ls-files '*.py')
           
             pip install pylint 
-            pylint $(git ls-files '*.py') 
+            pylint $(git ls-files '*.py')
+      - name: check linting using pycodestyle
+        run: |
+          # try to install tkinter
+          sudo apt install python3-tk
 
       - name: install pySignalScope package
         run: |
             pip install -e .
+
+      # Runs a set of commands using the runners shell
+      - name: Run pytests
+        run: |
+          pip install pytest
+          echo Start testing...
+          pytest tests
+          echo tests finished.
 
 
