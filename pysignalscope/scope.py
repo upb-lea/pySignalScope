@@ -63,6 +63,10 @@ class HandleScope:
             channel_data = channel_data
         else:
             raise TypeError("channel_data must be type list or ArrayLike")
+        if np.any(np.isnan(channel_data)):
+            raise ValueError("NaN is not allowed in channel_data.")
+        if np.any(np.isinf(channel_data)):
+            raise ValueError("inf is not allowed in channel_data.")
         # check if channel_time and channel_data have the same length
         if len(channel_time) != len(channel_data):
             raise ValueError("channel_time and channel_data must be same lenght.")

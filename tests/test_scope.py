@@ -46,10 +46,22 @@ def test_generate_scope_object():
     numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
     numpy.testing.assert_equal(scope_object.channel_data, [1, -2.1, -3.2])
 
-    # valid mixed negative infinity and positive infinity value
-    scope_object = pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[-np.inf, np.inf, -3.2])
+    # very high, very low and very small mixed values
+    scope_object = pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1e25, -3.4e34, 3.1e-17])
     numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
-    numpy.testing.assert_equal(scope_object.channel_data, [-np.inf, np.inf, -3.2])
+    numpy.testing.assert_equal(scope_object.channel_data, [1e25, -3.4e34, 3.1e-17])
+
+    # invalid time value
+    with pytest.raises(ValueError):
+        pss.HandleScope.generate_scope_object(channel_time=[np.nan, 2, 3], channel_data=[0, 2, -3.2])
+
+    # invalid data value
+    with pytest.raises(ValueError):
+        pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[-np.nan, 2, -3.2])
+    with pytest.raises(ValueError):
+        pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[-np.inf, 2, -3.2])
+    with pytest.raises(ValueError):
+        pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[np.inf, 2, -3.2])
 
     # check None inputs
     scope_object = pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2])
@@ -82,7 +94,7 @@ def test_generate_scope_object():
         pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2], channel_linestyle=100.1)
 
 def test_from_numpy():
-    """Test for the function from_numpy()."""
+    """Test for the method from_numpy()."""
     time = [0, 1, 2 * np.pi]
     data = [2, 3, 2]
     frequency = 20000
