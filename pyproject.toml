@@ -18,7 +18,8 @@ classifiers = [
 ]
 dependencies = ["numpy",
                 "matplotlib",
-                "lecroyutils"]
+                "lecroyutils",
+                "scipy"]
 
 [project.urls]
 Homepage = "https://github.com/upb-lea/pySignalScope"
