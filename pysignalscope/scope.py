@@ -1341,7 +1341,7 @@ class HandleScope:
         return channel
 
     @staticmethod
-    def low_pass_filter(channel: Scope, order: int, angular_frequency_rad: float = 0.05) -> Scope:
+    def low_pass_filter(channel: Scope, order: int = 1, angular_frequency_rad: float = 0.05) -> Scope:
         """
         Implement a butterworth filter on the given signal.
 

@@ -176,6 +176,11 @@ def test_low_pass_filter():
     numpy.testing.assert_array_almost_equal([0.99927604, 2.26610791, 2.85423117, 3.5885494, 4.09641649, 3.33691443, 1.99801723],
                                             filter_current_prim_1.channel_data)
 
+    # working test for default values
+    filter_current_prim_1 = pss.HandleScope.low_pass_filter(current_prim)
+    numpy.testing.assert_array_almost_equal([0.7568143, 0.98001724, 1.15909406, 1.2985092, 1.37680805, 1.36477982, 1.29328745],
+                                            filter_current_prim_1.channel_data)
+
     # insert not a scope type
     with pytest.raises(TypeError):
         pss.HandleScope.low_pass_filter(5, order=1, angular_frequency_rad=0.5)
@@ -202,6 +207,10 @@ def test_derivative():
     # function test
     sample_scope_object = pss.HandleScope.generate_scope_object([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
     sample_scope_object_1st_derivative = pss.HandleScope.derivative(sample_scope_object, 1)
+    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
+
+    # function test using default order
+    sample_scope_object_1st_derivative = pss.HandleScope.derivative(sample_scope_object)
     numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
 
     # wrong scope type
