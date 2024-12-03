@@ -1,4 +1,9 @@
 """Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
+# python libraries
+import copy
+import os.path
+import warnings
+import logging
 from typing import Union, List, Tuple, Optional, Any
 import pickle
 
@@ -6,16 +11,11 @@ import pickle
 import numpy as np
 from matplotlib import pyplot as plt
 from lecroyutils.control import LecroyScope
+from scipy import signal
 # own libraries
 import pysignalscope.functions as functions
 from pysignalscope.logconfig import setup_logging
 from pysignalscope.scope_dataclass import Scope
-# python libraries
-import copy
-import os.path
-import warnings
-import logging
-# Interactive shift plot
 from pysignalscope.channelshift import ScopeChShift as scope_ch_shift
 
 # - Logging setup ---------------------------------------------------------------------------------
@@ -1337,6 +1337,48 @@ class HandleScope:
         logging.debug(f"{channel.modulename} :Time range: {start_time} to {end_time}")
 
         return channel
+
+    @staticmethod
+    def low_pass_filter(channel: Scope, order: int, angular_frequency_rad: float = 0.05) -> Scope:
+        """
+        Implement a butterworth filter on the given signal.
+
+        See also: https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
+
+        :param channel: Channel object
+        :type channel: Scope
+        :param order: filter order
+        :type order: int
+        :param angular_frequency_rad: angular frequency in rad. Valid for values 0...1. Smaller value means lower filter frequency.
+        :type angular_frequency_rad: float
+        :return: Scope object with filtered channel_data
+        :rtype: Scope
+        """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be of type Scope.")
+        if not isinstance(order, int):
+            raise TypeError("order must be of type int.")
+        if order <= 0:
+            raise ValueError("minimum order is 1.")
+        if not isinstance(angular_frequency_rad, float):
+            raise TypeError("angular_frequency_rad must be of type float.")
+        if angular_frequency_rad >= 1 or angular_frequency_rad <= 0:
+            raise ValueError("angular_frequency_rad must be in interval ]0...1[.")
+
+        # introduce scope copy for further channel modifications
+        scope_copy = HandleScope.copy(channel)
+
+        # filter adapted according to scipy example, see also:
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
+        b, a = signal.butter(order, angular_frequency_rad, btype="lowpass")
+        zi = signal.lfilter_zi(b, a)
+        z, _ = signal.lfilter(b, a, channel.channel_data, zi=zi * channel.channel_data[0])
+        z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
+        y = signal.filtfilt(b, a, channel.channel_data)
+
+        # overwrite scope data of the copy
+        scope_copy.channel_data = y
+        return scope_copy
 
     @staticmethod
     def rms(channel: Scope) -> Any:

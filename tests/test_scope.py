@@ -166,3 +166,32 @@ def test_from_numpy():
     # set wrong unit type
     with pytest.raises(TypeError):
         pss.HandleScope.from_numpy(period_vector_t_i, mode="rad", f0=frequency, channel_unit=100)
+
+def test_low_pass_filter():
+    """Unit test for low_pass_filter()."""
+    # working test
+    current_prim = pss.HandleScope.generate_scope_object([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
+    filter_current_prim_1 = pss.HandleScope.low_pass_filter(current_prim, 1, angular_frequency_rad=0.3)
+    numpy.testing.assert_array_almost_equal([0.99927604, 2.26610791, 2.85423117, 3.5885494, 4.09641649, 3.33691443, 1.99801723],
+                                            filter_current_prim_1.channel_data)
+
+    # insert not a scope type
+    with pytest.raises(TypeError):
+        pss.HandleScope.low_pass_filter(5, order=1, angular_frequency_rad=0.5)
+
+    # wrong filter order type
+    with pytest.raises(TypeError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1.4, angular_frequency_rad=0.5)
+    # negative filter order
+    with pytest.raises(ValueError):
+        pss.HandleScope.low_pass_filter(current_prim, order=-3, angular_frequency_rad=0.5)
+
+    # wrong filter frequency type
+    with pytest.raises(TypeError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=True)
+
+    # wrong frequency value
+    with pytest.raises(ValueError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=1.4)
+    with pytest.raises(ValueError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=-2.2)
