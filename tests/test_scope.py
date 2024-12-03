@@ -195,3 +195,22 @@ def test_low_pass_filter():
         pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=1.4)
     with pytest.raises(ValueError):
         pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=-2.2)
+
+def test_derivative():
+    """Test the derivative method."""
+    # function test
+    sample_scope_object = pss.HandleScope.generate_scope_object([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
+    sample_scope_object_1st_derivative = pss.HandleScope.derivative(sample_scope_object, 1)
+    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
+
+    # wrong scope type
+    with pytest.raises(TypeError):
+        pss.HandleScope.derivative(5, order=1)
+
+    # wrong order type
+    with pytest.raises(TypeError):
+        pss.HandleScope.derivative(sample_scope_object, order=3.3)
+
+    # negative oder type
+    with pytest.raises(ValueError):
+        pss.HandleScope.derivative(sample_scope_object, order=-2)

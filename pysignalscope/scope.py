@@ -12,6 +12,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from lecroyutils.control import LecroyScope
 from scipy import signal
+from findiff import FinDiff
+
 # own libraries
 import pysignalscope.functions as functions
 from pysignalscope.logconfig import setup_logging
@@ -1379,6 +1381,38 @@ class HandleScope:
         # overwrite scope data of the copy
         scope_copy.channel_data = y
         return scope_copy
+
+    @staticmethod
+    def derivative(channel: Scope, order: int = 1) -> Scope:
+        """
+        Get the derivative of the channel_data.
+
+        In case of measured input signal, it is useful to apply a low-pass filter first.
+
+        :param channel: Scope object
+        :type channel: Scope
+        :param order: oder of derivative, e.g. 1st order, ...
+        :type order: int
+        :return: Scope object
+        :rtype: Scope
+        """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+        if not isinstance(order, int):
+            raise TypeError("order must be type integer.")
+        if order <= 0:
+            raise ValueError("order must be > 0.")
+        # make a copy of the input channel object
+        channel_copy = HandleScope.copy(channel)
+
+        # calculate the derivative, using findiff-toolbox
+        d_dx = FinDiff(0, channel.channel_time, order)
+        df_dx = d_dx(channel.channel_data)
+
+        # apply the derivative to the scope channel copy
+        channel_copy.channel_data = df_dx
+
+        return channel_copy
 
     @staticmethod
     def rms(channel: Scope) -> Any:
