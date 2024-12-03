@@ -165,7 +165,7 @@ class HandleImpedance:
         :param channel_label: label to add to the Channel-class, optional.
         :type channel_label: str
         :return: Impedance object
-        :rtype: HandleImpedance
+        :rtype: Impedance
         """
         impedance_measurement = np.genfromtxt(csv_filename, delimiter=',', dtype=float, skip_header=1,
                                               encoding='latin1')
@@ -295,6 +295,7 @@ class HandleImpedance:
         Calculate R, L, C values for given impedance curve.
 
         Calculated values will be drawn in a plot for comparison with the given data.
+
         :param channel: Impedance channel object
         :type channel: Impedance
         :param type_rlc: Type 'R', 'L', 'C'
@@ -309,7 +310,8 @@ class HandleImpedance:
         :return: Values for R, L, C
         :rtype: tuple
 
-        Example:
+        :Example:
+
         >>> import pysignalscope as pss
         >>> example_data_rlc = pss.HandleImpedance.from_rlc('l', 1000, 500e-6, 10e-12)
         >>> recalculated_r, recalculated_l, recalculated_c = pss.HandleImpedance.calc_rlc(example_data_rlc, 'l', f_calc_l=10e3, f_calc_c=10e7, plot_figure=True)
@@ -390,24 +392,34 @@ class HandleImpedance:
         :return: Impedance object
         :rtype: Impedance
 
-        Example:
+        :Example:
+
         >>> import pysignalscope as pss
         >>> impedance_channel_object = pss.HandleImpedance.from_rlc('C', 10e-3, 100e-9, 36e-3)
 
          *  Type C and RLC
-        ---R---L---C---
+
+         .. code-block::
+
+            ---R---L---C---
 
          *  Type R
-        ---+---R---L---+---
-           |           |
-           +-----C-----+
+
+         .. code-block::
+
+            ---+---R---L---+---
+               |           |
+               +-----C-----+
 
          *  Type L
-        ---+---L---+---
-           |       |
-           +---C---+
-           |       |
-           +---R---+
+
+         .. code-block::
+
+            ---+---L---+---
+               |       |
+               +---C---+
+               |       |
+               +---R---+
         """
         f = np.logspace(0, 8, 10000)
 

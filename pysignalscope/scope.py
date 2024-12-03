@@ -765,10 +765,12 @@ class HandleScope:
         """
         Plot channel datasets.
 
-        Examples:
+        :Examples:
+
         >>> import pysignalscope as pss
         >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
         >>> pss.HandleScope.plot_channels([ch1, ch2, ch3],[ch4])
+
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
 
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
@@ -867,7 +869,8 @@ class HandleScope:
         """
         Check if the  value is within the given range.
 
-        Example for a valid value:
+        :Example for a valid value:
+
         >>> bool valid
         >>> value = 10.2
         >>> valid = HandleScope.check_limits(value, 3.2,11.3)
@@ -875,6 +878,7 @@ class HandleScope:
         >>>     print(f"{value} is within the limit")
         >>> else:
         >>>     printf(f"{value} is invalid")
+
         The  value will be check according the given limits.
         If the value is within the limit the method provide True as return value.
 
@@ -907,7 +911,8 @@ class HandleScope:
 
         Calculate the minimal absolute differene of the values within the array (values will not be sorted).
 
-        Example for a valid value:
+        :Example for a valid value:
+
         >>> bool valid
         >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
         >>> valid,mindiff = HandleScope.calculate_min_diff(channel5,5)
@@ -915,6 +920,7 @@ class HandleScope:
         >>>     print(f"{mindiff} is the minimum difference")
         >>> else:
         >>>     printf("Minimum difference could not be calculated")
+
         The minimum difference of a channel are calculated. A difference of 0 is ignored.
         The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
 
@@ -957,6 +963,7 @@ class HandleScope:
         >>> import pysignalscope as pss
         >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
         >>> pss.HandleScope.plot_shiftchannels([ch1, ch2])
+
         Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
         left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
         If you release the left mouse button the area is marked. By moving the mouse within the area an perform
