@@ -49,6 +49,13 @@ pySignalScope function documentation
 
 .. autoclass:: pysignalscope.Scope
    :members:
+   
+.. autoclass:: pysignalscope.HandleScope
+   :members:
+   
+.. autoclass:: pysignalscope.HandleImpedance
+   :members:
+  
 
 .. automodule:: pysignalscope.functions
    :members:

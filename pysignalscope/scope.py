@@ -984,14 +984,14 @@ class HandleScope:
         :type shiftstep_y: float
         :param displayrange_x: Display range limits in x-direction (min_x, max_x)  (optional parameter)
                             Definition: delta_min_x = 100 * 'minimum distance between 2 samples', min_x = 'minimal x-value (of all channels)',
-                                        max_x = 'maximal x-value (of all channels)',  delta_x = max_x-min_x
+                            max_x = 'maximal x-value (of all channels)',  delta_x = max_x-min_x
                             The range for displayrange_x[0]: From min_x-delta_x to max_x-delta_min_x
                             The range for displayrange_x[1]: From min_x+delta_min_x to max_x+delta_x
                             and displayrange_x[1]-displayrange_x[0]>=delta_min_x
         :type displayrange_x: tuple of float
         :param displayrange_y: Display range limits in y-direction (min_y, max_y) (optional parameter)
                             Definition: delta_y = max_y-min_y, min_y = 'minimal y-value (of all channels)',
-                                        max_y = 'maximal y-value (of all channels)',  delta_min_y = delta_y/100
+                            max_y = 'maximal y-value (of all channels)',  delta_min_y = delta_y/100
                             The range for displayrange_y[0]: From min_y-delta_y to max_y-delta_min_y*50
                             The range for displayrange_y[1]: From min_y+delta_min_y*50 to max_y-delta_y
                             and displayrange_y[1]-displayrange_y[0]>=delta_min_y*50
@@ -1345,7 +1345,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: rms(self.channel_data).
+        :return: rms(self.channel_data).
+        :rtype: Any
         """
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
@@ -1359,7 +1360,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: mean(self.channel_data).
+        :return: mean(self.channel_data)
+        :rtype: any
         """
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
@@ -1373,7 +1375,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: abs(mean(self.channel_data)).
+        :return: abs(mean(self.channel_data))
+        :rtype: Any
         """
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
@@ -1387,7 +1390,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: abs(channel.channel_data).
+        :return: abs(channel.channel_data).
+        :rtype: Scope
         """
         channel_modified = copy.deepcopy(channel)
 
@@ -1407,7 +1411,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: channel.channel_data ** 2.
+        :return: channel.channel_data ** 2 as scope object
+        :rtype: Scope
         """
         channel_modified = copy.deepcopy(channel)
 
