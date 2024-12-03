@@ -951,7 +951,7 @@ class HandleScope:
 
     @staticmethod
     def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None,
-                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None):
+                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None) -> list[list[float]]:
         """
         Plot channel datasets.
 
@@ -1000,7 +1000,7 @@ class HandleScope:
         :type displayrange_y: tuple of float
 
         :return: List of x and y-shifts per channel
-        :rtype: list[float]
+        :rtype: list[list[float]]
         """
         # Init minimum and maximum values
         global_min_x = float(np.min(channels[0].channel_time))
@@ -1291,8 +1291,8 @@ class HandleScope:
 
         >>> import pysignalscope as pss
         >>> import numpy as np
-        >>> channel = pss.HandleScope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
-        >>> pss.HandleScope.fft(channel)
+        >>> channel_example = pss.HandleScope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
+        >>> pss.HandleScope.fft(channel_example)
         """
         if not isinstance(plot, bool):
             raise TypeError("plot must be type bool.")

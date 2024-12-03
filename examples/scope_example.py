@@ -29,6 +29,8 @@ pss.HandleScope.save_figure(fig1, 'test')
 # Shift first two channels and plot the shift of these channels
 shiftlist = pss.HandleScope.plot_shiftchannels([voltage_prim, voltage_sec])
 
+print(f"{shiftlist=}")
+
 # print the list
 ch_i = 0
 for ch_shift in shiftlist:

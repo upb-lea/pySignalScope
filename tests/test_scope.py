@@ -8,6 +8,7 @@ import os
 import numpy as np
 import numpy.testing
 
+# key must be set before import of pysignalscope. Disables the GUI inside the test machine.
 os.environ["IS_TEST"] = "True"
 
 # own libraries
