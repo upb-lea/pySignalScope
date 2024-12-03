@@ -73,7 +73,7 @@ class HandleScope:
             raise ValueError("inf is not allowed in channel_data.")
         # check if channel_time and channel_data have the same length
         if len(channel_time) != len(channel_data):
-            raise ValueError("channel_time and channel_data must be same lenght.")
+            raise ValueError("channel_time and channel_data must be same length.")
         # check if channel_time is strictly increasing
         if not np.all(np.diff(channel_time) > 0):
             raise ValueError("channel time not strictly increasing.")
@@ -876,7 +876,7 @@ class HandleScope:
         >>> if valid:
         >>>     print(f"{value} is within the limit")
         >>> else:
-        >>>     printf(f"{value} is invalid")
+        >>>     print(f"{value} is invalid")
         The  value will be check according the given limits.
         If the value is within the limit the method provide True as return value.
 
@@ -912,17 +912,17 @@ class HandleScope:
         Example for a valid value:
         >>> bool valid
         >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
-        >>> valid,mindiff = HandleScope.calculate_min_diff(channel5,5)
+        >>> valid, mindiff = HandleScope.calculate_min_diff(channel5,5)
         >>> if valid:
         >>>     print(f"{mindiff} is the minimum difference")
         >>> else:
-        >>>     printf("Minimum difference could not be calculated")
+        >>>     print("Minimum difference could not be calculated")
         The minimum difference of a channel are calculated. A difference of 0 is ignored.
         The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
 
         :param cur_channel: value to check
         :type cur_channel: np.array
-        :param ch_id: lowest valid value
+        :param ch_id: the lowest valid value
         :type ch_id: any
 
         :return: [Validity of the minimum value, minimum value]
@@ -950,7 +950,7 @@ class HandleScope:
         return [validity, min_diff]
 
     @staticmethod
-    def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None, \
+    def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None,
                            displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None):
         """
         Plot channel datasets.
@@ -1027,13 +1027,13 @@ class HandleScope:
                     # First entry
                     min_diff_channel = min_diff
                 else:
-                    # Additinal entries
+                    # Additional entries
                     min_diff_channel = np.min([min_diff_channel, min_diff])
             # Check if no channel provides a minimum
             if min_diff_channel == 0:
                 # Invalid type of shift step x
                 logging.error("Any channel has got invalid values (no ascending order or multiple values for x.")
-                # Stop the programm
+                # Stop the program
                 raise ValueError("Any channel has got invalid values (no ascending order or multiple values for x.")
 
         # Calculate max_shiftstepx as delta_max/10, min_shiftstepx as min_diff_channel  and
@@ -1046,7 +1046,7 @@ class HandleScope:
         max_shiftstep_x = delta_x/10
         min_shiftstep_x = min_diff_channel
         def_shiftstep_x = max_shiftstep_x/50
-        # Check, if default shift is less mimimum shift
+        # Check, if default shift is less minimum shift
         if def_shiftstep_x < min_shiftstep_x:
             def_shiftstep_x = min_shiftstep_x
 
@@ -1067,14 +1067,14 @@ class HandleScope:
             if not HandleScope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
                 shiftstep_x = def_shiftstep_x
                 # Shift step in x-Direction is out of range
-                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
                                 f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
         elif shiftstep_x is None:
             shiftstep_x = def_shiftstep_x
         else:
             # Invalid type of shift step x
             logging.error("Type of optional parameter 'shiftstep_x' has to be 'float'.")
-            # Stop the programm
+            # Stop the program
             raise TypeError("Type of optional parameter 'shiftstep_x' has to be 'float'.")
 
         # Shift steps y
@@ -1082,7 +1082,7 @@ class HandleScope:
             if not HandleScope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
                 shiftstep_y = def_shiftstep_y
                 # Shift step in y-Direction is out of range
-                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
                                 f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
                 # logging
         elif shiftstep_y is None:
@@ -1090,7 +1090,7 @@ class HandleScope:
         else:
             # Invalid type of shift step y
             logging.error("Type of optional parameter 'shiftstep_y' has to be 'float'.")
-            # Stop the programm
+            # Stop the program
             raise TypeError("Type of optional parameter 'shiftstep_y' has to be 'float'.")
 
         # Initialize the actual display range y with an invalid value
@@ -1104,12 +1104,12 @@ class HandleScope:
             if (displayrange_x[0] < global_min_x - global_delta) \
                or (displayrange_x[1] > global_max_x + global_delta) \
                or global_delta < (min_shiftstep_x * 5):
-                # Display range in x-direction exeeds the limit
+                # Display range in x-direction exceeds the limit
                 logging.warning(
-                    f"Display range in x-direction of min,max: {act_displayrange_x[0]},{act_displayrange_x[1]}  exeeds the limit "
+                    f"Display range in x-direction of min,max: {act_displayrange_x[0]},{act_displayrange_x[1]}  exceeds the limit "
                     f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
             elif display_delta < 100 * min_shiftstep_x:
-                # Display range in x-direction exeeds the limit
+                # Display range in x-direction exceeds the limit
                 logging.warning(
                     f"Display range in x-direction of max-min: {display_delta} is to small (should be {100 * min_shiftstep_x})"
                     f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
@@ -1119,9 +1119,9 @@ class HandleScope:
                 act_displayrange_x[1] = displayrange_x[1]
         elif displayrange_x is not None:
             # Invalid type of Display range x
-            logging.error("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
-            # Stop the programm
-            raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
+            logging.error("Type of optional parameter 'displayrange_x' has to be 'tuple[float][float]'.")
+            # Stop the program
+            raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tuple[float][float]'.")
 
         # Initialize the actual display range y with an invalid value
         act_displayrange_y = [0.0, 0.0]
@@ -1134,12 +1134,12 @@ class HandleScope:
             if (displayrange_y[0] < (global_min_y - global_delta)) \
                or (displayrange_y[1] > (global_max_y + global_delta)) \
                or (global_delta < (min_shiftstep_y * 5)):
-                # Display range in y-direction exeeds the limit
+                # Display range in y-direction exceeds the limit
                 logging.warning(
-                    f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exeeds the limit "
+                    f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exceeds the limit "
                     f"min,max: {global_min_y - global_delta},{global_max_y + global_delta}.")
             elif display_delta < global_delta / 100:
-                # Display range in y-direction exeeds the limit
+                # Display range in y-direction exceeds the limit
                 logging.warning(
                     f"Display range in y-direction of max-min: {display_delta} is to small (should be {global_delta / 100})"
                     f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
@@ -1150,9 +1150,9 @@ class HandleScope:
                 act_displayrange_y[1] = displayrange_y[1]
         elif displayrange_y is not None:
             # Invalid type of Display range y
-            logging.error("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
-            # Stop the programm
-            raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
+            logging.error("Type of optional parameter 'displayrange_y' has to be 'tuple[float][float]'.")
+            # Stop the program
+            raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tuple[float][float]'.")
 
         # Create instance variable
         ch_shift = scope_ch_shift()
@@ -1163,7 +1163,7 @@ class HandleScope:
         return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
 
     @staticmethod
-    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's', \
+    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's',
                    channel_units: Optional[List[str]] = None, channel_labels: Optional[List[str]] = None):
         """
         Plot the scope signal.

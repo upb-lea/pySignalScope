@@ -27,7 +27,7 @@ def test_generate_scope_object():
         pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, 2])
     # invalid time data positive values
     with pytest.raises(ValueError):
-        scope_object = pss.HandleScope.generate_scope_object(channel_time=[3, 2, 1], channel_data=[1, 2, 3])
+        pss.HandleScope.generate_scope_object(channel_time=[3, 2, 1], channel_data=[1, 2, 3])
     # invalid time data negative values. Time values in wrong order.
     with pytest.raises(ValueError):
         pss.HandleScope.generate_scope_object(channel_time=[-1, -2, -3], channel_data=[1, 2, 3])
