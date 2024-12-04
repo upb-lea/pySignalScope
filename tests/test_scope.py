@@ -8,6 +8,7 @@ import os
 import numpy as np
 import numpy.testing
 
+# key must be set before import of pysignalscope. Disables the GUI inside the test machine.
 os.environ["IS_TEST"] = "True"
 
 # own libraries
@@ -27,7 +28,7 @@ def test_generate_scope_object():
         pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, 2])
     # invalid time data positive values
     with pytest.raises(ValueError):
-        scope_object = pss.HandleScope.generate_scope_object(channel_time=[3, 2, 1], channel_data=[1, 2, 3])
+        pss.HandleScope.generate_scope_object(channel_time=[3, 2, 1], channel_data=[1, 2, 3])
     # invalid time data negative values. Time values in wrong order.
     with pytest.raises(ValueError):
         pss.HandleScope.generate_scope_object(channel_time=[-1, -2, -3], channel_data=[1, 2, 3])
@@ -166,3 +167,60 @@ def test_from_numpy():
     # set wrong unit type
     with pytest.raises(TypeError):
         pss.HandleScope.from_numpy(period_vector_t_i, mode="rad", f0=frequency, channel_unit=100)
+
+def test_low_pass_filter():
+    """Unit test for low_pass_filter()."""
+    # working test
+    current_prim = pss.HandleScope.generate_scope_object([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
+    filter_current_prim_1 = pss.HandleScope.low_pass_filter(current_prim, 1, angular_frequency_rad=0.3)
+    numpy.testing.assert_array_almost_equal([0.99927604, 2.26610791, 2.85423117, 3.5885494, 4.09641649, 3.33691443, 1.99801723],
+                                            filter_current_prim_1.channel_data)
+
+    # working test for default values
+    filter_current_prim_1 = pss.HandleScope.low_pass_filter(current_prim)
+    numpy.testing.assert_array_almost_equal([0.7568143, 0.98001724, 1.15909406, 1.2985092, 1.37680805, 1.36477982, 1.29328745],
+                                            filter_current_prim_1.channel_data)
+
+    # insert not a scope type
+    with pytest.raises(TypeError):
+        pss.HandleScope.low_pass_filter(5, order=1, angular_frequency_rad=0.5)
+
+    # wrong filter order type
+    with pytest.raises(TypeError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1.4, angular_frequency_rad=0.5)
+    # negative filter order
+    with pytest.raises(ValueError):
+        pss.HandleScope.low_pass_filter(current_prim, order=-3, angular_frequency_rad=0.5)
+
+    # wrong filter frequency type
+    with pytest.raises(TypeError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=True)
+
+    # wrong frequency value
+    with pytest.raises(ValueError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=1.4)
+    with pytest.raises(ValueError):
+        pss.HandleScope.low_pass_filter(current_prim, order=1, angular_frequency_rad=-2.2)
+
+def test_derivative():
+    """Test the derivative method."""
+    # function test
+    sample_scope_object = pss.HandleScope.generate_scope_object([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
+    sample_scope_object_1st_derivative = pss.HandleScope.derivative(sample_scope_object, 1)
+    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
+
+    # function test using default order
+    sample_scope_object_1st_derivative = pss.HandleScope.derivative(sample_scope_object)
+    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
+
+    # wrong scope type
+    with pytest.raises(TypeError):
+        pss.HandleScope.derivative(5, order=1)
+
+    # wrong order type
+    with pytest.raises(TypeError):
+        pss.HandleScope.derivative(sample_scope_object, order=3.3)
+
+    # negative oder type
+    with pytest.raises(ValueError):
+        pss.HandleScope.derivative(sample_scope_object, order=-2)

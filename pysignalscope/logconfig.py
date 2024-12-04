@@ -19,7 +19,7 @@ import logging.config
 
 # - Code ------------------------------------------------------------------------------------------
 
-# Setup the logging level for the module
+# Set up the logging level for the module
 def setup_logging():
     """Set up the logging capability.
 

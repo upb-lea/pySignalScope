@@ -1,4 +1,9 @@
 """Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
+# python libraries
+import copy
+import os.path
+import warnings
+import logging
 from typing import Union, List, Tuple, Optional, Any
 import pickle
 
@@ -6,16 +11,13 @@ import pickle
 import numpy as np
 from matplotlib import pyplot as plt
 from lecroyutils.control import LecroyScope
+from scipy import signal
+from findiff import FinDiff
+
 # own libraries
 import pysignalscope.functions as functions
 from pysignalscope.logconfig import setup_logging
 from pysignalscope.scope_dataclass import Scope
-# python libraries
-import copy
-import os.path
-import warnings
-import logging
-# Interactive shift plot
 from pysignalscope.channelshift import ScopeChShift as scope_ch_shift
 
 # - Logging setup ---------------------------------------------------------------------------------
@@ -71,7 +73,7 @@ class HandleScope:
             raise ValueError("inf is not allowed in channel_data.")
         # check if channel_time and channel_data have the same length
         if len(channel_time) != len(channel_data):
-            raise ValueError("channel_time and channel_data must be same lenght.")
+            raise ValueError("channel_time and channel_data must be same length.")
         # check if channel_time is strictly increasing
         if not np.all(np.diff(channel_time) > 0):
             raise ValueError("channel time not strictly increasing.")
@@ -874,7 +876,7 @@ class HandleScope:
         >>> if valid:
         >>>     print(f"{value} is within the limit")
         >>> else:
-        >>>     printf(f"{value} is invalid")
+        >>>     print(f"{value} is invalid")
         The  value will be check according the given limits.
         If the value is within the limit the method provide True as return value.
 
@@ -910,17 +912,17 @@ class HandleScope:
         Example for a valid value:
         >>> bool valid
         >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
-        >>> valid,mindiff = HandleScope.calculate_min_diff(channel5,5)
+        >>> valid, mindiff = HandleScope.calculate_min_diff(channel5,5)
         >>> if valid:
         >>>     print(f"{mindiff} is the minimum difference")
         >>> else:
-        >>>     printf("Minimum difference could not be calculated")
+        >>>     print("Minimum difference could not be calculated")
         The minimum difference of a channel are calculated. A difference of 0 is ignored.
         The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
 
         :param cur_channel: value to check
         :type cur_channel: np.array
-        :param ch_id: lowest valid value
+        :param ch_id: the lowest valid value
         :type ch_id: any
 
         :return: [Validity of the minimum value, minimum value]
@@ -948,8 +950,8 @@ class HandleScope:
         return [validity, min_diff]
 
     @staticmethod
-    def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None, \
-                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None):
+    def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None,
+                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None) -> list[list[float]]:
         """
         Plot channel datasets.
 
@@ -998,7 +1000,7 @@ class HandleScope:
         :type displayrange_y: tuple of float
 
         :return: List of x and y-shifts per channel
-        :rtype: list[float]
+        :rtype: list[list[float]]
         """
         # Init minimum and maximum values
         global_min_x = float(np.min(channels[0].channel_time))
@@ -1025,13 +1027,13 @@ class HandleScope:
                     # First entry
                     min_diff_channel = min_diff
                 else:
-                    # Additinal entries
+                    # Additional entries
                     min_diff_channel = np.min([min_diff_channel, min_diff])
             # Check if no channel provides a minimum
             if min_diff_channel == 0:
                 # Invalid type of shift step x
                 logging.error("Any channel has got invalid values (no ascending order or multiple values for x.")
-                # Stop the programm
+                # Stop the program
                 raise ValueError("Any channel has got invalid values (no ascending order or multiple values for x.")
 
         # Calculate max_shiftstepx as delta_max/10, min_shiftstepx as min_diff_channel  and
@@ -1044,7 +1046,7 @@ class HandleScope:
         max_shiftstep_x = delta_x/10
         min_shiftstep_x = min_diff_channel
         def_shiftstep_x = max_shiftstep_x/50
-        # Check, if default shift is less mimimum shift
+        # Check, if default shift is less minimum shift
         if def_shiftstep_x < min_shiftstep_x:
             def_shiftstep_x = min_shiftstep_x
 
@@ -1065,14 +1067,14 @@ class HandleScope:
             if not HandleScope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
                 shiftstep_x = def_shiftstep_x
                 # Shift step in x-Direction is out of range
-                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
                                 f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
         elif shiftstep_x is None:
             shiftstep_x = def_shiftstep_x
         else:
             # Invalid type of shift step x
             logging.error("Type of optional parameter 'shiftstep_x' has to be 'float'.")
-            # Stop the programm
+            # Stop the program
             raise TypeError("Type of optional parameter 'shiftstep_x' has to be 'float'.")
 
         # Shift steps y
@@ -1080,7 +1082,7 @@ class HandleScope:
             if not HandleScope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
                 shiftstep_y = def_shiftstep_y
                 # Shift step in y-Direction is out of range
-                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " \
+                logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
                                 f"The range isn from {min_shiftstep_x} to {max_shiftstep_x}")
                 # logging
         elif shiftstep_y is None:
@@ -1088,7 +1090,7 @@ class HandleScope:
         else:
             # Invalid type of shift step y
             logging.error("Type of optional parameter 'shiftstep_y' has to be 'float'.")
-            # Stop the programm
+            # Stop the program
             raise TypeError("Type of optional parameter 'shiftstep_y' has to be 'float'.")
 
         # Initialize the actual display range y with an invalid value
@@ -1102,12 +1104,12 @@ class HandleScope:
             if (displayrange_x[0] < global_min_x - global_delta) \
                or (displayrange_x[1] > global_max_x + global_delta) \
                or global_delta < (min_shiftstep_x * 5):
-                # Display range in x-direction exeeds the limit
+                # Display range in x-direction exceeds the limit
                 logging.warning(
-                    f"Display range in x-direction of min,max: {act_displayrange_x[0]},{act_displayrange_x[1]}  exeeds the limit "
+                    f"Display range in x-direction of min,max: {act_displayrange_x[0]},{act_displayrange_x[1]}  exceeds the limit "
                     f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
             elif display_delta < 100 * min_shiftstep_x:
-                # Display range in x-direction exeeds the limit
+                # Display range in x-direction exceeds the limit
                 logging.warning(
                     f"Display range in x-direction of max-min: {display_delta} is to small (should be {100 * min_shiftstep_x})"
                     f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
@@ -1117,9 +1119,9 @@ class HandleScope:
                 act_displayrange_x[1] = displayrange_x[1]
         elif displayrange_x is not None:
             # Invalid type of Display range x
-            logging.error("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
-            # Stop the programm
-            raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tupel[float][float]'.")
+            logging.error("Type of optional parameter 'displayrange_x' has to be 'tuple[float][float]'.")
+            # Stop the program
+            raise TypeError("Type of optional parameter 'displayrange_x' has to be 'tuple[float][float]'.")
 
         # Initialize the actual display range y with an invalid value
         act_displayrange_y = [0.0, 0.0]
@@ -1132,12 +1134,12 @@ class HandleScope:
             if (displayrange_y[0] < (global_min_y - global_delta)) \
                or (displayrange_y[1] > (global_max_y + global_delta)) \
                or (global_delta < (min_shiftstep_y * 5)):
-                # Display range in y-direction exeeds the limit
+                # Display range in y-direction exceeds the limit
                 logging.warning(
-                    f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exeeds the limit "
+                    f"Display range in y-direction of min,max: {displayrange_y[0]},{displayrange_y[1]}  exceeds the limit "
                     f"min,max: {global_min_y - global_delta},{global_max_y + global_delta}.")
             elif display_delta < global_delta / 100:
-                # Display range in y-direction exeeds the limit
+                # Display range in y-direction exceeds the limit
                 logging.warning(
                     f"Display range in y-direction of max-min: {display_delta} is to small (should be {global_delta / 100})"
                     f"min,max: {global_min_x - global_delta},{global_max_x + global_delta}.")
@@ -1148,9 +1150,9 @@ class HandleScope:
                 act_displayrange_y[1] = displayrange_y[1]
         elif displayrange_y is not None:
             # Invalid type of Display range y
-            logging.error("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
-            # Stop the programm
-            raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tupel[float][float]'.")
+            logging.error("Type of optional parameter 'displayrange_y' has to be 'tuple[float][float]'.")
+            # Stop the program
+            raise TypeError("Type of optional parameter 'displayrange_y' has to be 'tuple[float][float]'.")
 
         # Create instance variable
         ch_shift = scope_ch_shift()
@@ -1161,7 +1163,7 @@ class HandleScope:
         return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
 
     @staticmethod
-    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's', \
+    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's',
                    channel_units: Optional[List[str]] = None, channel_labels: Optional[List[str]] = None):
         """
         Plot the scope signal.
@@ -1289,8 +1291,8 @@ class HandleScope:
 
         >>> import pysignalscope as pss
         >>> import numpy as np
-        >>> channel = pss.HandleScope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
-        >>> pss.HandleScope.fft(channel)
+        >>> channel_example = pss.HandleScope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
+        >>> pss.HandleScope.fft(channel_example)
         """
         if not isinstance(plot, bool):
             raise TypeError("plot must be type bool.")
@@ -1337,6 +1339,80 @@ class HandleScope:
         logging.debug(f"{channel.modulename} :Time range: {start_time} to {end_time}")
 
         return channel
+
+    @staticmethod
+    def low_pass_filter(channel: Scope, order: int = 1, angular_frequency_rad: float = 0.05) -> Scope:
+        """
+        Implement a butterworth filter on the given signal.
+
+        See also: https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
+
+        :param channel: Channel object
+        :type channel: Scope
+        :param order: filter order
+        :type order: int
+        :param angular_frequency_rad: angular frequency in rad. Valid for values 0...1. Smaller value means lower filter frequency.
+        :type angular_frequency_rad: float
+        :return: Scope object with filtered channel_data
+        :rtype: Scope
+        """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be of type Scope.")
+        if not isinstance(order, int):
+            raise TypeError("order must be of type int.")
+        if order <= 0:
+            raise ValueError("minimum order is 1.")
+        if not isinstance(angular_frequency_rad, float):
+            raise TypeError("angular_frequency_rad must be of type float.")
+        if angular_frequency_rad >= 1 or angular_frequency_rad <= 0:
+            raise ValueError("angular_frequency_rad must be in interval ]0...1[.")
+
+        # introduce scope copy for further channel modifications
+        scope_copy = HandleScope.copy(channel)
+
+        # filter adapted according to scipy example, see also:
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
+        b, a = signal.butter(order, angular_frequency_rad, btype="lowpass")
+        zi = signal.lfilter_zi(b, a)
+        z, _ = signal.lfilter(b, a, channel.channel_data, zi=zi * channel.channel_data[0])
+        z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
+        y = signal.filtfilt(b, a, channel.channel_data)
+
+        # overwrite scope data of the copy
+        scope_copy.channel_data = y
+        return scope_copy
+
+    @staticmethod
+    def derivative(channel: Scope, order: int = 1) -> Scope:
+        """
+        Get the derivative of the channel_data.
+
+        In case of measured input signal, it is useful to apply a low-pass filter first.
+
+        :param channel: Scope object
+        :type channel: Scope
+        :param order: oder of derivative, e.g. 1st order, ...
+        :type order: int
+        :return: Scope object
+        :rtype: Scope
+        """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+        if not isinstance(order, int):
+            raise TypeError("order must be type integer.")
+        if order <= 0:
+            raise ValueError("order must be > 0.")
+        # make a copy of the input channel object
+        channel_copy = HandleScope.copy(channel)
+
+        # calculate the derivative, using findiff-toolbox
+        d_dx = FinDiff(0, channel.channel_time, order)
+        df_dx = d_dx(channel.channel_data)
+
+        # apply the derivative to the scope channel copy
+        channel_copy.channel_data = df_dx
+
+        return channel_copy
 
     @staticmethod
     def rms(channel: Scope) -> Any:
