@@ -24,7 +24,7 @@ current_sec = pss.HandleScope.modify(current_sec, channel_data_factor=1.3, chann
 
 # Plot channels
 fig1 = pss.HandleScope.plot_channels([voltage_prim, voltage_sec], [current_prim, current_sec], timebase='us')
-pss.HandleScope.save(fig1, 'test')
+pss.HandleScope.save_figure(fig1, 'test')
 
 # Shift first two channels and plot the shift of these channels
 shiftlist = pss.HandleScope.plot_shiftchannels([voltage_prim, voltage_sec])
@@ -41,7 +41,7 @@ current_prim = pss.HandleScope.modify(current_prim, channel_time_shift=5e-6)
 pss.HandleScope.fft(current_prim)
 
 # ------------------------------------------
-# Example 2: Read curves from LeCroy csv-Files and GeckoCirucits. Compare these signals.
+# Example 2: Read curves from LeCroy csv-Files and GeckoCIRCUITS. Compare these signals.
 # ------------------------------------------
 
 meas_v_ob, meas_il_ib, meas_il_ob = pss.HandleScope.from_lecroy('scope_example_data_lecroy_1.csv',
@@ -87,7 +87,9 @@ mean_diff_il_ob = pss.HandleScope.mean(diff_il_ob)
 # Average of absolute values
 absmean_diff_il_ob = pss.HandleScope.absmean(diff_il_ob)
 # Print calculated values
-print(f"Rootmeansquare={rms_diff_il_ob}\nAverage value={mean_diff_il_ob}\nAbsolute average value={absmean_diff_il_ob}\n")
+print(f"Root mean square = {rms_diff_il_ob}\n"
+      f"Average value = {mean_diff_il_ob}\n"
+      f"Absolute average value={absmean_diff_il_ob}\n")
 # Plot results
 pss.HandleScope.plot_channels([diff_il_ob])
 # Plot results

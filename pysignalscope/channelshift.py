@@ -189,7 +189,7 @@ class ScopeChShift:
         # Set display range in y-direction
         ScopeChShift.zoom_ax.set_ylim(act_displayrange_y[0], act_displayrange_y[1])
 
-        # Define mimimum zoom window as min_shiftstep_[xy]*5
+        # Define minimum zoom window as min_shiftstep_[xy]*5
         ScopeChShift.zoom_delta_y = ScopeChShift.min_shiftstep_y * 5
         ScopeChShift.zoom_delta_x = ScopeChShift.min_shiftstep_x * 5
 
@@ -217,12 +217,12 @@ class ScopeChShift:
         # Button for selection of graph
         button_ax = plt.axes([0.1, 0.25, 0.3, 0.075])  # Position and size of button
         ScopeChShift.chn_sel_button = Button(button_ax, 'Sel. Plot')
-        ScopeChShift.chn_sel_button.on_clicked(ScopeChShift.__next_channel)  # Verknüpft die Schaltfläche mit der Funktion
+        ScopeChShift.chn_sel_button.on_clicked(ScopeChShift.__next_channel)  # links button to function
 
         # Button for reset slider position
         button_ax = plt.axes([0.85, 0.1, 0.14, 0.1])  # Position and size of button
         ScopeChShift.shsl_reset_button = Button(button_ax, 'Re-calibrate\nslider')
-        ScopeChShift.shsl_reset_button.on_clicked(ScopeChShift.__reset_slider)  # Verknüpft die Schaltfläche mit der Funktion
+        ScopeChShift.shsl_reset_button.on_clicked(ScopeChShift.__reset_slider)  # links button to function
 
         # Textbox for step size
         text_box_ax = plt.axes([0.6, 0.15, 0.2, 0.05])
@@ -300,9 +300,9 @@ class ScopeChShift:
         Select the next channel.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to a button.
+        Called by matplotlib-Event and assigned to a button.
 
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
+        :param event: Container with some information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
         # Increment the index of the selected channel
@@ -321,7 +321,7 @@ class ScopeChShift:
         ScopeChShift.selplotlabel.set_text(labeltext)
         ScopeChShift.selplotlabel.set_color(ScopeChShift.channelplotlist[ScopeChShift.chn_index].get_color())
 
-        ScopeChShift.shiftfig.canvas.draw_idle()  # Aktualisiert die Darstellung
+        ScopeChShift.shiftfig.canvas.draw_idle()  # update view
         ScopeChShift.last_val = 0
         ScopeChShift.shift_slider.set_val(0)
 
@@ -334,9 +334,9 @@ class ScopeChShift:
         Toggle the shift direction.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to a button.
+        Called by matplotlib-Event and assigned to a button.
 
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
+        :param event: Container with some information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
         # Check shift direction
@@ -359,7 +359,7 @@ class ScopeChShift:
         ScopeChShift.shiftfig.canvas.draw_idle()
 
         # Log flow control
-        logging.debug(f"{class_modulename} :Shift direction is toogled to {ScopeChShift.shift_dir} (0=x, 1=y).")
+        logging.debug(f"{class_modulename} :Shift direction is toggled to {ScopeChShift.shift_dir} (0=x, 1=y).")
 
     @staticmethod
     def __submit(text: str):
@@ -367,7 +367,7 @@ class ScopeChShift:
         Change the shift-step size.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to an update of text.
+        Called by matplotlib-Event and assigned to an update of text.
 
         :param text: Updated text
         :type text: string
@@ -438,7 +438,7 @@ class ScopeChShift:
         Shift the channel by movement of the slider.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to the slider
+        Called by matplotlib-Event and assigned to the slider
 
         :param val:  slider position
         :type val: float
@@ -477,9 +477,9 @@ class ScopeChShift:
         Recalibrate the slider position to zero without movement of the channel.
 
         This method is private (only for internal usage)
-        Called by mathplotlib-Event and assigned to a button
+        Called by matplotlib-Event and assigned to a button
 
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
+        :param event: Container with some information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
         ScopeChShift.last_val = 0
@@ -498,9 +498,9 @@ class ScopeChShift:
         Notification event if a mouse button is pressed.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event on button press
+        Called by matplotlib-Event on button press
 
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
+        :param event: Container with some information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
         # Check, if the button press was within the area
@@ -539,9 +539,9 @@ class ScopeChShift:
         Provide the current mouse position in case of mouse movement.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event on button press
+        Called by matplotlib-Event on button press
 
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
+        :param event: Container with some information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
         # Check Zoomstate
@@ -574,9 +574,9 @@ class ScopeChShift:
         Notify the mouse button release.
 
         This callback method is private (only for internal usage)
-        Called by mathplotlib-Event on button press
+        Called by matplotlib-Event on button press
 
-        :param event: Container with several information: x and y position in pixel, x and y position in data scale,...
+        :param event: Container with some information: x and y position in pixel, x and y position in data scale,...
         :type event: any
         """
         # Check, if the left button was released
@@ -598,13 +598,13 @@ class ScopeChShift:
                     cur_zoom_delta = ScopeChShift.zoom_end_x - ScopeChShift.zoom_start_x
                     # Read  range
                     cur_start_x, cur_end_x = ScopeChShift.zoom_ax.get_xlim()
-                    # Check if the mimimum zoom is reached
+                    # Check if the minimum zoom is reached
                     if cur_end_x - cur_start_x <= ScopeChShift.zoom_delta_x:
                         # Overtake rect
                         ScopeChShift.zoom_end_x = cur_end_x
                         ScopeChShift.zoom_start_x = cur_start_x
                         # Log flow control
-                        logging.debug("Mimimum zoom in x-direction is reached. Zooming in x-direction is denied.")
+                        logging.debug("minimum zoom in x-direction is reached. Zooming in x-direction is denied.")
                     elif cur_zoom_delta < ScopeChShift.zoom_delta_x:
                         logging.debug(f"Selected range in x-direction {ScopeChShift.zoom_start_x} to {event.xdata} is too small.")
                         ScopeChShift.zoom_end_x = ScopeChShift.zoom_end_x + (ScopeChShift.zoom_delta_x - cur_zoom_delta) / 2
@@ -612,7 +612,7 @@ class ScopeChShift:
                         if ScopeChShift.zoom_end_x > ScopeChShift.display_max_x:
                             ScopeChShift.zoom_end_x = ScopeChShift.display_max_x
                             ScopeChShift.zoom_start_x = ScopeChShift.zoom_end_x - ScopeChShift.zoom_delta_x
-                        else:  # Calculate mimimum window value
+                        else:  # Calculate minimum window value
                             ScopeChShift.zoom_start_x = ScopeChShift.zoom_start_x - (ScopeChShift.zoom_delta_x - cur_zoom_delta) / 2
                         # Check, if minimum limit is exceed
                         if ScopeChShift.zoom_start_x < ScopeChShift.display_min_x:
@@ -624,13 +624,13 @@ class ScopeChShift:
                     cur_zoom_delta = ScopeChShift.zoom_end_y - ScopeChShift.zoom_start_y
                     # Read  range
                     cur_start_y, cur_end_y = ScopeChShift.zoom_ax.get_ylim()
-                    # Check if the mimimum zoom is reached
+                    # Check if the minimum zoom is reached
                     if cur_end_y - cur_start_y <= ScopeChShift.zoom_delta_y:
                         # Overtake rect
                         ScopeChShift.zoom_end_y = cur_end_y
                         ScopeChShift.zoom_start_y = cur_start_y
                         # Log flow control
-                        logging.debug("Mimimum zoom in y-direction is reached. Zooming in y-direction is denied.")
+                        logging.debug("minimum zoom in y-direction is reached. Zooming in y-direction is denied.")
                     elif cur_zoom_delta < ScopeChShift.zoom_delta_y:
                         logging.debug(f"Selected range in y-direction {ScopeChShift.zoom_start_y} to {event.ydata} is too small.")
                         ScopeChShift.zoom_end_y = ScopeChShift.zoom_end_y + (ScopeChShift.zoom_delta_y - cur_zoom_delta) / 2
@@ -638,7 +638,7 @@ class ScopeChShift:
                         if ScopeChShift.zoom_end_y > ScopeChShift.display_max_y:
                             ScopeChShift.zoom_end_y = ScopeChShift.display_max_y
                             ScopeChShift.zoom_start_y = ScopeChShift.zoom_end_y - ScopeChShift.zoom_delta_y
-                        else:  # Calculate mimimum window value
+                        else:  # Calculate minimum window value
                             ScopeChShift.zoom_start_y = (
                                 ScopeChShift.zoom_start_y - (ScopeChShift.zoom_delta_y - cur_zoom_delta) / 2)
                         # Check, if minimum limit is exceed
