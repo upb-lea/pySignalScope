@@ -95,6 +95,10 @@ def test_generate_scope_object():
     assert scope_object.channel_source == "scope 11"
     assert scope_object.channel_linestyle == "--"
 
+    # allow tuple inputs for color (custom color schemes)
+    scope_object = pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2], channel_color=pss.gnome_colors["red"])
+    assert scope_object.channel_color == pss.gnome_colors["red"]
+
     # wrong type inputs
     with pytest.raises(TypeError):
         pss.HandleScope.generate_scope_object(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2], channel_label=100.1)

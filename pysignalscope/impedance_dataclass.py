@@ -24,4 +24,3 @@ class Impedance:
 
     # meta data
     channel_source: Union[str]  #: channel source, additional meta data (optional)
-
