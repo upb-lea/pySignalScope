@@ -33,7 +33,7 @@ class HandleScope:
 
     @staticmethod
     def generate_scope_object(channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
-                              channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+                              channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
                               channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> Scope:
         """
         Generate a scope object.
@@ -79,7 +79,7 @@ class HandleScope:
             raise ValueError("channel time not strictly increasing.")
 
         # check channel_label for a valid type
-        if isinstance(channel_label, str) or channel_label is None:
+        if isinstance(channel_label, str) or isinstance(channel_color, tuple) or channel_label is None:
             channel_label = channel_label
         else:
             raise TypeError("channel_label must be type str or None.")
@@ -89,7 +89,7 @@ class HandleScope:
         else:
             raise TypeError("channel_unit must be type str or None.")
         # check channel_color for a valid type
-        if isinstance(channel_color, str) or channel_color is None:
+        if isinstance(channel_color, str) or channel_color is None or isinstance(channel_color, tuple):
             channel_color = channel_color
         else:
             raise TypeError("channel_color must be type str or None.")
@@ -117,7 +117,7 @@ class HandleScope:
 
     @staticmethod
     def modify(channel: Scope, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
-               channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+               channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
                channel_source: Optional[str] = None, channel_time_shift: Optional[float] = None,
                channel_time_shift_rotate: Optional[float] = None,
                channel_time_cut_min: Optional[float] = None, channel_time_cut_max: Optional[float] = None,
@@ -185,13 +185,13 @@ class HandleScope:
             pass
         else:
             raise TypeError("channel_data_offset must be type float or None")
-        if isinstance(channel_color, str):
+        if isinstance(channel_color, str) or isinstance(channel_color, tuple):
             channel_modified.channel_color = channel_color
             modify_flag = True
         elif channel_color is None:
             pass
         else:
-            raise TypeError("channel_color must be type str or None")
+            raise TypeError("channel_color must be type str or tuple or None")
         if isinstance(channel_source, str):
             channel_modified.channel_source = channel_source
             modify_flag = True

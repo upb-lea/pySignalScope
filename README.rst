@@ -12,6 +12,7 @@ Bring measurements from the oscilloscope and the circuit simulator into a standa
 
 .. image:: docs/source/figures/introduction.png
 
+
 Getting started
 ---------------
 Install this repository into your virtual environment (venv) or jupyter notebook:
@@ -26,6 +27,17 @@ Use the toolbox in your python program:
 
     import pysignalscope as pss
     ...
+
+Example usage
+-------------
+pySignalScope helps to load, edit, display and analyze the signals. The following application example loads a noisy measurement signal, which is first filtered. To simplify the display, colors, linestyle and the label can be attached to the object. This is shown in the plot above.
+
+
+The lower plot shows the post-processing of the filtered signal. This is multiplied by a small gain, provided with an offset and shortened to a period duration. The label, color and line style are changed. The signals are then plotted with just one plot command.
+
+
+.. image:: docs/source/figures/function_overview.png
+
 
 Examples
 --------
