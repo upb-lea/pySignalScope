@@ -279,6 +279,8 @@ class HandleScope:
         :param channel: Scope channel object
         :type channel: Scope
         """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
         return copy.deepcopy(channel)
 
     @staticmethod

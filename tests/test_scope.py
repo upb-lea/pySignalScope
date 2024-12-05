@@ -262,3 +262,23 @@ def test_save_load():
     # load: non-existing pkl-file
     with pytest.raises(ValueError):
         pss.HandleScope.load("test_example_not_existing.pkl")
+
+def test_copy():
+    """Unit test for copy()."""
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleScope.copy("not-a-channel")
+
+    # test for valid copy
+    object_to_copy = pss.HandleScope.generate_scope_object([1, 2, 3], [4, 5, 6],
+                                                           channel_unit="A", channel_label="label", channel_color="red",
+                                                           channel_source="source", channel_linestyle='--')
+    object_copy = pss.HandleScope.copy(object_to_copy)
+
+    assert (object_to_copy.channel_time == object_copy.channel_time).all()
+    assert (object_to_copy.channel_data == object_copy.channel_data).all()
+    assert object_to_copy.channel_unit == object_copy.channel_unit
+    assert object_to_copy.channel_label == object_copy.channel_label
+    assert object_to_copy.channel_color == object_copy.channel_color
+    assert object_to_copy.channel_source == object_copy.channel_source
+    assert object_to_copy.channel_linestyle == object_copy.channel_linestyle

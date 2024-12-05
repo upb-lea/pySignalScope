@@ -204,6 +204,8 @@ class HandleImpedance:
         :return: Deepcopy of the impedance object
         :rtype: Impedance
         """
+        if not isinstance(channel, Impedance):
+            raise TypeError("channel must be type Impedance.")
         return copy.deepcopy(channel)
 
     @staticmethod

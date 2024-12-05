@@ -170,3 +170,24 @@ def test_save_load():
     # load: non-existing pkl-file
     with pytest.raises(ValueError):
         pss.HandleImpedance.load("test_example_not_existing.pkl")
+
+def test_copy():
+    """Unit test for copy()."""
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleImpedance.copy("not-a-channel")
+
+    # test for valid copy
+    object_to_copy = pss.HandleImpedance.generate_impedance_object([1, 2, 3], [4, 5, 6], [7, 8, 9],
+                                                                   channel_unit="A", channel_label="label", channel_color="red",
+                                                                   channel_source="source", channel_linestyle='--')
+    object_copy = pss.HandleImpedance.copy(object_to_copy)
+
+    assert (object_to_copy.channel_frequency == object_copy.channel_frequency).all()
+    assert (object_to_copy.channel_impedance == object_copy.channel_impedance).all()
+    assert (object_to_copy.channel_phase == object_copy.channel_phase).all()
+    assert object_to_copy.channel_unit == object_copy.channel_unit
+    assert object_to_copy.channel_label == object_copy.channel_label
+    assert object_to_copy.channel_color == object_copy.channel_color
+    assert object_to_copy.channel_source == object_copy.channel_source
+    assert object_to_copy.channel_linestyle == object_copy.channel_linestyle
