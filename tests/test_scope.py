@@ -224,3 +224,41 @@ def test_derivative():
     # negative oder type
     with pytest.raises(ValueError):
         pss.HandleScope.derivative(sample_scope_object, order=-2)
+
+def test_save_load():
+    """Unit test for save and load."""
+    # assumption: the given scope object is valid
+    example = pss.HandleScope.generate_scope_object([1, 2, 3], [4, 5, 6],
+                                                    channel_unit="A", channel_label="label", channel_color="red",
+                                                    channel_source="source", channel_linestyle='--')
+
+    # save + load: working example
+    pss.HandleScope.save(example, "test_example")
+    loaded_example = pss.HandleScope.load("test_example.pkl")
+    assert (example.channel_time == loaded_example.channel_time).all()
+    assert (example.channel_data == loaded_example.channel_data).all()
+    assert example.channel_unit == loaded_example.channel_unit
+    assert example.channel_label == loaded_example.channel_label
+    assert example.channel_color == loaded_example.channel_color
+    assert example.channel_source == loaded_example.channel_source
+    assert example.channel_linestyle == loaded_example.channel_linestyle
+
+    # save: wrong file path type
+    with pytest.raises(TypeError):
+        pss.HandleScope.save(example, 123)
+
+    # save: insert wrong scope type
+    with pytest.raises(TypeError):
+        pss.HandleScope.save(123, "test_example")
+
+    # load: not a pkl-file
+    with pytest.raises(ValueError):
+        pss.HandleScope.load("test_example.m")
+
+    # load: not a string filepath
+    with pytest.raises(TypeError):
+        pss.HandleScope.load(123)
+
+    # load: non-existing pkl-file
+    with pytest.raises(ValueError):
+        pss.HandleScope.load("test_example_not_existing.pkl")

@@ -3,6 +3,8 @@
 from typing import Union, List, Tuple, Optional
 import copy
 import cmath
+import os
+import pickle
 
 # 3rd party libraries
 import numpy as np
@@ -459,3 +461,51 @@ class HandleImpedance:
         print(f"{derivation_capacitance=}")
 
         return capacitor_impedance
+
+    @staticmethod
+    def save(impedance_object: Impedance, filepath: str) -> None:
+        """
+        Save an impedance object to hard disk.
+
+        :param impedance_object: impedance object
+        :type impedance_object: Impedance
+        :param filepath: filepath including file name
+        :type filepath: str
+        """
+        if not isinstance(filepath, str):
+            raise TypeError("filepath must be of type str.")
+        if ".pkl" not in filepath:
+            filepath = filepath + ".pkl"
+        file_path, file_name = os.path.split(filepath)
+        if file_path == "":
+            file_path = os.path.curdir
+        if not os.path.exists(file_path):
+            os.makedirs(file_path, exist_ok=True)
+        if not isinstance(impedance_object, Impedance):
+            raise TypeError("impedance_object must be of type Impedance.")
+
+        with open(filepath, 'wb') as handle:
+            pickle.dump(impedance_object, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    @staticmethod
+    def load(filepath: str) -> Impedance:
+        """
+        Load an impedance file from the hard disk.
+
+        :param filepath: filepath
+        :type filepath: str
+        :return: loaded impedance object
+        :rtype: Impedance
+        """
+        if not isinstance(filepath, str):
+            raise TypeError("filepath must be of type str.")
+        if ".pkl" not in filepath:
+            raise ValueError("filepath must end with .pkl")
+        if not os.path.exists(filepath):
+            raise ValueError(f"{filepath} does not exist.")
+        with open(filepath, 'rb') as handle:
+            loaded_scope_object: Impedance = pickle.load(handle)
+        if not isinstance(loaded_scope_object, Impedance):
+            raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
+
+        return loaded_scope_object

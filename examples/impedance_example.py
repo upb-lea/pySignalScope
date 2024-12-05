@@ -20,3 +20,7 @@ print(f"{recalculated_c=}")
 
 # plot multiple channel data
 pss.HandleImpedance.plot_impedance([example_data_0mm5, example_data_1mm5, example_data_rlc])
+
+# save and load an impedance object
+pss.HandleImpedance.save(example_data_rlc, "example")
+loaded_impedance_object = pss.HandleImpedance.load("example.pkl")
