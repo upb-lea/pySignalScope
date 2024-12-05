@@ -310,14 +310,9 @@ class HandleScope:
 
         channel_list = []
         for channel_count in range(1, channel_counts + 1):
-            channel_list.append(Scope(channel_time=time,
-                                      channel_data=file[:, channel_count],
-                                      channel_source=channel_source,
-                                      channel_label=None,
-                                      channel_unit=None,
-                                      channel_color=None,
-                                      channel_linestyle=None,
-                                      modulename=class_modulename))
+            channel_list.append(HandleScope.generate_scope_object(
+                channel_time=time, channel_data=file[:, channel_count], channel_source=channel_source,
+                channel_label=None, channel_unit=None, channel_color=None, channel_linestyle=None))
 
         # Log user error Empty csv-file
         if channel_count == 0:
@@ -363,9 +358,9 @@ class HandleScope:
             if not ch1_data:
                 logging.info(f"{class_modulename} : file {csv_file}->Invalid file or file without content")
 
-            tektronix_channels.append(Scope(time, ch1_data, channel_source=channel_source,
-                                            channel_label=os.path.basename(csv_file).replace('.csv', ''),
-                                            channel_unit=None, channel_linestyle=None, channel_color=None, modulename=class_modulename))
+            tektronix_channels.append(HandleScope.generate_scope_object(
+                time, ch1_data, channel_source=channel_source, channel_label=os.path.basename(csv_file).replace('.csv', ''),
+                channel_unit=None, channel_linestyle=None, channel_color=None))
 
         # Log user error Empty csv-file
         if not tektronix_channels:
@@ -403,8 +398,9 @@ class HandleScope:
 
         channel_list = []
         for channel_count in range(1, channel_counts + 1):
-            channel_list.append(Scope(time, file[:, channel_count], channel_source=channel_source, channel_color=None, channel_linestyle=None,
-                                      channel_unit=None, channel_label=None, modulename=class_modulename))
+            channel_list.append(HandleScope.generate_scope_object(
+                time, file[:, channel_count], channel_source=channel_source, channel_color=None, channel_linestyle=None,
+                channel_unit=None, channel_label=None))
 
         # Log user error Empty csv-file
         if channel_count == 0:
@@ -447,10 +443,10 @@ class HandleScope:
             time = file[:, 0]
             ch1_data = file[:, 1]
 
-            lecroy_channel.append(Scope(channel_time=time, channel_data=ch1_data, channel_source=channel_source,
-                                        channel_label=os.path.basename(csv_file).replace('.csv', ''),
-                                        channel_unit=None, channel_color=None, channel_linestyle=None,
-                                        modulename=class_modulename))
+            lecroy_channel.append(HandleScope.generate_scope_object(
+                channel_time=time, channel_data=ch1_data, channel_source=channel_source,
+                channel_label=os.path.basename(csv_file).replace('.csv', ''), channel_unit=None,
+                channel_color=None, channel_linestyle=None))
 
         # Log user error Empty csv-file
         if not lecroy_channel:
@@ -513,8 +509,9 @@ class HandleScope:
 
         if channel is not None:
             data = scope.waveform(channel)
-            return Scope(channel_time=data.x, channel_data=data.y, channel_source=channel_source, channel_label=channel_label,
-                         channel_color=None, channel_linestyle=None, channel_unit=None, modulename=class_modulename)
+            return HandleScope.generate_scope_object(
+                channel_time=data.x, channel_data=data.y, channel_source=channel_source, channel_label=channel_label,
+                channel_color=None, channel_linestyle=None, channel_unit=None)
 
     @staticmethod
     def from_numpy(period_vector_t_i: np.ndarray, mode: str = 'rad', f0: Union[float, None] = None,
@@ -609,9 +606,9 @@ class HandleScope:
             list_simulation_data.append(channel_data_last_period[:, count_var])
 
             if count_var != 0:
-                list_return_dataset.append(Scope(channel_time=time_modified, channel_data=list_simulation_data[count_var],
-                                                 channel_label=variable, channel_source=channel_source, channel_unit=None,
-                                                 channel_linestyle=None, channel_color=None, modulename=class_modulename))
+                list_return_dataset.append(HandleScope.generate_scope_object(
+                    channel_time=time_modified, channel_data=list_simulation_data[count_var], channel_label=variable,
+                    channel_source=channel_source, channel_unit=None, channel_linestyle=None, channel_color=None))
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Value of count_var {count_var}")
