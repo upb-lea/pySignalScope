@@ -12,19 +12,19 @@ from numpy import typing as npt
 import matplotlib.pyplot as plt
 
 # own libraries
-from pysignalscope.impedance_dataclass import Impedance
+from pysignalscope.impedance_dataclass import ImpedanceCurve
 
 supported_measurement_devices = ['waynekerr', 'agilent']
 
 
-class HandleImpedance:
+class Impedance:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
     @staticmethod
     def generate_impedance_object(channel_frequency: Union[List, npt.ArrayLike], channel_impedance: Union[List, npt.ArrayLike],
                                   channel_phase: Union[List, npt.ArrayLike],
                                   channel_label: str = None, channel_unit: str = None, channel_color: str = None,
-                                  channel_source: str = None, channel_linestyle: str = None) -> Impedance:
+                                  channel_source: str = None, channel_linestyle: str = None) -> ImpedanceCurve:
         """
         Generate the impedance object.
 
@@ -113,7 +113,7 @@ class HandleImpedance:
         else:
             raise TypeError("channel_linestyle must be type str or None.")
 
-        return Impedance(
+        return ImpedanceCurve(
             channel_frequency=channel_frequency,
             channel_impedance=channel_impedance,
             channel_phase=channel_phase,
@@ -124,17 +124,17 @@ class HandleImpedance:
             channel_linestyle=channel_linestyle)
 
     @staticmethod
-    def modify(channel: Impedance, channel_impedance_factor: float = None, channel_impedance_offset: float = None,
+    def modify(channel: ImpedanceCurve, channel_impedance_factor: float = None, channel_impedance_offset: float = None,
                channel_label: str = None, channel_unit: str = None, channel_color: str = None,
                channel_source: str = None, channel_linestyle: str = None,
-               channel_frequency_cut_min: float = None, channel_frequency_cut_max: float = None) -> Impedance:
+               channel_frequency_cut_min: float = None, channel_frequency_cut_max: float = None) -> ImpedanceCurve:
         """
         Modify channel data like metadata or add a factor or offset to channel data.
 
         Useful for classes with channel_frequency/data, but without labels or units.
 
         :param channel: Impedance object to modify
-        :type channel: Impedance
+        :type channel: ImpedanceCurve
         :param channel_impedance_factor: multiply channel.channel_impedance by channel_impedance_factor
         :type channel_impedance_factor: float
         :param channel_impedance_offset: add an offset to channel.channel_impedance
@@ -154,7 +154,7 @@ class HandleImpedance:
         :param channel_linestyle: linestyle of channel, e.g. '--'
         :type channel_linestyle: str
         :return: Modified impedance object
-        :rtype: Impedance
+        :rtype: ImpedanceCurve
         """
         # deep copy to not modify the original input data
         modified_channel = copy.deepcopy(channel)
@@ -195,21 +195,21 @@ class HandleImpedance:
         return modified_channel
 
     @staticmethod
-    def copy(channel: Impedance) -> Impedance:
+    def copy(channel: ImpedanceCurve) -> ImpedanceCurve:
         """
         Create a deepcopy of Channel.
 
         :param channel: Impedance object
-        :type channel: Impedance
+        :type channel: ImpedanceCurve
         :return: Deepcopy of the impedance object
-        :rtype: Impedance
+        :rtype: ImpedanceCurve
         """
-        if not isinstance(channel, Impedance):
+        if not isinstance(channel, ImpedanceCurve):
             raise TypeError("channel must be type Impedance.")
         return copy.deepcopy(channel)
 
     @staticmethod
-    def from_waynekerr(csv_filename: str, channel_label: Optional[str] = None) -> 'Impedance':
+    def from_waynekerr(csv_filename: str, channel_label: Optional[str] = None) -> 'ImpedanceCurve':
         """
         Bring csv-data from wayne kerr 6515b to Impedance.
 
@@ -218,7 +218,7 @@ class HandleImpedance:
         :param channel_label: label to add to the Channel-class, optional.
         :type channel_label: str
         :return: Impedance object
-        :rtype: HandleImpedance
+        :rtype: Impedance
         """
         impedance_measurement = np.genfromtxt(csv_filename, delimiter=',', dtype=float, skip_header=1,
                                               encoding='latin1')
@@ -227,18 +227,18 @@ class HandleImpedance:
         impedance = impedance_measurement[:, 1]
         phase = impedance_measurement[:, 2]
 
-        return HandleImpedance.generate_impedance_object(channel_frequency=frequency, channel_impedance=impedance, channel_phase=phase,
-                                                         channel_source='Impedance Analyzer Wayne Kerr 6515b', channel_label=channel_label)
+        return Impedance.generate_impedance_object(channel_frequency=frequency, channel_impedance=impedance, channel_phase=phase,
+                                                   channel_source='Impedance Analyzer Wayne Kerr 6515b', channel_label=channel_label)
 
     @staticmethod
-    def from_kemet_ksim(csv_filename: str) -> 'Impedance':
+    def from_kemet_ksim(csv_filename: str) -> 'ImpedanceCurve':
         """
         Import data from kemet "ksim" tool.
 
         :param csv_filename: path to csv-file
         :type csv_filename: str
         :return: Impedance object
-        :rtype: Impedance
+        :rtype: ImpedanceCurve
         """
         impedance_measurement = np.genfromtxt(csv_filename, delimiter=',', dtype=float, skip_header=1,
                                               encoding='latin1')
@@ -247,8 +247,8 @@ class HandleImpedance:
         impedance = impedance_measurement[:, 3]
         phase = impedance_measurement[:, 4]
 
-        return HandleImpedance.generate_impedance_object(channel_frequency=frequency, channel_impedance=impedance, channel_phase=phase,
-                                                         channel_source='https://ksim3.kemet.com/capacitor-simulation')
+        return Impedance.generate_impedance_object(channel_frequency=frequency, channel_impedance=impedance, channel_phase=phase,
+                                                   channel_source='https://ksim3.kemet.com/capacitor-simulation')
 
     @staticmethod
     def plot_impedance(channel_list: List, figure_size: Tuple = None) -> None:
@@ -304,12 +304,12 @@ class HandleImpedance:
         plt.show()
 
     @staticmethod
-    def calc_re_im_parts(channel: Impedance, show_figure: bool = True):
+    def calc_re_im_parts(channel: ImpedanceCurve, show_figure: bool = True):
         """
         Calculate real and imaginary part of Impedance measurement.
 
         :param channel: Impedance object
-        :type channel: Impedance
+        :type channel: ImpedanceCurve
         :param show_figure: Plot figure if true
         :type show_figure: bool
         :return: List with [(channel_frequency, frequency_real_part), (channel_frequency, frequency_imag_part)]
@@ -343,13 +343,13 @@ class HandleImpedance:
         return [(frequency, frequency_real_part), (frequency, frequency_imag_part)]
 
     @staticmethod
-    def calc_rlc(channel: Impedance, type_rlc: str, f_calc_c: float, f_calc_l: float, plot_figure: bool = False) -> tuple:
+    def calc_rlc(channel: ImpedanceCurve, type_rlc: str, f_calc_c: float, f_calc_l: float, plot_figure: bool = False) -> tuple:
         """
         Calculate R, L, C values for given impedance curve.
 
         Calculated values will be drawn in a plot for comparison with the given data.
         :param channel: Impedance channel object
-        :type channel: Impedance
+        :type channel: ImpedanceCurve
         :param type_rlc: Type 'R', 'L', 'C'
         :type type_rlc: str
         :param f_calc_c: Choose the frequency for calculation of C-value
@@ -364,8 +364,8 @@ class HandleImpedance:
 
         Example:
         >>> import pysignalscope as pss
-        >>> example_data_rlc = pss.HandleImpedance.from_rlc('l', 1000, 500e-6, 10e-12)
-        >>> recalculated_r, recalculated_l, recalculated_c = pss.HandleImpedance.calc_rlc(example_data_rlc, 'l', f_calc_l=10e3, f_calc_c=10e7, plot_figure=True)
+        >>> example_data_rlc = pss.Impedance.from_rlc('l', 1000, 500e-6, 10e-12)
+        >>> recalculated_r, recalculated_l, recalculated_c = pss.Impedance.calc_rlc(example_data_rlc, 'l', f_calc_l=10e3, f_calc_c=10e7, plot_figure=True)
         """
         # # Calculate R, L, C
         z_calc_c = np.interp(f_calc_c, channel.channel_frequency, channel.channel_impedance)
@@ -396,7 +396,7 @@ class HandleImpedance:
             linestyle_calculation = ':'
 
             # plot output figure, compare measurement and interpolated data
-            recalculated_curve = HandleImpedance.from_rlc(type_rlc, r_calc, l_calc, c_calc)
+            recalculated_curve = Impedance.from_rlc(type_rlc, r_calc, l_calc, c_calc)
 
             # generate plot
             fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
@@ -428,7 +428,8 @@ class HandleImpedance:
         return r_calc, l_calc, c_calc
 
     @staticmethod
-    def from_rlc(type_rlc: str, resistance: Union[float, np.array], inductance: Union[float, np.array], capacitance: Union[float, np.array]) -> 'Impedance':
+    def from_rlc(type_rlc: str, resistance: Union[float, np.array], inductance: Union[float, np.array],
+                 capacitance: Union[float, np.array]) -> 'ImpedanceCurve':
         """
         Calculate the impedance over frequency for R - L - C - combination.
 
@@ -441,11 +442,11 @@ class HandleImpedance:
         :param capacitance: capacitance
         :type capacitance: bool
         :return: Impedance object
-        :rtype: Impedance
+        :rtype: ImpedanceCurve
 
         Example:
         >>> import pysignalscope as pss
-        >>> impedance_channel_object = pss.HandleImpedance.from_rlc('C', 10e-3, 100e-9, 36e-3)
+        >>> impedance_channel_object = pss.Impedance.from_rlc('C', 10e-3, 100e-9, 36e-3)
 
          *  Type C and RLC
         ---R---L---C---
@@ -477,11 +478,11 @@ class HandleImpedance:
         for i in z_total:
             phase_vector.append(cmath.phase(i) * 360 / (2 * np.pi))
 
-        return HandleImpedance.generate_impedance_object(channel_frequency=f, channel_impedance=np.abs(z_total), channel_phase=phase_vector)
+        return Impedance.generate_impedance_object(channel_frequency=f, channel_impedance=np.abs(z_total), channel_phase=phase_vector)
 
     @staticmethod
     def check_capacitor_from_waynekerr(csv_filename: str, channel_label: str,
-                                       target_capacitance: float, plot_figure: bool = True) -> 'Impedance':
+                                       target_capacitance: float, plot_figure: bool = True) -> 'ImpedanceCurve':
         """
         Check a capacitor impedance .csv-curve against a target capacitance.
 
@@ -499,14 +500,14 @@ class HandleImpedance:
         :type plot_figure: bool
 
         :return: measured capacitor as impedance curve
-        :rtype: Impedance
+        :rtype: ImpedanceCurve
         """
         f_calc_c = 100
         f_calc_l = 15e6
 
-        capacitor_impedance = HandleImpedance.from_waynekerr(csv_filename, channel_label)
+        capacitor_impedance = Impedance.from_waynekerr(csv_filename, channel_label)
 
-        r_measure, l_measure, c_measure = HandleImpedance.calc_rlc(capacitor_impedance, "c", f_calc_c, f_calc_l, plot_figure=plot_figure)
+        r_measure, l_measure, c_measure = Impedance.calc_rlc(capacitor_impedance, "c", f_calc_c, f_calc_l, plot_figure=plot_figure)
         derivation_capacitance = c_measure / target_capacitance
 
         print(f"{derivation_capacitance=}")
@@ -514,12 +515,12 @@ class HandleImpedance:
         return capacitor_impedance
 
     @staticmethod
-    def save(impedance_object: Impedance, filepath: str) -> None:
+    def save(impedance_object: ImpedanceCurve, filepath: str) -> None:
         """
         Save an impedance object to hard disk.
 
         :param impedance_object: impedance object
-        :type impedance_object: Impedance
+        :type impedance_object: ImpedanceCurve
         :param filepath: filepath including file name
         :type filepath: str
         """
@@ -532,21 +533,21 @@ class HandleImpedance:
             file_path = os.path.curdir
         if not os.path.exists(file_path):
             os.makedirs(file_path, exist_ok=True)
-        if not isinstance(impedance_object, Impedance):
+        if not isinstance(impedance_object, ImpedanceCurve):
             raise TypeError("impedance_object must be of type Impedance.")
 
         with open(filepath, 'wb') as handle:
             pickle.dump(impedance_object, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     @staticmethod
-    def load(filepath: str) -> Impedance:
+    def load(filepath: str) -> ImpedanceCurve:
         """
         Load an impedance file from the hard disk.
 
         :param filepath: filepath
         :type filepath: str
         :return: loaded impedance object
-        :rtype: Impedance
+        :rtype: ImpedanceCurve
         """
         if not isinstance(filepath, str):
             raise TypeError("filepath must be of type str.")
@@ -555,8 +556,8 @@ class HandleImpedance:
         if not os.path.exists(filepath):
             raise ValueError(f"{filepath} does not exist.")
         with open(filepath, 'rb') as handle:
-            loaded_scope_object: Impedance = pickle.load(handle)
-        if not isinstance(loaded_scope_object, Impedance):
+            loaded_scope_object: ImpedanceCurve = pickle.load(handle)
+        if not isinstance(loaded_scope_object, ImpedanceCurve):
             raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
 
         return loaded_scope_object

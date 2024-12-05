@@ -8,7 +8,7 @@ from typing import Optional
 import numpy as np
 
 @dataclasses.dataclass
-class Impedance:
+class ImpedanceCurve:
     """Dataclass to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
     channel_frequency: np.array

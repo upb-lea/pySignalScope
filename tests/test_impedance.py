@@ -18,85 +18,85 @@ def test_generate_impedance_object():
     """Test generate_impedance_object() method."""
     # no input or missing input channel_frequency and channel_impedance - raise type error
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object()
+        pss.Impedance.generate_impedance_object()
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3])
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_impedance=[1, 2, 3])
+        pss.Impedance.generate_impedance_object(channel_impedance=[1, 2, 3])
     # different length of time and data must raise value error
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2], channel_phase=[1, 2, 3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2], channel_phase=[1, 2, 3])
     # invalid time data positive values
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[3, 2, 1], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[3, 2, 1], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
     # invalid time data negative values. Time values in wrong order.
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[-1, -2, -3], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[-1, -2, -3], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
     # invalid time data negative and positive values. Time values in wrong order.
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[-1, -3, 1], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[-1, -3, 1], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
 
     # channel_frequency: non-equidistant values and negative valid values
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[-3.3, -2.2, -1.1, 0, 1.2],
-                                                                     channel_impedance=[-1, -2.1, -3.2, 4.4, -2.7], channel_phase=[-1, -2.1, -4, 3.3, 5])
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[-3.3, -2.2, -1.1, 0, 1.2],
+                                                               channel_impedance=[-1, -2.1, -3.2, 4.4, -2.7], channel_phase=[-1, -2.1, -4, 3.3, 5])
     np.testing.assert_equal(impedance_object.channel_frequency, [-3.3, -2.2, -1.1, 0, 1.2])
     np.testing.assert_equal(impedance_object.channel_impedance, [-1, -2.1, -3.2, 4.4, -2.7])
     np.testing.assert_equal(impedance_object.channel_phase, [-1, -2.1, -4, 3.3, 5])
 
     # channel_frequency: same x-data, should fail.
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3, 3, 4, 5], channel_impedance=[-1, -2.1, -3.2, 4.4],
-                                                      channel_phase=[-1, -2.1, -4, 3.3, 5])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3, 3, 4, 5], channel_impedance=[-1, -2.1, -3.2, 4.4],
+                                                channel_phase=[-1, -2.1, -4, 3.3, 5])
 
     # valid positive data, mixed int and float
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2, 3.1], channel_phase=[1, 2.1, 4])
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2, 3.1], channel_phase=[1, 2.1, 4])
     np.testing.assert_equal(impedance_object.channel_frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.channel_impedance, [1, 2, 3.1])
     np.testing.assert_equal(impedance_object.channel_phase, [1, 2.1, 4])
 
     # valid negative data, mixed int and float
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-1, -2.1, -3.2],
-                                                                     channel_phase=[-2, -2.2, -5])
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-1, -2.1, -3.2],
+                                                               channel_phase=[-2, -2.2, -5])
     np.testing.assert_equal(impedance_object.channel_frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.channel_impedance, [-1, -2.1, -3.2])
     np.testing.assert_equal(impedance_object.channel_phase, [-2, -2.2, -5])
 
     # valid mixed positive and negative data, mixed int and float
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
-                                                                     channel_phase=[2, -3.3, -3])
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
+                                                               channel_phase=[2, -3.3, -3])
     np.testing.assert_equal(impedance_object.channel_frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.channel_impedance, [1, -2.1, -3.2])
     np.testing.assert_equal(impedance_object.channel_phase, [2, -3.3, -3])
 
     # very high, very low and very small mixed values
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1e25, -3.4e34, 3.1e-17],
-                                                                     channel_phase=[1e32, -3.3e33, 3.33e-17])
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1e25, -3.4e34, 3.1e-17],
+                                                               channel_phase=[1e32, -3.3e33, 3.33e-17])
     np.testing.assert_equal(impedance_object.channel_frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.channel_impedance, [1e25, -3.4e34, 3.1e-17])
     np.testing.assert_equal(impedance_object.channel_phase, [1e32, -3.3e33, 3.33e-17])
 
     # invalid frequency value
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[np.nan, 2, 3], channel_impedance=[0, 2, -3.2], channel_phase=[1, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[np.nan, 2, 3], channel_impedance=[0, 2, -3.2], channel_phase=[1, 2, 3.3])
 
     # invalid impedance value
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-np.nan, 2, -3.2], channel_phase=[1, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-np.nan, 2, -3.2], channel_phase=[1, 2, 3.3])
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-np.inf, 2, -3.2], channel_phase=[1, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-np.inf, 2, -3.2], channel_phase=[1, 2, 3.3])
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[np.inf, 2, -3.2], channel_phase=[1, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[np.inf, 2, -3.2], channel_phase=[1, 2, 3.3])
 
     # invalid phase value
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2, -3.2], channel_phase=[-np.nan, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2, -3.2], channel_phase=[-np.nan, 2, 3.3])
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[2, 2, -3.2], channel_phase=[-np.inf, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[2, 2, -3.2], channel_phase=[-np.inf, 2, 3.3])
     with pytest.raises(ValueError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[2, 2, -3.2], channel_phase=[np.inf, 2, 3.3])
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[2, 2, -3.2], channel_phase=[np.inf, 2, 3.3])
 
     # check None inputs
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2], channel_phase=[1, 2, 3.3])
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2], channel_phase=[1, 2, 3.3])
     assert impedance_object.channel_label is None
     assert impedance_object.channel_unit is None
     assert impedance_object.channel_color is None
@@ -104,9 +104,9 @@ def test_generate_impedance_object():
     assert impedance_object.channel_linestyle is None
 
     # check inputs
-    impedance_object = pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2], channel_phase=[1, 2, 3.3],
-                                                                     channel_label="test 1", channel_unit="A", channel_color="red",
-                                                                     channel_source="scope 11", channel_linestyle="--")
+    impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2], channel_phase=[1, 2, 3.3],
+                                                               channel_label="test 1", channel_unit="A", channel_color="red",
+                                                               channel_source="scope 11", channel_linestyle="--")
     assert impedance_object.channel_label == "test 1"
     assert impedance_object.channel_unit == "A"
     assert impedance_object.channel_color == "red"
@@ -115,33 +115,33 @@ def test_generate_impedance_object():
 
     # wrong type inputs
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
-                                                      channel_phase=[1, 2, 3.3], channel_label=100.1)
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
+                                                channel_phase=[1, 2, 3.3], channel_label=100.1)
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
-                                                      channel_phase=[1, 2, 3.3], channel_unit=100.1)
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
+                                                channel_phase=[1, 2, 3.3], channel_unit=100.1)
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
-                                                      channel_phase=[1, 2, 3.3], channel_color=100.1)
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
+                                                channel_phase=[1, 2, 3.3], channel_color=100.1)
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
-                                                      channel_phase=[1, 2, 3.3], channel_source=100.1)
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
+                                                channel_phase=[1, 2, 3.3], channel_source=100.1)
     with pytest.raises(TypeError):
-        pss.HandleImpedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
-                                                      channel_phase=[1, 2, 3.3], channel_linestyle=100.1)
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
+                                                channel_phase=[1, 2, 3.3], channel_linestyle=100.1)
 
 
 def test_save_load():
     """Unit test for save and load."""
     # assumption: the given scope object is valid
-    example = pss.HandleImpedance.generate_impedance_object([1, 2, 3], [4, 5, 6],
-                                                            channel_phase=[10, 20, 30],
-                                                            channel_unit="A", channel_label="label", channel_color="red",
-                                                            channel_source="source", channel_linestyle='--')
+    example = pss.Impedance.generate_impedance_object([1, 2, 3], [4, 5, 6],
+                                                      channel_phase=[10, 20, 30],
+                                                      channel_unit="A", channel_label="label", channel_color="red",
+                                                      channel_source="source", channel_linestyle='--')
 
     # save + load: working example
-    pss.HandleImpedance.save(example, "test_example")
-    loaded_example = pss.HandleImpedance.load("test_example.pkl")
+    pss.Impedance.save(example, "test_example")
+    loaded_example = pss.Impedance.load("test_example.pkl")
     assert (example.channel_frequency == loaded_example.channel_frequency).all()
     assert (example.channel_impedance == loaded_example.channel_impedance).all()
     assert (example.channel_phase == loaded_example.channel_phase).all()
@@ -153,35 +153,35 @@ def test_save_load():
 
     # save: wrong file path type
     with pytest.raises(TypeError):
-        pss.HandleImpedance.save(example, 123)
+        pss.Impedance.save(example, 123)
 
     # save: insert wrong scope type
     with pytest.raises(TypeError):
-        pss.HandleImpedance.save(123, "test_example")
+        pss.Impedance.save(123, "test_example")
 
     # load: not a pkl-file
     with pytest.raises(ValueError):
-        pss.HandleImpedance.load("test_example.m")
+        pss.Impedance.load("test_example.m")
 
     # load: not a string filepath
     with pytest.raises(TypeError):
-        pss.HandleImpedance.load(123)
+        pss.Impedance.load(123)
 
     # load: non-existing pkl-file
     with pytest.raises(ValueError):
-        pss.HandleImpedance.load("test_example_not_existing.pkl")
+        pss.Impedance.load("test_example_not_existing.pkl")
 
 def test_copy():
     """Unit test for copy()."""
     # wrong input type
     with pytest.raises(TypeError):
-        pss.HandleImpedance.copy("not-a-channel")
+        pss.Impedance.copy("not-a-channel")
 
     # test for valid copy
-    object_to_copy = pss.HandleImpedance.generate_impedance_object([1, 2, 3], [4, 5, 6], [7, 8, 9],
-                                                                   channel_unit="A", channel_label="label", channel_color="red",
-                                                                   channel_source="source", channel_linestyle='--')
-    object_copy = pss.HandleImpedance.copy(object_to_copy)
+    object_to_copy = pss.Impedance.generate_impedance_object([1, 2, 3], [4, 5, 6], [7, 8, 9],
+                                                             channel_unit="A", channel_label="label", channel_color="red",
+                                                             channel_source="source", channel_linestyle='--')
+    object_copy = pss.Impedance.copy(object_to_copy)
 
     assert (object_to_copy.channel_frequency == object_copy.channel_frequency).all()
     assert (object_to_copy.channel_impedance == object_copy.channel_impedance).all()
