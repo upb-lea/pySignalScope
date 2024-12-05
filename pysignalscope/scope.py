@@ -816,12 +816,17 @@ class Scope:
         if len(channel) == 1:  # This is for a single plot with multiple graphs
             fig = plt.figure(figsize=[x/25.4 for x in figure_size] if figure_size is not None else None, dpi=80)
             for plot_list in channel:
+                count_legend_entries = 0
                 for channel_dataset in plot_list:
                     plt.plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
                              label=channel_dataset.channel_label, color=channel_dataset.channel_color,
                              linestyle=channel_dataset.channel_linestyle)
+                    if channel_dataset.channel_label is not None:
+                        count_legend_entries += 1
                 plt.grid()
-                plt.legend()
+                # plot legend in case of labels only. Otherwise, there would appear an empty box.
+                if count_legend_entries != 0:
+                    plt.legend()
                 plt.xlabel(f'Time in {timebase}')
                 if channel_dataset.channel_unit is None:
                     pass
@@ -840,12 +845,17 @@ class Scope:
         else:  # This is for multiple plots with multiple graphs
             fig, axs = plt.subplots(nrows=len(channel), ncols=1, sharex=True, figsize=[x/25.4 for x in figure_size] if figure_size is not None else None)
             for plot_count, plot_list in enumerate(channel):
+                count_legend_entries = 0
                 for channel_dataset in plot_list:
                     axs[plot_count].plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
                                          label=channel_dataset.channel_label, color=channel_dataset.channel_color,
                                          linestyle=channel_dataset.channel_linestyle)
+                    if channel_dataset.channel_label is not None:
+                        count_legend_entries += 1
                 axs[plot_count].grid()
-                axs[plot_count].legend()
+                # plot legend in case of labels only. Otherwise, there would appear an empty box.
+                if count_legend_entries != 0:
+                    axs[plot_count].legend()
                 axs[plot_count].set_xlabel(f'Time in {timebase}')
                 if channel_dataset.channel_unit is None:
                     pass
