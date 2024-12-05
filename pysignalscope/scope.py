@@ -2,7 +2,6 @@
 # python libraries
 import copy
 import os.path
-import warnings
 import logging
 from typing import Union, List, Tuple, Optional, Any
 import pickle
@@ -1171,53 +1170,6 @@ class Scope:
         ch_shift.init_shiftstep_limits((min_shiftstep_x, max_shiftstep_x), (min_shiftstep_y, max_shiftstep_y))
         # Return the list of channel shifts
         return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
-
-    @staticmethod
-    def scope2plot(csv_file, scope: str = 'tektronix', order: str = 'single', timebase: str = 's',
-                   channel_units: Optional[List[str]] = None, channel_labels: Optional[List[str]] = None):
-        """
-        Plot the scope signal.
-
-        :param csv_file: csv file-name
-        :type csv_file: str
-        :param scope: oscilloscope type
-        :type scope: str
-        :param order: 'single' [default] for all plots in single subplots, or 'multi' for subplots with one curve
-        :type order: str
-        :param timebase: timebase, can be 's', 'ms', 'us', 'ns' or 'ps'
-        :type timebase: str
-        :param channel_units: units in a list [unit_ch1, unit_ch2, unit_ch3, unit_ch4], e.g. ['A', 'A', 'V', 'Ohm']
-        :type channel_units: list[str]
-        :param channel_labels: channel labels in a list [label_ch1, label_ch2, label_ch3, label_ch4]
-        :type channel_labels: list[str]
-        """
-        if scope.lower() == 'tektronix':
-            channel_list = Scope.from_tektronix(csv_file)
-        elif scope.lower() == 'lecroy':
-            channel_list = Scope.from_lecroy(csv_file)
-        else:
-            # Log user warning
-            logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope")
-            # Display message
-            warnings.warn('Can not detect scope type. Set to Tektronix scope', stacklevel=2)
-            channel_list = Scope.from_tektronix(csv_file)
-
-        if channel_units is not None:
-            for channel_count, channel in enumerate(channel_list):
-                channel = Scope.modify(channel, channel_unit=channel_units[channel_count])
-
-        if channel_labels is not None:
-            for channel_count, channel in enumerate(channel_list):
-                channel = Scope.modify(channel, channel_label=channel_labels[channel_count])
-
-        if order.lower().replace(" ", "") == 'single':
-            Scope.plot_channels(channel_list, timebase=timebase)
-        else:
-            Scope.plot_channels([channel_list[0]], [channel_list[1]], [channel_list[2]], [channel_list[3]],
-                                timebase=timebase)
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :Data of file {csv_file} are displayed (Type {scope})")
 
     @staticmethod
     def compare_channels(*channel_datasets: 'Channel', shift: Optional[List[Union[None, float]]] = None,
