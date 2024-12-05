@@ -2,7 +2,7 @@
 
 # python libraries
 import dataclasses
-from typing import Union
+from typing import Optional
 
 # 3rd party libraries
 import numpy as np
@@ -14,8 +14,8 @@ class Impedance:
     channel_frequency: np.array
     channel_impedance: np.array
     channel_phase: np.array
-    channel_label: Union[str]
-    channel_unit: Union[str]
-    channel_color: Union[str]
-    channel_source: Union[str]
-    channel_linestyle: Union[str]
+    channel_label: Optional[str]
+    channel_unit: Optional[str]
+    channel_color: Optional[str]
+    channel_source: Optional[str]
+    channel_linestyle: Optional[str]

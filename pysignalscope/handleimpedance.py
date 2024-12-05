@@ -64,6 +64,55 @@ class HandleImpedance:
         else:
             raise TypeError("channel_phase must be type list or ArrayLike")
 
+        # check for single non-allowed values in channel_impedance
+        if np.any(np.isnan(channel_impedance)):
+            raise ValueError("NaN is not allowed in channel_impedance.")
+        if np.any(np.isinf(channel_impedance)):
+            raise ValueError("inf is not allowed in channel_impedance.")
+
+        # check for single non-allowed values in channel_phase
+        if np.any(np.isnan(channel_phase)):
+            raise ValueError("NaN is not allowed in channel_phase.")
+        if np.any(np.isinf(channel_phase)):
+            raise ValueError("inf is not allowed in channel_phase.")
+
+        # check if channel_frequency and channel_impedance have the same length
+        if len(channel_frequency) != len(channel_impedance):
+            raise ValueError("channel_frequency and channel_impedance must be same length.")
+        # check if channel_frequency and channel_phase have the same length
+        if len(channel_frequency) != len(channel_phase):
+            raise ValueError("channel_frequency and channel_phase must be same length.")
+
+        # check if channel_time is strictly increasing
+        if not np.all(np.diff(channel_frequency) > 0):
+            raise ValueError("channel_frequency not strictly increasing.")
+
+        # check channel_label for a valid type
+        if isinstance(channel_label, str) or channel_label is None:
+            channel_label = channel_label
+        else:
+            raise TypeError("channel_label must be type str or None.")
+        # check channel unit for a valid type
+        if isinstance(channel_unit, str) or channel_unit is None:
+            channel_unit = channel_unit
+        else:
+            raise TypeError("channel_unit must be type str or None.")
+        # check channel_color for a valid type
+        if isinstance(channel_color, str) or channel_color is None:
+            channel_color = channel_color
+        else:
+            raise TypeError("channel_color must be type str or None.")
+        # check channel_source for a valid type
+        if isinstance(channel_source, str) or channel_source is None:
+            channel_source = channel_source
+        else:
+            raise TypeError("channel_source must be type str or None.")
+        # check channel_linestyle for a valid type
+        if isinstance(channel_linestyle, str) or channel_linestyle is None:
+            channel_linestyle = channel_linestyle
+        else:
+            raise TypeError("channel_linestyle must be type str or None.")
+
         return Impedance(
             channel_frequency=channel_frequency,
             channel_impedance=channel_impedance,

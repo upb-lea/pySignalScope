@@ -67,6 +67,7 @@ class HandleScope:
             channel_data = channel_data
         else:
             raise TypeError("channel_data must be type list or ArrayLike")
+        # check for single non-allowed values in channel_data
         if np.any(np.isnan(channel_data)):
             raise ValueError("NaN is not allowed in channel_data.")
         if np.any(np.isinf(channel_data)):
