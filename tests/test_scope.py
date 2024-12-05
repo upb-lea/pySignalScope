@@ -328,3 +328,78 @@ def test_subtract():
     # valid result
     channel_subtract = pss.HandleScope.subtract(channel_2, channel_3)
     np.testing.assert_equal(channel_subtract.channel_data, channel_4.channel_data)
+
+def test_mean():
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleScope.mean("not-a-scope-object")
+
+    # mixed signal
+    example_channel = pss.HandleScope.generate_scope_object([1, 2, 3, 4], [-1, 1, -1, 1])
+    rms_example_channel = pss.HandleScope.mean(example_channel)
+    assert rms_example_channel == 0
+
+    # positive signal, negative time steps
+    example_channel = pss.HandleScope.generate_scope_object([-4.1, -3.1, -2.1, -1.1], [2.5, 1.5, 2.5, 1.5])
+    rms_example_channel = pss.HandleScope.mean(example_channel)
+    assert rms_example_channel == 2
+
+    # negative signal
+    example_channel = pss.HandleScope.generate_scope_object([1, 2, 3, 4], [-2.5, -1.5, -2.5, -1.5])
+    rms_example_channel = pss.HandleScope.mean(example_channel)
+    assert rms_example_channel == -2
+
+    # non-equidistant time steps
+    example_channel = pss.HandleScope.generate_scope_object([-2, -1, 1, 2], [-1, -1, 2, 2])
+    rms_example_channel = pss.HandleScope.mean(example_channel)
+    assert rms_example_channel == 0.5
+
+def test_abs_mean():
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleScope.absmean("not-a-scope-object")
+
+    # mixed signal
+    example_channel = pss.HandleScope.generate_scope_object([1, 2, 3, 4], [-1, 1, -1, 1])
+    rms_example_channel = pss.HandleScope.absmean(example_channel)
+    assert rms_example_channel == 1
+
+    # positive signal, negative time steps
+    example_channel = pss.HandleScope.generate_scope_object([-4.1, -3.1, -2.1, -1.1], [2.5, 1.5, 2.5, 1.5])
+    rms_example_channel = pss.HandleScope.absmean(example_channel)
+    assert rms_example_channel == 2
+
+    # negative signal
+    example_channel = pss.HandleScope.generate_scope_object([1, 2, 3, 4], [-2.5, -1.5, -2.5, -1.5])
+    rms_example_channel = pss.HandleScope.absmean(example_channel)
+    assert rms_example_channel == 2
+
+    # non-equidistant time steps
+    example_channel = pss.HandleScope.generate_scope_object([-2, -1, 1, 2], [-1, -1, 2, 2])
+    rms_example_channel = pss.HandleScope.absmean(example_channel)
+    assert rms_example_channel == 1.5
+
+def test_rms():
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleScope.rms("not-a-scope-object")
+
+    # mixed signal
+    example_channel = pss.HandleScope.generate_scope_object([1, 2, 3, 4], [-1, 1, -1, 1])
+    rms_example_channel = pss.HandleScope.rms(example_channel)
+    assert rms_example_channel == 1
+
+    # positive signal, negative time steps
+    example_channel = pss.HandleScope.generate_scope_object([-4.1, -3.1, -2.1, -1.1], [2.5, 1.5, 2.5, 1.5])
+    rms_example_channel = pss.HandleScope.rms(example_channel)
+    assert rms_example_channel == 2.0615528128088303
+
+    # negative signal
+    example_channel = pss.HandleScope.generate_scope_object([1, 2, 3, 4], [-2.5, -1.5, -2.5, -1.5])
+    rms_example_channel = pss.HandleScope.rms(example_channel)
+    assert rms_example_channel == 2.0615528128088303
+
+    # non-equidistant time steps
+    example_channel = pss.HandleScope.generate_scope_object([-2, -1, 1, 2], [-1, -1, 2, 2])
+    rms_example_channel = pss.HandleScope.rms(example_channel)
+    assert rms_example_channel == 1.5811388300841898

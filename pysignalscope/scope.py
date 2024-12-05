@@ -1433,6 +1433,9 @@ class HandleScope:
         :type channel: Scope
         Returns: rms(self.channel_data).
         """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
 
@@ -1447,6 +1450,9 @@ class HandleScope:
         :type channel: Scope
         Returns: mean(self.channel_data).
         """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
 
@@ -1461,6 +1467,9 @@ class HandleScope:
         :type channel: Scope
         Returns: abs(mean(self.channel_data)).
         """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
 
@@ -1475,6 +1484,9 @@ class HandleScope:
         :type channel: Scope
         Returns: abs(channel.channel_data).
         """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+
         channel_modified = copy.deepcopy(channel)
 
         # Log flow control
@@ -1495,6 +1507,9 @@ class HandleScope:
         :type channel: Scope
         Returns: channel.channel_data ** 2.
         """
+        if not isinstance(channel, Scope):
+            raise TypeError("channel must be type Scope.")
+
         channel_modified = copy.deepcopy(channel)
 
         channel_modified.channel_data = channel_modified.channel_data ** 2
