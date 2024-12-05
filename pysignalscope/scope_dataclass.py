@@ -1,4 +1,4 @@
-"""Definition of the scope dataclass."""
+"""Definition of the channel dataclass."""
 
 # python libraries
 import dataclasses
@@ -8,7 +8,7 @@ from typing import Optional
 import numpy as np
 
 @dataclasses.dataclass
-class Scope:
+class Channel:
     """Scope data class."""
 
     # mandatory measurement data

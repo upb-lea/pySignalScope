@@ -6,7 +6,7 @@ import os
 from matplotlib import pyplot as plt
 # own libraries
 from pysignalscope.logconfig import setup_logging
-from pysignalscope.scope_dataclass import Scope
+from pysignalscope.scope_dataclass import Channel
 # python libraries
 import logging
 # Interactive shift plot
@@ -96,7 +96,7 @@ class ScopeChShift:
     zoom_state = Zoom_State.NoZoom
 
     @staticmethod
-    def channel_shift(channels: List['Scope'], shiftstep_x: float, shiftstep_y: float, \
+    def channel_shift(channels: List['Channel'], shiftstep_x: float, shiftstep_y: float, \
                       displayrange_x: Tuple[float, float], displayrange_y: Tuple[float, float]):
         """
         Interactive plot of channel datasets.
@@ -122,7 +122,7 @@ class ScopeChShift:
         Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
 
         :param channels: list of datasets
-        :type channels: list[Scope]
+        :type channels: list[Channel]
         :param shiftstep_x: shift step in x-direction
         :type shiftstep_x: float
         :param shiftstep_y: shift step in y-direction

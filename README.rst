@@ -31,6 +31,27 @@ Examples
 --------
 Have a look at the `example <examples/scope_example.py>`__, to see what you can do with this toolbox.
 
+Naming convention
+-------------------
+This toolbox is divided into two modules: The functionality of an oscilloscope (``Scope``) and the functionality of an impedance analyzer (``Impedance``).
+
+Scope
+#####
+The Scope module provides functionalities for editing and evaluating individual channels that are also provided by a real oscilloscope - just on a PC.
+Scope creates, imports, edits or evaluates channels. The following prefixes apply:
+
+- ``generate_``: Generates a new channel
+- ``no prefix``: Is applied to a channel and results in a new channel (e.g. ``add()`` adds two channels)
+- ``from_``: Generates a channel from an oscilloscope data set, a simulation program or a calculation (e.g. ``from_tektronix`` generates a channel from a tektronix scope file)
+- ``calc_``: Calculates individual values from a channel (e.g. ``calc_rms()`` calculates the RMS from a given channel)
+- ``plot_``: Plots channels in the desired arrangement (e.g. ``plot_channels()`` plots the given channels)
+
+Impedance
+#########
+
+
+
+
 Documentation
 ---------------------------------------
 

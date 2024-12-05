@@ -17,7 +17,7 @@ from findiff import FinDiff
 # own libraries
 import pysignalscope.functions as functions
 from pysignalscope.logconfig import setup_logging
-from pysignalscope.scope_dataclass import Scope
+from pysignalscope.scope_dataclass import Channel
 from pysignalscope.channelshift import ScopeChShift as scope_ch_shift
 
 # - Logging setup ---------------------------------------------------------------------------------
@@ -28,13 +28,13 @@ class_modulename = "scope"
 
 # - Class definition ------------------------------------------------------------------------------
 
-class HandleScope:
+class Scope:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
     @staticmethod
-    def generate_scope_object(channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
-                              channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
-                              channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> Scope:
+    def generate_channel(channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
+                         channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+                         channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> Channel:
         """
         Generate a scope object.
 
@@ -105,31 +105,31 @@ class HandleScope:
         else:
             raise TypeError("channel_linestyle must be type str or None.")
 
-        return Scope(channel_time=channel_time,
-                     channel_data=channel_data,
-                     channel_label=channel_label,
-                     channel_unit=channel_unit,
-                     channel_color=channel_color,
-                     channel_source=channel_source,
-                     channel_linestyle=channel_linestyle,
-                     modulename=class_modulename)
+        return Channel(channel_time=channel_time,
+                       channel_data=channel_data,
+                       channel_label=channel_label,
+                       channel_unit=channel_unit,
+                       channel_color=channel_color,
+                       channel_source=channel_source,
+                       channel_linestyle=channel_linestyle,
+                       modulename=class_modulename)
 
     # - Method modify ------------------------------------------------------------------------------
 
     @staticmethod
-    def modify(channel: Scope, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
+    def modify(channel: Channel, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
                channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
                channel_source: Optional[str] = None, channel_time_shift: Optional[float] = None,
                channel_time_shift_rotate: Optional[float] = None,
                channel_time_cut_min: Optional[float] = None, channel_time_cut_max: Optional[float] = None,
-               channel_linestyle: Optional[str] = None) -> Scope:
+               channel_linestyle: Optional[str] = None) -> Channel:
         """
         Modify channel data like metadata or add a factor or offset to channel data.
 
         Useful for classes with channel_time/data, but without labels or units.
 
         :param channel: Scope channel object
-        :type channel: Scope
+        :type channel: Channel
         :param channel_data_factor: multiply self.channel_data by channel_data_factor
         :type channel_data_factor: float
         :param channel_data_offset: add an offset to self.channel_data
@@ -154,7 +154,7 @@ class HandleScope:
         :param channel_linestyle: channel linestyle, e.g. '--'
         :type channel_linestyle: str
         :return: Scope object
-        :rtype: Scope
+        :rtype: Channel
         """
         channel_modified = copy.deepcopy(channel)
 
@@ -273,18 +273,18 @@ class HandleScope:
         return channel_modified
 
     @staticmethod
-    def copy(channel: Scope) -> Scope:
+    def copy(channel: Channel) -> Channel:
         """Create a deepcopy of Channel.
 
         :param channel: Scope channel object
-        :type channel: Scope
+        :type channel: Channel
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
         return copy.deepcopy(channel)
 
     @staticmethod
-    def from_tektronix(csv_file: str) -> List['Scope']:
+    def from_tektronix(csv_file: str) -> List['Channel']:
         """
         Translate tektronix csv-file to a tuple of Channel.
 
@@ -294,12 +294,12 @@ class HandleScope:
         :param csv_file: csv-file from tektronix scope
         :type csv_file: str
         :return: tuple of Channel, depending on the channel count stored in the .csv-file
-        :rtype: list[Scope, Scope, Scope, Scope]
+        :rtype: list[Channel, Scope, Scope, Scope]
 
         :Example:
 
         >>> import pysignalscope as pss
-        >>> [voltage, current_prim, current_sec] = pss.HandleScope.from_tektronix('/path/to/tektronix/file/tek0000.csv')
+        >>> [voltage, current_prim, current_sec] = pss.Scope.from_tektronix('/path/to/tektronix/file/tek0000.csv')
         """
         channel_source = 'Tektronix scope'
 
@@ -312,7 +312,7 @@ class HandleScope:
 
         channel_list = []
         for channel_count in range(1, channel_counts + 1):
-            channel_list.append(HandleScope.generate_scope_object(
+            channel_list.append(Scope.generate_channel(
                 channel_time=time, channel_data=file[:, channel_count], channel_source=channel_source,
                 channel_label=None, channel_unit=None, channel_color=None, channel_linestyle=None))
 
@@ -326,7 +326,7 @@ class HandleScope:
         return channel_list
 
     @staticmethod
-    def from_tektronix_mso58(*csv_files: str) -> List['Scope']:
+    def from_tektronix_mso58(*csv_files: str) -> List['Channel']:
         """
         Translate tektronix csv-files to a list of Channel class objects.
 
@@ -339,12 +339,12 @@ class HandleScope:
         :Example single channel:
 
         >>> import pysignalscope as pss
-        >>> [current_prim] = pss.HandleScope.from_tektronix_mso58('/path/to/lecroy/files/current_prim.csv')
+        >>> [current_prim] = pss.Scope.from_tektronix_mso58('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
 
         >>> import pysignalscope as pss
-        >>> [current_prim, current_sec] = pss.HandleScope.from_tektronix_mso58('/path/one/current_prim.csv', '/path/two/current_sec.csv')
+        >>> [current_prim, current_sec] = pss.Scope.from_tektronix_mso58('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
         channel_source = 'Tektronix scope MSO58'
 
@@ -360,7 +360,7 @@ class HandleScope:
             if not ch1_data:
                 logging.info(f"{class_modulename} : file {csv_file}->Invalid file or file without content")
 
-            tektronix_channels.append(HandleScope.generate_scope_object(
+            tektronix_channels.append(Scope.generate_channel(
                 time, ch1_data, channel_source=channel_source, channel_label=os.path.basename(csv_file).replace('.csv', ''),
                 channel_unit=None, channel_linestyle=None, channel_color=None))
 
@@ -374,7 +374,7 @@ class HandleScope:
         return tektronix_channels
 
     @staticmethod
-    def from_tektronix_mso58_multichannel(csv_file: str) -> List['Scope']:
+    def from_tektronix_mso58_multichannel(csv_file: str) -> List['Channel']:
         """
         Translate tektronix csv-files to a list of Channel class objects.
 
@@ -387,7 +387,7 @@ class HandleScope:
         :Example multiple channel csv-file:
 
         >>> import pysignalscope as pss
-        >>> [current_prim, current_sec] = pss.HandleScope.from_tektronix_mso58_multichannel('/path/to/lecroy/files/currents.csv')
+        >>> [current_prim, current_sec] = pss.Scope.from_tektronix_mso58_multichannel('/path/to/lecroy/files/currents.csv')
         """
         channel_source = 'Tektronix scope MSO58'
 
@@ -400,7 +400,7 @@ class HandleScope:
 
         channel_list = []
         for channel_count in range(1, channel_counts + 1):
-            channel_list.append(HandleScope.generate_scope_object(
+            channel_list.append(Scope.generate_channel(
                 time, file[:, channel_count], channel_source=channel_source, channel_color=None, channel_linestyle=None,
                 channel_unit=None, channel_label=None))
 
@@ -414,7 +414,7 @@ class HandleScope:
         return channel_list
 
     @staticmethod
-    def from_lecroy(*csv_files: str) -> List['Scope']:
+    def from_lecroy(*csv_files: str) -> List['Channel']:
         """
         Translate LeCroy csv-files to a list of Channel class objects.
 
@@ -428,12 +428,12 @@ class HandleScope:
         :Example single channel:
 
         >>> import pysignalscope as pss
-        >>> [current_prim] = pss.HandleScope.from_lecroy('/path/to/lecroy/files/current_prim.csv')
+        >>> [current_prim] = pss.Scope.from_lecroy('/path/to/lecroy/files/current_prim.csv')
 
         :Example multiple channels channel:
 
         >>> import pysignalscope as pss
-        >>> [current_prim, current_sec] = pss.HandleScope.from_lecroy('/path/one/current_prim.csv', '/path/two/current_sec.csv')
+        >>> [current_prim, current_sec] = pss.Scope.from_lecroy('/path/one/current_prim.csv', '/path/two/current_sec.csv')
         """
         channel_source = 'LeCroy scope'
 
@@ -445,7 +445,7 @@ class HandleScope:
             time = file[:, 0]
             ch1_data = file[:, 1]
 
-            lecroy_channel.append(HandleScope.generate_scope_object(
+            lecroy_channel.append(Scope.generate_channel(
                 channel_time=time, channel_data=ch1_data, channel_source=channel_source,
                 channel_label=os.path.basename(csv_file).replace('.csv', ''), channel_unit=None,
                 channel_color=None, channel_linestyle=None))
@@ -511,13 +511,13 @@ class HandleScope:
 
         if channel is not None:
             data = scope.waveform(channel)
-            return HandleScope.generate_scope_object(
+            return Scope.generate_channel(
                 channel_time=data.x, channel_data=data.y, channel_source=channel_source, channel_label=channel_label,
                 channel_color=None, channel_linestyle=None, channel_unit=None)
 
     @staticmethod
     def from_numpy(period_vector_t_i: np.ndarray, mode: str = 'rad', f0: Union[float, None] = None,
-                   channel_label: Optional[str] = None, channel_unit: Optional[str] = None) -> 'Scope':
+                   channel_label: Optional[str] = None, channel_unit: Optional[str] = None) -> 'Channel':
         """
         Bring a numpy or list array to an instance of Channel.
 
@@ -536,7 +536,7 @@ class HandleScope:
 
         >>> import pysignalscope as pss
         >>> import numpy as np
-        >>> channel = pss.HandleScope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
+        >>> channel = pss.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
         """
         # changes period_vector_t_i to a float array. e.g. the user inserts a vector like this
         # [[0, 90, 180, 270, 360], [1, -1, 1, -1, 1]], with degree-mode, there are only integers inside.
@@ -556,9 +556,9 @@ class HandleScope:
         elif mode != 'time':
             raise ValueError("Mode not available. Choose: 'rad', 'deg', 'time'")
 
-        single_dataset_channel = HandleScope.generate_scope_object(period_vector_t_i[0], period_vector_t_i[1],
-                                                                   channel_label=channel_label, channel_unit=channel_unit, channel_color=None,
-                                                                   channel_linestyle=None, channel_source=None)
+        single_dataset_channel = Scope.generate_channel(period_vector_t_i[0], period_vector_t_i[1],
+                                                        channel_label=channel_label, channel_unit=channel_unit, channel_color=None,
+                                                        channel_linestyle=None, channel_source=None)
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of Data: 1")
@@ -566,7 +566,7 @@ class HandleScope:
         return single_dataset_channel
 
     @staticmethod
-    def from_geckocircuits(txt_datafile: str, f0: Optional[float] = None) -> List['Scope']:
+    def from_geckocircuits(txt_datafile: str, f0: Optional[float] = None) -> List['Channel']:
         """
         Convert a gecko simulation file to Channel.
 
@@ -575,7 +575,7 @@ class HandleScope:
         :param f0: fundamental frequency [optional]
         :type f0: float
         :return: List of Channels
-        :rtype: list[Scope]
+        :rtype: list[Channel]
         """
         if not isinstance(txt_datafile, str):
             raise TypeError("txt_datafile must be type str to show the full filepath.")
@@ -608,7 +608,7 @@ class HandleScope:
             list_simulation_data.append(channel_data_last_period[:, count_var])
 
             if count_var != 0:
-                list_return_dataset.append(HandleScope.generate_scope_object(
+                list_return_dataset.append(Scope.generate_channel(
                     channel_time=time_modified, channel_data=list_simulation_data[count_var], channel_label=variable,
                     channel_source=channel_source, channel_unit=None, channel_linestyle=None, channel_color=None))
 
@@ -618,22 +618,22 @@ class HandleScope:
         return list_return_dataset
 
     @staticmethod
-    def power(channel_voltage: 'Scope', channel_current: 'Scope', channel_label: Optional[str] = None) -> 'Scope':
+    def multiply(channel_voltage: 'Channel', channel_current: 'Channel', channel_label: Optional[str] = None) -> 'Channel':
         """
         calculate the power of two datasets.
 
         :param channel_voltage: dataset with voltage information
-        :type channel_voltage: Scope
+        :type channel_voltage: Channel
         :param channel_current: dataset with current information
-        :type channel_current: Scope
+        :type channel_current: Channel
         :param channel_label: label for new dataset_channel
         :type channel_label: str
         :return: power in a dataset
-        :rtype: Scope
+        :rtype: Channel
         """
-        if not isinstance(channel_voltage, Scope):
+        if not isinstance(channel_voltage, Channel):
             raise TypeError("channel_voltage must be type Scope.")
-        if not isinstance(channel_current, Scope):
+        if not isinstance(channel_current, Channel):
             raise TypeError("channel_current must be type Scope.")
         if not isinstance(channel_label, str) != channel_label is not None:
             raise TypeError("channel_label must be type str or None.")
@@ -642,8 +642,8 @@ class HandleScope:
         if channel_label is None and channel_voltage.channel_label is not None \
                 and channel_current.channel_label is not None:
             channel_label = f"{channel_voltage.channel_label} * {channel_current.channel_label}"
-        channel_power = Scope(channel_voltage.channel_time, channel_data, channel_label=channel_label,
-                              channel_unit='W', channel_color=None, channel_linestyle=None, channel_source=None, modulename=class_modulename)
+        channel_power = Channel(channel_voltage.channel_time, channel_data, channel_label=channel_label,
+                                channel_unit='W', channel_color=None, channel_linestyle=None, channel_source=None, modulename=class_modulename)
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={len(channel_data)}")
@@ -651,20 +651,20 @@ class HandleScope:
         return channel_power
 
     @staticmethod
-    def integrate(channel_power: 'Scope', channel_label: Optional[str] = None):
+    def integrate(channel_power: 'Channel', channel_label: Optional[str] = None):
         """
         Integrate a channels signal.
 
         The default use-case is calculating energy loss (variable naming is for the use case to calculate
         switch energy from power loss curve, e.g. from double-pulse measurement)
         :param channel_power: channel with power
-        :type channel_power: Scope
+        :type channel_power: Channel
         :param channel_label: channel label
         :type channel_label: Optional[str]
         :return: returns a scope-class, what integrates the input values
-        :rtype: Scope
+        :rtype: Channel
         """
-        if not isinstance(channel_power, Scope):
+        if not isinstance(channel_power, Channel):
             raise TypeError("channel_power must be type Scope.")
         if not isinstance(channel_label, str):
             raise TypeError("channel_label must be type str.")
@@ -686,25 +686,25 @@ class HandleScope:
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={count}")
 
-        return Scope(channel_power.channel_time, channel_energy, channel_label=channel_label, channel_unit='J', channel_color=None, channel_source=None,
-                     channel_linestyle=None, modulename=class_modulename)
+        return Channel(channel_power.channel_time, channel_energy, channel_label=channel_label, channel_unit='J', channel_color=None, channel_source=None,
+                       channel_linestyle=None, modulename=class_modulename)
 
     @staticmethod
-    def add(*channels: 'Scope') -> 'Scope':
+    def add(*channels: 'Channel') -> 'Channel':
         """
         Add channel_data of several Channels.
 
         :param channels: Input channels
-        :type channels: Scope
+        :type channels: Channel
         :return: Channel resulting from added input channels
-        :rtype: Scope
+        :rtype: Channel
         """
         if len(channels) < 2:
             raise ValueError("Minimum two channel inputs necessary!")
 
         # check input type and time data points
         for channel in channels:
-            if not isinstance(channel, Scope):
+            if not isinstance(channel, Channel):
                 raise TypeError("channel must be type Scope.")
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
@@ -725,25 +725,25 @@ class HandleScope:
 
         logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are added={len(channels)}")
 
-        return Scope(channel_time=channels[0].channel_time, channel_data=channel_data_result, channel_unit=channels[0].channel_unit,
-                     channel_label=channel_label_result, channel_linestyle=None, channel_color=None, channel_source=None, modulename=class_modulename)
+        return Channel(channel_time=channels[0].channel_time, channel_data=channel_data_result, channel_unit=channels[0].channel_unit,
+                       channel_label=channel_label_result, channel_linestyle=None, channel_color=None, channel_source=None, modulename=class_modulename)
 
     @staticmethod
-    def subtract(*channels: 'Scope') -> 'Scope':
+    def subtract(*channels: 'Channel') -> 'Channel':
         """
         Subtract channel_data of several Channels.
 
         :param channels: Input channels
-        :type channels: Scope
+        :type channels: Channel
         :return: Channel resulting from first input channel minus all following input channels
-        :rtype: Scope
+        :rtype: Channel
         """
         if len(channels) < 2:
             raise ValueError("Minimum two channel inputs necessary!")
 
         # check input type and time data points
         for channel in channels:
-            if not isinstance(channel, Scope):
+            if not isinstance(channel, Channel):
                 raise TypeError("channel must be type Scope.")
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
@@ -768,19 +768,19 @@ class HandleScope:
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are subtracted={len(channels)}")
 
-        return Scope(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
-                     channel_label=channel_label_result, channel_color=None, channel_source=None, channel_linestyle=None, modulename=class_modulename)
+        return Channel(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
+                       channel_label=channel_label_result, channel_color=None, channel_source=None, channel_linestyle=None, modulename=class_modulename)
 
     @staticmethod
-    def plot_channels(*channel: List['Scope'], timebase: str = 's', figure_size: Optional[Tuple] = None,
+    def plot_channels(*channel: List['Channel'], timebase: str = 's', figure_size: Optional[Tuple] = None,
                       figure_directory: Optional[str] = None) -> plt.figure:
         """
         Plot channel datasets.
 
         Examples:
         >>> import pysignalscope as pss
-        >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
-        >>> pss.HandleScope.plot_channels([ch1, ch2, ch3],[ch4])
+        >>> ch1, ch2, ch3, ch4 = pss.Scope.from_tektronix('tektronix_csv_file.csv')
+        >>> pss.Scope.plot_channels([ch1, ch2, ch3],[ch4])
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
 
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
@@ -788,7 +788,7 @@ class HandleScope:
         Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
 
         :param channel: list of datasets
-        :type channel: list[Scope]
+        :type channel: list[Channel]
         :param timebase: timebase, can be 's', 'ms', 'us', 'ns' or 'ps'
         :type timebase: str
         :param figure_size: None for auto-fit; fig_size for matplotlib (width, length in mm)
@@ -882,7 +882,7 @@ class HandleScope:
         Example for a valid value:
         >>> bool valid
         >>> value = 10.2
-        >>> valid = HandleScope.check_limits(value, 3.2,11.3)
+        >>> valid = Scope.check_limits(value, 3.2,11.3)
         >>> if valid:
         >>>     print(f"{value} is within the limit")
         >>> else:
@@ -922,7 +922,7 @@ class HandleScope:
         Example for a valid value:
         >>> bool valid
         >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
-        >>> valid, mindiff = HandleScope.calculate_min_diff(channel5,5)
+        >>> valid, mindiff = Scope.calculate_min_diff(channel5,5)
         >>> if valid:
         >>>     print(f"{mindiff} is the minimum difference")
         >>> else:
@@ -960,15 +960,15 @@ class HandleScope:
         return [validity, min_diff]
 
     @staticmethod
-    def plot_shiftchannels(channels: List['Scope'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None,
+    def plot_shiftchannels(channels: List['Channel'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None,
                            displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None) -> list[list[float]]:
         """
         Plot channel datasets.
 
         Examples:
         >>> import pysignalscope as pss
-        >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
-        >>> pss.HandleScope.plot_shiftchannels([ch1, ch2])
+        >>> ch1, ch2, ch3, ch4 = pss.Scope.from_tektronix('tektronix_csv_file.csv')
+        >>> pss.Scope.plot_shiftchannels([ch1, ch2])
         Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
         left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
         If you release the left mouse button the area is marked. By moving the mouse within the area an perform
@@ -985,7 +985,7 @@ class HandleScope:
         Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
 
         :param channels: list of datasets
-        :type channels: list[Scope]
+        :type channels: list[Channel]
         :param shiftstep_x: shift step in x-direction (optional parameter)
                             Has to be in range 'minimal difference of 2 points of the channels'
                             to ('displayed maximal x-value minus displayed minimal x-value')/10
@@ -1029,7 +1029,7 @@ class HandleScope:
         min_diff_channel = 0
         # For-loop over channels to calculate the minimum distance between the values
         for channel_id, channel in enumerate(channels[1:], start=1):
-            validity, min_diff = HandleScope.calculate_min_diff(channel.channel_time, channel_id)
+            validity, min_diff = Scope.calculate_min_diff(channel.channel_time, channel_id)
             # Check, if the value is valid
             if validity:
                 # Check, if a minimum is not set (min_diff_channel == 0
@@ -1074,7 +1074,7 @@ class HandleScope:
         # Initialize values
         # Shift steps x
         if isinstance(shiftstep_x, float) or isinstance(shiftstep_x, int):
-            if not HandleScope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
+            if not Scope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
                 shiftstep_x = def_shiftstep_x
                 # Shift step in x-Direction is out of range
                 logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
@@ -1089,7 +1089,7 @@ class HandleScope:
 
         # Shift steps y
         if isinstance(shiftstep_y, float) or isinstance(shiftstep_y, int):
-            if not HandleScope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
+            if not Scope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
                 shiftstep_y = def_shiftstep_y
                 # Shift step in y-Direction is out of range
                 logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
@@ -1192,42 +1192,42 @@ class HandleScope:
         :type channel_labels: list[str]
         """
         if scope.lower() == 'tektronix':
-            channel_list = HandleScope.from_tektronix(csv_file)
+            channel_list = Scope.from_tektronix(csv_file)
         elif scope.lower() == 'lecroy':
-            channel_list = HandleScope.from_lecroy(csv_file)
+            channel_list = Scope.from_lecroy(csv_file)
         else:
             # Log user warning
             logging.warning(f"{class_modulename} :Scope {scope} is unknown. Set to Tektronix scope")
             # Display message
             warnings.warn('Can not detect scope type. Set to Tektronix scope', stacklevel=2)
-            channel_list = HandleScope.from_tektronix(csv_file)
+            channel_list = Scope.from_tektronix(csv_file)
 
         if channel_units is not None:
             for channel_count, channel in enumerate(channel_list):
-                channel = HandleScope.modify(channel, channel_unit=channel_units[channel_count])
+                channel = Scope.modify(channel, channel_unit=channel_units[channel_count])
 
         if channel_labels is not None:
             for channel_count, channel in enumerate(channel_list):
-                channel = HandleScope.modify(channel, channel_label=channel_labels[channel_count])
+                channel = Scope.modify(channel, channel_label=channel_labels[channel_count])
 
         if order.lower().replace(" ", "") == 'single':
-            HandleScope.plot_channels(channel_list, timebase=timebase)
+            Scope.plot_channels(channel_list, timebase=timebase)
         else:
-            HandleScope.plot_channels([channel_list[0]], [channel_list[1]], [channel_list[2]], [channel_list[3]],
-                                      timebase=timebase)
+            Scope.plot_channels([channel_list[0]], [channel_list[1]], [channel_list[2]], [channel_list[3]],
+                                timebase=timebase)
 
         # Log flow control
         logging.debug(f"{class_modulename} :Data of file {csv_file} are displayed (Type {scope})")
 
     @staticmethod
-    def compare_channels(*channel_datasets: 'Scope', shift: Optional[List[Union[None, float]]] = None,
+    def compare_channels(*channel_datasets: 'Channel', shift: Optional[List[Union[None, float]]] = None,
                          scale: Optional[List[Union[None, float]]] = None, offset: Optional[List[Union[None, float]]] = None,
                          timebase: str = 's'):
         """
         Graphical comparison for datasets. Note: Datasets need to be type Channel.
 
         :param channel_datasets: dataset according to Channel
-        :type channel_datasets: Scope
+        :type channel_datasets: Channel
         :param shift: phase shift in a list for every input dataset
         :type shift: list[Union[None, float]]
         :param scale: channel scale factor in a list for every input dataset
@@ -1256,7 +1256,7 @@ class HandleScope:
             timebase = 's'
 
         for count, channel_dataset in enumerate(channel_datasets):
-            if not isinstance(channel_dataset, Scope):
+            if not isinstance(channel_dataset, Channel):
                 raise TypeError("channel_dataset must be type Scope.")
             modified_time = channel_dataset.channel_time
             modified_data = channel_dataset.channel_data
@@ -1286,12 +1286,12 @@ class HandleScope:
         logging.debug(f"{class_modulename} :Amount of displayed datasets={len(channel_datasets)}")
 
     @staticmethod
-    def fft(channel: Scope, plot: bool = True):
+    def fft(channel: Channel, plot: bool = True):
         """
         Perform fft to the signal.
 
         :param channel: Scope channel object
-        :type channel: Scope
+        :type channel: Channel
         :param plot: True to show a figure
         :type plot: bool
         :return: numpy-array [[frequency-vector],[amplitude-vector],[phase-vector]]
@@ -1301,8 +1301,8 @@ class HandleScope:
 
         >>> import pysignalscope as pss
         >>> import numpy as np
-        >>> channel_example = pss.HandleScope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
-        >>> pss.HandleScope.fft(channel_example)
+        >>> channel_example = pss.Scope.from_numpy(np.array([[0, 5e-3, 10e-3, 15e-3, 20e-3], [1, -1, 1, -1, 1]]), f0=100000, mode='time')
+        >>> pss.Scope.fft(channel_example)
         """
         if not isinstance(plot, bool):
             raise TypeError("plot must be type bool.")
@@ -1314,12 +1314,12 @@ class HandleScope:
         return functions.fft(period_vector, mode='time', plot=plot)
 
     @staticmethod
-    def short_to_period(channel: Scope, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
-                        start_time: Union[float, int, None] = None):
+    def channel_short_to_period(channel: Channel, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
+                                start_time: Union[float, int, None] = None):
         """Short a given Scope object to a period.
 
         :param channel: Scope channel object
-        :type channel: Scope
+        :type channel: Channel
         :param f0: frequency in Hz
         :type f0: float
         :param time_period: time period in seconds
@@ -1344,29 +1344,29 @@ class HandleScope:
             end_time = start_time + time_period
         elif f0 is not None:
             end_time = start_time + 1/f0
-        channel = HandleScope.modify(channel, channel_time_cut_min=start_time, channel_time_cut_max=end_time)
+        channel = Scope.modify(channel, channel_time_cut_min=start_time, channel_time_cut_max=end_time)
         # Log flow control
         logging.debug(f"{channel.modulename} :Time range: {start_time} to {end_time}")
 
         return channel
 
     @staticmethod
-    def low_pass_filter(channel: Scope, order: int = 1, angular_frequency_rad: float = 0.05) -> Scope:
+    def channel_low_pass_filter(channel: Channel, order: int = 1, angular_frequency_rad: float = 0.05) -> Channel:
         """
         Implement a butterworth filter on the given signal.
 
         See also: https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
 
         :param channel: Channel object
-        :type channel: Scope
+        :type channel: Channel
         :param order: filter order
         :type order: int
         :param angular_frequency_rad: angular frequency in rad. Valid for values 0...1. Smaller value means lower filter frequency.
         :type angular_frequency_rad: float
         :return: Scope object with filtered channel_data
-        :rtype: Scope
+        :rtype: Channel
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be of type Scope.")
         if not isinstance(order, int):
             raise TypeError("order must be of type int.")
@@ -1378,7 +1378,7 @@ class HandleScope:
             raise ValueError("angular_frequency_rad must be in interval ]0...1[.")
 
         # introduce scope copy for further channel modifications
-        scope_copy = HandleScope.copy(channel)
+        scope_copy = Scope.copy(channel)
 
         # filter adapted according to scipy example, see also:
         # https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
@@ -1393,27 +1393,27 @@ class HandleScope:
         return scope_copy
 
     @staticmethod
-    def derivative(channel: Scope, order: int = 1) -> Scope:
+    def derivative(channel: Channel, order: int = 1) -> Channel:
         """
         Get the derivative of the channel_data.
 
         In case of measured input signal, it is useful to apply a low-pass filter first.
 
         :param channel: Scope object
-        :type channel: Scope
+        :type channel: Channel
         :param order: oder of derivative, e.g. 1st order, ...
         :type order: int
         :return: Scope object
-        :rtype: Scope
+        :rtype: Channel
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
         if not isinstance(order, int):
             raise TypeError("order must be type integer.")
         if order <= 0:
             raise ValueError("order must be > 0.")
         # make a copy of the input channel object
-        channel_copy = HandleScope.copy(channel)
+        channel_copy = Scope.copy(channel)
 
         # calculate the derivative, using findiff-toolbox
         d_dx = FinDiff(0, channel.channel_time, order)
@@ -1425,7 +1425,7 @@ class HandleScope:
         return channel_copy
 
     @staticmethod
-    def rms(channel: Scope) -> Any:
+    def calc_rms(channel: Channel) -> Any:
         """
         Calculate the RMS of a given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
@@ -1433,7 +1433,7 @@ class HandleScope:
         :type channel: Scope
         Returns: rms(self.channel_data).
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
 
         # Log flow control
@@ -1442,7 +1442,7 @@ class HandleScope:
         return np.sqrt(np.mean(channel.channel_data ** 2))
 
     @staticmethod
-    def mean(channel: Scope) -> Any:
+    def calc_mean(channel: Channel) -> Any:
         """
         Calculate the mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
@@ -1450,7 +1450,7 @@ class HandleScope:
         :type channel: Scope
         Returns: mean(self.channel_data).
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
 
         # Log flow control
@@ -1459,7 +1459,7 @@ class HandleScope:
         return np.mean(channel.channel_data)
 
     @staticmethod
-    def absmean(channel: Scope) -> Any:
+    def calc_absmean(channel: Channel) -> Any:
         """
         Calculate the absolute mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
@@ -1467,7 +1467,7 @@ class HandleScope:
         :type channel: Scope
         Returns: abs(mean(self.channel_data)).
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
 
         # Log flow control
@@ -1476,7 +1476,7 @@ class HandleScope:
         return np.mean(np.abs(channel.channel_data))
 
     @staticmethod
-    def abs(channel: Scope) -> Scope:
+    def calc_abs(channel: Channel) -> Channel:
         """
         Modify the existing scope channel so that the signal is rectified.
 
@@ -1484,7 +1484,7 @@ class HandleScope:
         :type channel: Scope
         Returns: abs(channel.channel_data).
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
 
         channel_modified = copy.deepcopy(channel)
@@ -1499,7 +1499,7 @@ class HandleScope:
         return channel_modified
 
     @staticmethod
-    def square(channel: Scope) -> Scope:
+    def square(channel: Channel) -> Channel:
         """
         Square the data channel.
 
@@ -1507,7 +1507,7 @@ class HandleScope:
         :type channel: Scope
         Returns: channel.channel_data ** 2.
         """
-        if not isinstance(channel, Scope):
+        if not isinstance(channel, Channel):
             raise TypeError("channel must be type Scope.")
 
         channel_modified = copy.deepcopy(channel)
@@ -1540,12 +1540,12 @@ class HandleScope:
         logging.debug(f"{class_modulename} :Name of file to save={fig_name}.pdf")
 
     @staticmethod
-    def save(scope_object: Scope, filepath: str) -> None:
+    def save(scope_object: Channel, filepath: str) -> None:
         """
         Save a scope object to hard disk.
 
         :param scope_object: scope object
-        :type scope_object: Scope
+        :type scope_object: Channel
         :param filepath: filepath including file name
         :type filepath: str
         """
@@ -1558,21 +1558,21 @@ class HandleScope:
             file_path = os.path.curdir
         if not os.path.exists(file_path):
             os.makedirs(file_path, exist_ok=True)
-        if not isinstance(scope_object, Scope):
+        if not isinstance(scope_object, Channel):
             raise TypeError("scope_object must be of type Scope.")
 
         with open(filepath, 'wb') as handle:
             pickle.dump(scope_object, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     @staticmethod
-    def load(filepath: str) -> Scope:
+    def load(filepath: str) -> Channel:
         """
         Load a scope file from the hard disk.
 
         :param filepath: filepath
         :type filepath: str
         :return: loaded Scope object
-        :rtype: Scope
+        :rtype: Channel
         """
         if not isinstance(filepath, str):
             raise TypeError("filepath must be of type str.")
@@ -1581,8 +1581,8 @@ class HandleScope:
         if not os.path.exists(filepath):
             raise ValueError(f"{filepath} does not exist.")
         with open(filepath, 'rb') as handle:
-            loaded_scope_object: Scope = pickle.load(handle)
-        if not isinstance(loaded_scope_object, Scope):
+            loaded_scope_object: Channel = pickle.load(handle)
+        if not isinstance(loaded_scope_object, Channel):
             raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
 
         return loaded_scope_object
