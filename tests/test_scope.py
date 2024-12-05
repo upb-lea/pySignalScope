@@ -282,3 +282,49 @@ def test_copy():
     assert object_to_copy.channel_color == object_copy.channel_color
     assert object_to_copy.channel_source == object_copy.channel_source
     assert object_to_copy.channel_linestyle == object_copy.channel_linestyle
+
+def test_add():
+    """Unit test for add()."""
+    # sample data
+    channel_1 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2], channel_data=[1, 2, 3])
+    channel_2 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
+    channel_3 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
+    channel_4 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2], channel_data=[2, 4, 6])
+    channel_5 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2, 3.3], channel_data=[2, 4, 6, 9])
+
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleScope.add(123, "wrong-type")
+    # error: different length of channels
+    with pytest.raises(ValueError):
+        pss.HandleScope.add(channel_1, channel_5)
+    # error: different time steps of channels
+    with pytest.raises(ValueError):
+        pss.HandleScope.add(channel_1, channel_2)
+
+    # valid result
+    channel_add = pss.HandleScope.add(channel_2, channel_3)
+    np.testing.assert_equal(channel_add.channel_data, channel_4.channel_data)
+
+def test_subtract():
+    """Unit test for add()."""
+    # sample data
+    channel_1 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2], channel_data=[1, 2, 3])
+    channel_2 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
+    channel_3 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
+    channel_4 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2], channel_data=[0, 0, 0])
+    channel_5 = pss.HandleScope.generate_scope_object(channel_time=[1, 1.1, 2.2, 3.3], channel_data=[2, 4, 6, 9])
+
+    # wrong input type
+    with pytest.raises(TypeError):
+        pss.HandleScope.subtract(123, "wrong-type")
+    # error: different length of channels
+    with pytest.raises(ValueError):
+        pss.HandleScope.subtract(channel_1, channel_5)
+    # error: different time steps of channels
+    with pytest.raises(ValueError):
+        pss.HandleScope.subtract(channel_1, channel_2)
+
+    # valid result
+    channel_subtract = pss.HandleScope.subtract(channel_2, channel_3)
+    np.testing.assert_equal(channel_subtract.channel_data, channel_4.channel_data)

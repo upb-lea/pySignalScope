@@ -702,13 +702,18 @@ class HandleScope:
         if len(channels) < 2:
             raise ValueError("Minimum two channel inputs necessary!")
 
-        channel_data_result = np.zeros_like(channels[0].channel_data)
-        channel_label_result = ''
+        # check input type and time data points
         for channel in channels:
             if not isinstance(channel, Scope):
                 raise TypeError("channel must be type Scope.")
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
+            if not (channel.channel_time == channels[0].channel_time).all():
+                raise ValueError("Can not add data. Different Channel.channel_time values!")
+
+        channel_data_result = np.zeros_like(channels[0].channel_data)
+        channel_label_result = ''
+        for channel in channels:
             channel_data_result += channel.channel_data
             channel_label_result += channel.channel_label + ' + ' if channel.channel_label is not None else ""
         channel_label_result = channel_label_result[:-3]
@@ -736,13 +741,18 @@ class HandleScope:
         if len(channels) < 2:
             raise ValueError("Minimum two channel inputs necessary!")
 
-        channel_data_result = np.zeros_like(channels[0].channel_data)
-        channel_label_result = ''
-        for channel_count, channel in enumerate(channels):
+        # check input type and time data points
+        for channel in channels:
             if not isinstance(channel, Scope):
                 raise TypeError("channel must be type Scope.")
             if channel.channel_time.all() != channels[0].channel_time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
+            if not (channel.channel_time == channels[0].channel_time).all():
+                raise ValueError("Can not add data. Different Channel.channel_time values!")
+
+        channel_data_result = np.zeros_like(channels[0].channel_data)
+        channel_label_result = ''
+        for channel_count, channel in enumerate(channels):
             if channel_count == 0:
                 channel_data_result += channel.channel_data
             else:
