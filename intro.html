@@ -46,9 +46,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><span class="sectnum">1 </span>Scope toolbox for documentation purposes and comparisons</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview"><span class="sectnum">1.1 </span>Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started"><span class="sectnum">1.2 </span>Getting started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples"><span class="sectnum">1.3 </span>Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#bug-reports"><span class="sectnum">1.4 </span>Bug Reports</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#changelog"><span class="sectnum">1.5 </span>Changelog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-usage"><span class="sectnum">1.3 </span>Example usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples"><span class="sectnum">1.4 </span>Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bug-reports"><span class="sectnum">1.5 </span>Bug Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changelog"><span class="sectnum">1.6 </span>Changelog</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#module-pysignalscope.functions"><span class="sectnum">2 </span>pySignalScope function documentation</a><ul>
@@ -109,16 +110,22 @@
 </pre></div>
 </div>
 </section>
+<section id="example-usage">
+<h2><span class="sectnum">1.3 </span>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<p>pySignalScope helps to load, edit, display and analyze the signals. The following application example loads a noisy measurement signal, which is first filtered. To simplify the display, colors, linestyle and the label can be attached to the object. This is shown in the plot above.</p>
+<p>The lower plot shows the post-processing of the filtered signal. This is multiplied by a small gain, provided with an offset and shortened to a period duration. The label, color and line style are changed. The signals are then plotted with just one plot command.</p>
+<img alt="_images/function_overview.png" src="_images/function_overview.png" />
+</section>
 <section id="examples">
-<h2><span class="sectnum">1.3 </span>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<h2><span class="sectnum">1.4 </span>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <p>Have a look at the <a class="reference external" href="https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py">example</a>, to see what you can do with this toolbox.</p>
 </section>
 <section id="bug-reports">
-<h2><span class="sectnum">1.4 </span>Bug Reports<a class="headerlink" href="#bug-reports" title="Link to this heading"></a></h2>
+<h2><span class="sectnum">1.5 </span>Bug Reports<a class="headerlink" href="#bug-reports" title="Link to this heading"></a></h2>
 <p>Please use the issues report button within GitHub to report bugs.</p>
 </section>
 <section id="changelog">
-<h2><span class="sectnum">1.5 </span>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h2>
+<h2><span class="sectnum">1.6 </span>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h2>
 <p>Find the changelog <a class="reference external" href="https://github.com/upb-lea/pySignalScope/blob/main/CHANGELOG.md">here</a>.</p>
 </section>
 </section>
@@ -131,7 +138,7 @@
 <dd><p>Calculate the FFT for a given input signal. Input signal is in vector format and should include one period.</p>
 <p>Output vector includes only frequencies with amplitudes &gt; 1% of input signal</p>
 <dl class="field-list simple">
-<dt class="field-odd">Minimal Example<span class="colon">:</span></dt>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">sp</span>
