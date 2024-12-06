@@ -884,14 +884,14 @@ class Scope:
         return fig
 
     @staticmethod
-    def check_limits(cur_value: float, min_value: float, max_value: float) -> bool:
+    def __check_limits(cur_value: float, min_value: float, max_value: float) -> bool:
         """
         Check if the  value is within the given range.
 
         Example for a valid value:
         >>> bool valid
         >>> value = 10.2
-        >>> valid = Scope.check_limits(value, 3.2,11.3)
+        >>> valid = Scope.__check_limits(value, 3.2,11.3)
         >>> if valid:
         >>>     print(f"{value} is within the limit")
         >>> else:
@@ -922,7 +922,7 @@ class Scope:
         return ret_val
 
     @staticmethod
-    def calculate_min_diff(cur_channel: np.array, ch_id: any) -> [bool, float]:
+    def __calculate_min_diff(cur_channel: np.array, ch_id: any) -> [bool, float]:
         """
         Check if the  value is within the given range.
 
@@ -931,7 +931,7 @@ class Scope:
         Example for a valid value:
         >>> bool valid
         >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
-        >>> valid, mindiff = Scope.calculate_min_diff(channel5,5)
+        >>> valid, mindiff = Scope.__calculate_min_diff(channel5,5)
         >>> if valid:
         >>>     print(f"{mindiff} is the minimum difference")
         >>> else:
@@ -1038,7 +1038,7 @@ class Scope:
         min_diff_channel = 0
         # For-loop over channels to calculate the minimum distance between the values
         for channel_id, channel in enumerate(channels[1:], start=1):
-            validity, min_diff = Scope.calculate_min_diff(channel.channel_time, channel_id)
+            validity, min_diff = Scope.__calculate_min_diff(channel.channel_time, channel_id)
             # Check, if the value is valid
             if validity:
                 # Check, if a minimum is not set (min_diff_channel == 0
@@ -1083,7 +1083,7 @@ class Scope:
         # Initialize values
         # Shift steps x
         if isinstance(shiftstep_x, float) or isinstance(shiftstep_x, int):
-            if not Scope.check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
+            if not Scope.__check_limits(shiftstep_x, min_shiftstep_x, max_shiftstep_x):
                 shiftstep_x = def_shiftstep_x
                 # Shift step in x-Direction is out of range
                 logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
@@ -1098,7 +1098,7 @@ class Scope:
 
         # Shift steps y
         if isinstance(shiftstep_y, float) or isinstance(shiftstep_y, int):
-            if not Scope.check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
+            if not Scope.__check_limits(shiftstep_y, min_shiftstep_y, max_shiftstep_y):
                 shiftstep_y = def_shiftstep_y
                 # Shift step in y-Direction is out of range
                 logging.warning(f"{class_modulename} :Shift step in x-direction {shiftstep_x} is out of range. " 
@@ -1276,8 +1276,8 @@ class Scope:
         return functions.fft(period_vector, mode='time', plot=plot)
 
     @staticmethod
-    def channel_short_to_period(channel: Channel, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
-                                start_time: Union[float, int, None] = None):
+    def short_to_period(channel: Channel, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
+                        start_time: Union[float, int, None] = None):
         """Short a given Scope object to a period.
 
         :param channel: Scope channel object
@@ -1313,7 +1313,7 @@ class Scope:
         return channel
 
     @staticmethod
-    def channel_low_pass_filter(channel: Channel, order: int = 1, angular_frequency_rad: float = 0.05) -> Channel:
+    def low_pass_filter(channel: Channel, order: int = 1, angular_frequency_rad: float = 0.05) -> Channel:
         """
         Implement a butterworth filter on the given signal.
 

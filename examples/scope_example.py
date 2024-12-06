@@ -36,7 +36,7 @@ for ch_shift in shiftlist:
     ch_i = ch_i+1
 
 # short channels to a single period, perform FFT for current waveforms
-current_prim = pss.Scope.channel_short_to_period(current_prim, f0=200000)
+current_prim = pss.Scope.short_to_period(current_prim, f0=200000)
 current_prim = pss.Scope.modify(current_prim, channel_time_shift=5e-6)
 pss.Scope.fft(current_prim)
 

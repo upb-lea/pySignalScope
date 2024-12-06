@@ -172,35 +172,35 @@ def test_low_pass_filter():
     """Unit test for low_pass_filter()."""
     # working test
     current_prim = pss.Scope.generate_channel([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
-    filter_current_prim_1 = pss.Scope.channel_low_pass_filter(current_prim, 1, angular_frequency_rad=0.3)
+    filter_current_prim_1 = pss.Scope.low_pass_filter(current_prim, 1, angular_frequency_rad=0.3)
     numpy.testing.assert_array_almost_equal([0.99927604, 2.26610791, 2.85423117, 3.5885494, 4.09641649, 3.33691443, 1.99801723],
                                             filter_current_prim_1.channel_data)
 
     # working test for default values
-    filter_current_prim_1 = pss.Scope.channel_low_pass_filter(current_prim)
+    filter_current_prim_1 = pss.Scope.low_pass_filter(current_prim)
     numpy.testing.assert_array_almost_equal([0.7568143, 0.98001724, 1.15909406, 1.2985092, 1.37680805, 1.36477982, 1.29328745],
                                             filter_current_prim_1.channel_data)
 
     # insert not a scope type
     with pytest.raises(TypeError):
-        pss.Scope.channel_low_pass_filter(5, order=1, angular_frequency_rad=0.5)
+        pss.Scope.low_pass_filter(5, order=1, angular_frequency_rad=0.5)
 
     # wrong filter order type
     with pytest.raises(TypeError):
-        pss.Scope.channel_low_pass_filter(current_prim, order=1.4, angular_frequency_rad=0.5)
+        pss.Scope.low_pass_filter(current_prim, order=1.4, angular_frequency_rad=0.5)
     # negative filter order
     with pytest.raises(ValueError):
-        pss.Scope.channel_low_pass_filter(current_prim, order=-3, angular_frequency_rad=0.5)
+        pss.Scope.low_pass_filter(current_prim, order=-3, angular_frequency_rad=0.5)
 
     # wrong filter frequency type
     with pytest.raises(TypeError):
-        pss.Scope.channel_low_pass_filter(current_prim, order=1, angular_frequency_rad=True)
+        pss.Scope.low_pass_filter(current_prim, order=1, angular_frequency_rad=True)
 
     # wrong frequency value
     with pytest.raises(ValueError):
-        pss.Scope.channel_low_pass_filter(current_prim, order=1, angular_frequency_rad=1.4)
+        pss.Scope.low_pass_filter(current_prim, order=1, angular_frequency_rad=1.4)
     with pytest.raises(ValueError):
-        pss.Scope.channel_low_pass_filter(current_prim, order=1, angular_frequency_rad=-2.2)
+        pss.Scope.low_pass_filter(current_prim, order=1, angular_frequency_rad=-2.2)
 
 def test_derivative():
     """Test the derivative method."""
