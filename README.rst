@@ -38,10 +38,7 @@ The lower plot shows the post-processing of the filtered signal. This is multipl
 
 .. image:: docs/source/figures/function_overview.png
 
-
-Examples
---------
-Have a look at the `example <examples/scope_example.py>`__, to see what you can do with this toolbox.
+Have a look at the `Scope example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__ and at the `Impedance example <https://github.com/upb-lea/pySignalScope/blob/main/examples/impedance_example.py>`__ to see what you can do with this toolbox.
 
 Naming convention
 -------------------
