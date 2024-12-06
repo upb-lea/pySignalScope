@@ -2,23 +2,28 @@
 
 # python libraries
 import dataclasses
-from typing import Optional
+from typing import Union
 
 # 3rd party libraries
 import numpy as np
 
 @dataclasses.dataclass(eq=False)
 class ImpedanceCurve:
-    """Dataclass to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
+    """Dataclass for impedance objects in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
-    channel_frequency: np.array
-    channel_impedance: np.array
-    channel_phase: np.array
-    channel_label: Optional[str]
-    channel_unit: Optional[str]
-    channel_color: Optional[str]
-    channel_source: Optional[str]
-    channel_linestyle: Optional[str]
+    # mandatory data
+    channel_frequency: np.array  #: mandatory: frequency data (mandatory)
+    channel_impedance: np.array  #: mandatory: impedance data (mandatory)
+    channel_phase: np.array  #: mandatory: phase data (mandatory)
+
+    # optional data
+    channel_label: Union[str]  #: channel label displayed in a plot (optional)
+    channel_unit: Union[str]  #: channel unit displayed in a plot (optional)
+    channel_color: Union[str]  #: channel color displayed in a plot (optional)
+    channel_linestyle: Union[str]  #: channel linestyle displayed in a plot (optional)
+
+    # meta data
+    channel_source: Union[str]  #: channel source, additional meta data (optional)
 
     def __eq__(self, other):
         """Compare two Channel objects."""

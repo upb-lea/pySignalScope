@@ -29,6 +29,18 @@ Use the toolbox in your python program:
     import pysignalscope as pss
     ...
 
+Example usage
+-------------
+pySignalScope helps to load, edit, display and analyze the signals. The following application example loads a noisy measurement signal, which is first filtered. To simplify the display, colors, linestyle and the label can be attached to the object. This is shown in the plot above.
+
+
+The lower plot shows the post-processing of the filtered signal. This is multiplied by a small gain, provided with an offset and shortened to a period duration. The label, color and line style are changed. The signals are then plotted with just one plot command.
+
+
+.. image:: figures/function_overview.png
+
+
+
 Examples
 --------
 Have a look at the `example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__, to see what you can do with this toolbox.
@@ -47,9 +59,18 @@ pySignalScope function documentation
 ==================================================
 .. currentmodule:: pysignalscope.scope
 
+.. autoclass:: pysignalscope.Channel
+   :members: 
+   
 .. autoclass:: pysignalscope.Scope
+   :members: 
+     
+.. autoclass:: pysignalscope.ImpedanceCurve
    :members:
-
+   
+.. autoclass:: pysignalscope.Impedance
+   :members:
+  
 .. automodule:: pysignalscope.functions
    :members:
 

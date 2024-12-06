@@ -14,8 +14,8 @@ os.environ["IS_TEST"] = "True"
 # own libraries
 import pysignalscope as pss
 
-def test_generate_scope_object():
-    """Test generate_scope_object() method."""
+def test_generate_channel():
+    """Test generate_channel() method."""
     # no input or missing input channel_time and channel_data - raise type error
     with pytest.raises(TypeError):
         pss.Scope.generate_channel()
@@ -95,6 +95,10 @@ def test_generate_scope_object():
     assert scope_object.channel_source == "scope 11"
     assert scope_object.channel_linestyle == "--"
 
+    # allow tuple inputs for color (custom color schemes)
+    scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2], channel_color=pss.gnome_colors["red"])
+    assert scope_object.channel_color == pss.gnome_colors["red"]
+
     # wrong type inputs
     with pytest.raises(TypeError):
         pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2], channel_label=100.1)
@@ -146,7 +150,7 @@ def test_from_numpy():
     with pytest.raises(ValueError):
         pss.Scope.from_numpy(period_vector_t_i, 100)
 
-    # wrong input data to see if generate_scope_object() is used
+    # wrong input data to see if generate_channel() is used
     with pytest.raises(ValueError):
         pss.Scope.generate_channel(channel_time=[-3.14, -4, 5.0], channel_data=[1, -2.1, -3.2], channel_linestyle=100.1)
 

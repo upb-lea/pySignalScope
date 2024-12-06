@@ -348,6 +348,7 @@ class Impedance:
         Calculate R, L, C values for given impedance curve.
 
         Calculated values will be drawn in a plot for comparison with the given data.
+
         :param channel: Impedance channel object
         :type channel: ImpedanceCurve
         :param type_rlc: Type 'R', 'L', 'C'
@@ -362,7 +363,8 @@ class Impedance:
         :return: Values for R, L, C
         :rtype: tuple
 
-        Example:
+        :Example:
+
         >>> import pysignalscope as pss
         >>> example_data_rlc = pss.Impedance.from_rlc('l', 1000, 500e-6, 10e-12)
         >>> recalculated_r, recalculated_l, recalculated_c = pss.Impedance.calc_rlc(example_data_rlc, 'l', f_calc_l=10e3, f_calc_c=10e7, plot_figure=True)
@@ -444,24 +446,34 @@ class Impedance:
         :return: Impedance object
         :rtype: ImpedanceCurve
 
-        Example:
+        :Example:
+
         >>> import pysignalscope as pss
         >>> impedance_channel_object = pss.Impedance.from_rlc('C', 10e-3, 100e-9, 36e-3)
 
          *  Type C and RLC
-        ---R---L---C---
+
+         .. code-block::
+
+            ---R---L---C---
 
          *  Type R
-        ---+---R---L---+---
-           |           |
-           +-----C-----+
+
+         .. code-block::
+
+            ---+---R---L---+---
+               |           |
+               +-----C-----+
 
          *  Type L
-        ---+---L---+---
-           |       |
-           +---C---+
-           |       |
-           +---R---+
+
+         .. code-block::
+
+            ---+---L---+---
+               |       |
+               +---C---+
+               |       |
+               +---R---+
         """
         f = np.logspace(0, 8, 10000)
 
