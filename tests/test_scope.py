@@ -43,8 +43,8 @@ def test_generate_channel():
         pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[])
     # channel_time: non-equidistant values and negative valid values
     scope_object = pss.Scope.generate_channel(channel_time=[-3.3, -2.2, -1.1, 0, 1.2], channel_data=[-1, -2.1, -3.2, 4.4, -2.7])
-    numpy.testing.assert_equal(scope_object.channel_time, [-3.3, -2.2, -1.1, 0, 1.2])
-    numpy.testing.assert_equal(scope_object.channel_data, [-1, -2.1, -3.2, 4.4, -2.7])
+    numpy.testing.assert_equal(scope_object.time, [-3.3, -2.2, -1.1, 0, 1.2])
+    numpy.testing.assert_equal(scope_object.data, [-1, -2.1, -3.2, 4.4, -2.7])
 
     # channel_time: same x-data, should fail.
     with pytest.raises(ValueError):
@@ -52,23 +52,23 @@ def test_generate_channel():
 
     # valid positive data, mixed int and float
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, 2, 3.1])
-    numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
-    numpy.testing.assert_equal(scope_object.channel_data, [1, 2, 3.1])
+    numpy.testing.assert_equal(scope_object.time, [1, 2, 3])
+    numpy.testing.assert_equal(scope_object.data, [1, 2, 3.1])
 
     # valid negative data, mixed int and float
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[-1, -2.1, -3.2])
-    numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
-    numpy.testing.assert_equal(scope_object.channel_data, [-1, -2.1, -3.2])
+    numpy.testing.assert_equal(scope_object.time, [1, 2, 3])
+    numpy.testing.assert_equal(scope_object.data, [-1, -2.1, -3.2])
 
     # valid mixed positive and negative data, mixed int and float
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2])
-    numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
-    numpy.testing.assert_equal(scope_object.channel_data, [1, -2.1, -3.2])
+    numpy.testing.assert_equal(scope_object.time, [1, 2, 3])
+    numpy.testing.assert_equal(scope_object.data, [1, -2.1, -3.2])
 
     # very high, very low and very small mixed values
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1e25, -3.4e34, 3.1e-17])
-    numpy.testing.assert_equal(scope_object.channel_time, [1, 2, 3])
-    numpy.testing.assert_equal(scope_object.channel_data, [1e25, -3.4e34, 3.1e-17])
+    numpy.testing.assert_equal(scope_object.time, [1, 2, 3])
+    numpy.testing.assert_equal(scope_object.data, [1e25, -3.4e34, 3.1e-17])
 
     # invalid time value
     with pytest.raises(ValueError):
@@ -84,25 +84,25 @@ def test_generate_channel():
 
     # check None inputs
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2])
-    assert scope_object.channel_label is None
-    assert scope_object.channel_unit is None
-    assert scope_object.channel_color is None
-    assert scope_object.channel_source is None
-    assert scope_object.channel_linestyle is None
+    assert scope_object.label is None
+    assert scope_object.unit is None
+    assert scope_object.color is None
+    assert scope_object.source is None
+    assert scope_object.linestyle is None
 
     # check inputs
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2],
                                               channel_label="test 1", channel_unit="A", channel_color="red",
                                               channel_source="scope 11", channel_linestyle="--")
-    assert scope_object.channel_label == "test 1"
-    assert scope_object.channel_unit == "A"
-    assert scope_object.channel_color == "red"
-    assert scope_object.channel_source == "scope 11"
-    assert scope_object.channel_linestyle == "--"
+    assert scope_object.label == "test 1"
+    assert scope_object.unit == "A"
+    assert scope_object.color == "red"
+    assert scope_object.source == "scope 11"
+    assert scope_object.linestyle == "--"
 
     # allow tuple inputs for color (custom color schemes)
     scope_object = pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[1, -2.1, -3.2], channel_color=pss.gnome_colors["red"])
-    assert scope_object.channel_color == pss.gnome_colors["red"]
+    assert scope_object.color == pss.gnome_colors["red"]
 
     # wrong type inputs
     with pytest.raises(TypeError):
@@ -126,27 +126,27 @@ def test_from_numpy():
 
     # mode time
     scope_object = pss.Scope.from_numpy(period_vector_t_i, mode="time")
-    np.testing.assert_array_equal(scope_object.channel_time, time)
-    np.testing.assert_array_equal(scope_object.channel_data, data)
+    np.testing.assert_array_equal(scope_object.time, time)
+    np.testing.assert_array_equal(scope_object.data, data)
 
     # no mode input, should behave same as radiant mode
     scope_object = pss.Scope.from_numpy(period_vector_t_i, f0=frequency)
-    np.testing.assert_array_almost_equal(scope_object.channel_time, np.array(time) / 2 / np.pi / frequency)
-    np.testing.assert_array_equal(scope_object.channel_data, data)
+    np.testing.assert_array_almost_equal(scope_object.time, np.array(time) / 2 / np.pi / frequency)
+    np.testing.assert_array_equal(scope_object.data, data)
 
     # mode radiant
     scope_object = pss.Scope.from_numpy(period_vector_t_i, mode="rad", f0=frequency)
-    np.testing.assert_array_almost_equal(scope_object.channel_time, np.array(time) / 2 / np.pi / frequency)
-    np.testing.assert_array_equal(scope_object.channel_data, data)
+    np.testing.assert_array_almost_equal(scope_object.time, np.array(time) / 2 / np.pi / frequency)
+    np.testing.assert_array_equal(scope_object.data, data)
 
     # mode degree
     scope_object = pss.Scope.from_numpy(period_vector_t_i, mode="deg", f0=frequency)
-    np.testing.assert_array_almost_equal(scope_object.channel_time, np.array(time) / 360 / frequency)
-    np.testing.assert_array_equal(scope_object.channel_data, data)
+    np.testing.assert_array_almost_equal(scope_object.time, np.array(time) / 360 / frequency)
+    np.testing.assert_array_equal(scope_object.data, data)
 
     # Check for non set labels
-    assert scope_object.channel_label is None
-    assert scope_object.channel_unit is None
+    assert scope_object.label is None
+    assert scope_object.unit is None
 
     # wrong input value for mode
     with pytest.raises(ValueError):
@@ -162,7 +162,7 @@ def test_from_numpy():
     # set label
     label = "trail_label"
     scope_object = pss.Scope.from_numpy(period_vector_t_i, mode="rad", f0=frequency, channel_label=label)
-    assert scope_object.channel_label == label
+    assert scope_object.label == label
 
     # set wrong label type
     with pytest.raises(TypeError):
@@ -171,7 +171,7 @@ def test_from_numpy():
     # set unit
     unit = "trial_unit"
     scope_object = pss.Scope.from_numpy(period_vector_t_i, mode="rad", f0=frequency, channel_unit=unit)
-    assert scope_object.channel_unit == unit
+    assert scope_object.unit == unit
 
     # set wrong unit type
     with pytest.raises(TypeError):
@@ -183,12 +183,12 @@ def test_low_pass_filter():
     current_prim = pss.Scope.generate_channel([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
     filter_current_prim_1 = pss.Scope.low_pass_filter(current_prim, 1, angular_frequency_rad=0.3)
     numpy.testing.assert_array_almost_equal([0.99927604, 2.26610791, 2.85423117, 3.5885494, 4.09641649, 3.33691443, 1.99801723],
-                                            filter_current_prim_1.channel_data)
+                                            filter_current_prim_1.data)
 
     # working test for default values
     filter_current_prim_1 = pss.Scope.low_pass_filter(current_prim)
     numpy.testing.assert_array_almost_equal([0.7568143, 0.98001724, 1.15909406, 1.2985092, 1.37680805, 1.36477982, 1.29328745],
-                                            filter_current_prim_1.channel_data)
+                                            filter_current_prim_1.data)
 
     # insert not a scope type
     with pytest.raises(TypeError):
@@ -216,11 +216,11 @@ def test_derivative():
     # function test
     sample_scope_object = pss.Scope.generate_channel([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
     sample_scope_object_1st_derivative = pss.Scope.derivative(sample_scope_object, 1)
-    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
+    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.data)
 
     # function test using default order
     sample_scope_object_1st_derivative = pss.Scope.derivative(sample_scope_object)
-    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.channel_data)
+    numpy.testing.assert_equal([6, 1, 0, 2, 0, -2, 0], sample_scope_object_1st_derivative.data)
 
     # wrong scope type
     with pytest.raises(TypeError):
@@ -245,12 +245,12 @@ def test_eq():
 
     # not the same: different time
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2.channel_time = np.array([2, 2.1, 3])
+    ch_2.time = np.array([2, 2.1, 3])
     assert not (ch_1 == ch_2)
 
     # not the same: different data
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2.channel_data = np.array([2, 2.1, 3])
+    ch_2.data = np.array([2, 2.1, 3])
     assert not (ch_1 == ch_2)
 
     # not the same: different units
@@ -345,7 +345,7 @@ def test_add():
 
     # valid result
     channel_add = pss.Scope.add(channel_2, channel_3)
-    np.testing.assert_equal(channel_add.channel_data, channel_4.channel_data)
+    np.testing.assert_equal(channel_add.data, channel_4.data)
 
 def test_subtract():
     """Unit test for add()."""
@@ -368,7 +368,7 @@ def test_subtract():
 
     # valid result
     channel_subtract = pss.Scope.subtract(channel_2, channel_3)
-    np.testing.assert_equal(channel_subtract.channel_data, channel_4.channel_data)
+    np.testing.assert_equal(channel_subtract.data, channel_4.data)
 
 def test_mean():
     """Unit test for mean()."""

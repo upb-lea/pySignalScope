@@ -109,13 +109,13 @@ class Scope:
         else:
             raise TypeError("channel_linestyle must be type str or None.")
 
-        return Channel(channel_time=channel_time,
-                       channel_data=channel_data,
-                       channel_label=channel_label,
-                       channel_unit=channel_unit,
-                       channel_color=channel_color,
-                       channel_source=channel_source,
-                       channel_linestyle=channel_linestyle,
+        return Channel(time=channel_time,
+                       data=channel_data,
+                       label=channel_label,
+                       unit=channel_unit,
+                       color=channel_color,
+                       source=channel_source,
+                       linestyle=channel_linestyle,
                        modulename=class_modulename)
 
     # - Method modify ------------------------------------------------------------------------------
@@ -163,49 +163,49 @@ class Scope:
         channel_modified = copy.deepcopy(channel)
 
         if isinstance(channel_label, str):
-            channel_modified.channel_label = channel_label
+            channel_modified.label = channel_label
             modify_flag = True
         elif channel_label is None:
             pass
         else:
             raise TypeError("channel_label must be type str or None")
         if isinstance(channel_unit, str):
-            channel_modified.channel_unit = channel_unit
+            channel_modified.unit = channel_unit
             modify_flag = True
         elif channel_unit is None:
             pass
         else:
             raise TypeError("channel_unit must be type str or None")
         if isinstance(channel_data_factor, (int, float)):
-            channel_modified.channel_data = channel_modified.channel_data * channel_data_factor
+            channel_modified.data = channel_modified.data * channel_data_factor
             modify_flag = True
         elif channel_data_factor is None:
             pass
         else:
             raise TypeError("channel_data_factor must be type float or None")
         if isinstance(channel_data_offset, (int, float)):
-            channel_modified.channel_data = channel_modified.channel_data + channel_data_offset
+            channel_modified.data = channel_modified.data + channel_data_offset
             modify_flag = True
         elif channel_data_offset is None:
             pass
         else:
             raise TypeError("channel_data_offset must be type float or None")
         if isinstance(channel_color, str) or isinstance(channel_color, tuple):
-            channel_modified.channel_color = channel_color
+            channel_modified.color = channel_color
             modify_flag = True
         elif channel_color is None:
             pass
         else:
             raise TypeError("channel_color must be type str or tuple or None")
         if isinstance(channel_source, str):
-            channel_modified.channel_source = channel_source
+            channel_modified.source = channel_source
             modify_flag = True
         elif channel_source is None:
             pass
         else:
             raise TypeError("channel_source must be type str or None")
         if isinstance(channel_time_shift, (int, float)):
-            channel_modified.channel_time = channel_modified.channel_time + channel_time_shift
+            channel_modified.time = channel_modified.time + channel_time_shift
             modify_flag = True
         elif channel_time_shift is None:
             pass
@@ -213,16 +213,16 @@ class Scope:
             raise TypeError("channel_time_shift must be type float or None")
         if isinstance(channel_time_shift_rotate, (int, float)):
             # figure out current max time
-            current_max_time = channel_modified.channel_time[-1]
-            current_period = current_max_time - channel_modified.channel_time[0]
+            current_max_time = channel_modified.time[-1]
+            current_period = current_max_time - channel_modified.time[0]
             # shift all times
-            channel_modified.channel_time = channel_modified.channel_time + channel_time_shift_rotate
-            channel_modified.channel_time[channel_modified.channel_time > current_max_time] = (
-                channel_modified.channel_time[channel_modified.channel_time > current_max_time] - current_period)
+            channel_modified.time = channel_modified.time + channel_time_shift_rotate
+            channel_modified.time[channel_modified.time > current_max_time] = (
+                channel_modified.time[channel_modified.time > current_max_time] - current_period)
             # due to rolling time-shift, channel_time and channel_data needs to be re-sorted.
-            new_index = np.argsort(channel_modified.channel_time)
-            channel_modified.channel_time = np.array(channel_modified.channel_time)[new_index]
-            channel_modified.channel_data = np.array(channel_modified.channel_data)[new_index]
+            new_index = np.argsort(channel_modified.time)
+            channel_modified.time = np.array(channel_modified.time)[new_index]
+            channel_modified.data = np.array(channel_modified.data)[new_index]
             modify_flag = True
         elif channel_time_shift_rotate is None:
             pass
@@ -231,14 +231,14 @@ class Scope:
 
         if isinstance(channel_time_cut_min, (int, float)):
             index_list_to_remove = []
-            if channel_time_cut_min < channel_modified.channel_time[0]:
-                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel_modified.channel_time[0]}). "
+            if channel_time_cut_min < channel_modified.time[0]:
+                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel_modified.time[0]}). "
                                  f"This is not allowed!")
-            for count, value in enumerate(channel_modified.channel_time):
+            for count, value in enumerate(channel_modified.time):
                 if value < channel_time_cut_min:
                     index_list_to_remove.append(count)
-            channel_modified.channel_time = np.delete(channel_modified.channel_time, index_list_to_remove)
-            channel_modified.channel_data = np.delete(channel_modified.channel_data, index_list_to_remove)
+            channel_modified.time = np.delete(channel_modified.time, index_list_to_remove)
+            channel_modified.data = np.delete(channel_modified.data, index_list_to_remove)
             modify_flag = True
         elif channel_time_cut_min is None:
             pass
@@ -247,21 +247,21 @@ class Scope:
 
         if isinstance(channel_time_cut_max, (int, float)):
             index_list_to_remove = []
-            if channel_time_cut_max > channel_modified.channel_time[-1]:
-                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel_modified.channel_time[-1]}). "
+            if channel_time_cut_max > channel_modified.time[-1]:
+                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel_modified.time[-1]}). "
                                  f"This is not allowed!")
-            for count, value in enumerate(channel_modified.channel_time):
+            for count, value in enumerate(channel_modified.time):
                 if value > channel_time_cut_max:
                     index_list_to_remove.append(count)
-            channel_modified.channel_time = np.delete(channel_modified.channel_time, index_list_to_remove)
-            channel_modified.channel_data = np.delete(channel_modified.channel_data, index_list_to_remove)
+            channel_modified.time = np.delete(channel_modified.time, index_list_to_remove)
+            channel_modified.data = np.delete(channel_modified.data, index_list_to_remove)
             modify_flag = True
         elif channel_time_cut_max is None:
             pass
         else:
             raise TypeError("channel_time_cut_max must be type float or None")
         if isinstance(channel_linestyle, str):
-            channel_modified.channel_linestyle = channel_linestyle
+            channel_modified.linestyle = channel_linestyle
             modify_flag = True
         elif channel_linestyle is None:
             pass
@@ -644,12 +644,12 @@ class Scope:
         if not isinstance(channel_label, str) != channel_label is not None:
             raise TypeError("channel_label must be type str or None.")
 
-        channel_data = channel_voltage.channel_data * channel_current.channel_data
-        if channel_label is None and channel_voltage.channel_label is not None \
-                and channel_current.channel_label is not None:
-            channel_label = f"{channel_voltage.channel_label} * {channel_current.channel_label}"
-        channel_power = Channel(channel_voltage.channel_time, channel_data, channel_label=channel_label,
-                                channel_unit='W', channel_color=None, channel_linestyle=None, channel_source=None, modulename=class_modulename)
+        channel_data = channel_voltage.data * channel_current.data
+        if channel_label is None and channel_voltage.label is not None \
+                and channel_current.label is not None:
+            channel_label = f"{channel_voltage.label} * {channel_current.label}"
+        channel_power = Channel(channel_voltage.time, channel_data, label=channel_label,
+                                unit='W', color=None, linestyle=None, source=None, modulename=class_modulename)
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={len(channel_data)}")
@@ -676,14 +676,14 @@ class Scope:
         if not isinstance(channel_label, str):
             raise TypeError("channel_label must be type str.")
         channel_energy = np.array([])
-        timestep = channel_power.channel_time[2] - channel_power.channel_time[1]
-        for count, _ in enumerate(channel_power.channel_time):
+        timestep = channel_power.time[2] - channel_power.time[1]
+        for count, _ in enumerate(channel_power.time):
             if count == 0:
                 # set first energy value to zero
                 channel_energy = np.append(channel_energy, 0)
             else:
                 # using euler method
-                energy = (np.nan_to_num(channel_power.channel_data[count]) + np.nan_to_num(channel_power.channel_data[count-1])) / 2 * timestep
+                energy = (np.nan_to_num(channel_power.data[count]) + np.nan_to_num(channel_power.data[count - 1])) / 2 * timestep
                 channel_energy = np.append(channel_energy, channel_energy[-1] + energy)
         if channel_label is None:
             # Log missing user input
@@ -693,8 +693,8 @@ class Scope:
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={count}")
 
-        return Channel(channel_power.channel_time, channel_energy, channel_label=channel_label, channel_unit='J', channel_color=None, channel_source=None,
-                       channel_linestyle=None, modulename=class_modulename)
+        return Channel(channel_power.time, channel_energy, label=channel_label, unit='J', color=None, source=None,
+                       linestyle=None, modulename=class_modulename)
 
     @staticmethod
     def add(*channels: 'Channel') -> 'Channel':
@@ -713,16 +713,16 @@ class Scope:
         for channel in channels:
             if not isinstance(channel, Channel):
                 raise TypeError("channel must be type Scope.")
-            if channel.channel_time.all() != channels[0].channel_time.all():
+            if channel.time.all() != channels[0].time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
-            if not (channel.channel_time == channels[0].channel_time).all():
+            if not (channel.time == channels[0].time).all():
                 raise ValueError("Can not add data. Different Channel.channel_time values!")
 
-        channel_data_result = np.zeros_like(channels[0].channel_data)
+        channel_data_result = np.zeros_like(channels[0].data)
         channel_label_result = ''
         for channel in channels:
-            channel_data_result += channel.channel_data
-            channel_label_result += channel.channel_label + ' + ' if channel.channel_label is not None else ""
+            channel_data_result += channel.data
+            channel_label_result += channel.label + ' + ' if channel.label is not None else ""
         channel_label_result = channel_label_result[:-3]
 
         # Log missing channel input, if amount of channels is one
@@ -732,8 +732,8 @@ class Scope:
 
         logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are added={len(channels)}")
 
-        return Channel(channel_time=channels[0].channel_time, channel_data=channel_data_result, channel_unit=channels[0].channel_unit,
-                       channel_label=channel_label_result, channel_linestyle=None, channel_color=None, channel_source=None, modulename=class_modulename)
+        return Channel(time=channels[0].time, data=channel_data_result, unit=channels[0].unit,
+                       label=channel_label_result, linestyle=None, color=None, source=None, modulename=class_modulename)
 
     @staticmethod
     def subtract(*channels: 'Channel') -> 'Channel':
@@ -752,19 +752,19 @@ class Scope:
         for channel in channels:
             if not isinstance(channel, Channel):
                 raise TypeError("channel must be type Scope.")
-            if channel.channel_time.all() != channels[0].channel_time.all():
+            if channel.time.all() != channels[0].time.all():
                 raise ValueError("Can not add data. Different Channel.channel_time length!")
-            if not (channel.channel_time == channels[0].channel_time).all():
+            if not (channel.time == channels[0].time).all():
                 raise ValueError("Can not add data. Different Channel.channel_time values!")
 
-        channel_data_result = np.zeros_like(channels[0].channel_data)
+        channel_data_result = np.zeros_like(channels[0].data)
         channel_label_result = ''
         for channel_count, channel in enumerate(channels):
             if channel_count == 0:
-                channel_data_result += channel.channel_data
+                channel_data_result += channel.data
             else:
-                channel_data_result -= channel.channel_data
-            channel_label_result += channel.channel_label + ' - ' if channel.channel_label is not None else ""
+                channel_data_result -= channel.data
+            channel_label_result += channel.label + ' - ' if channel.label is not None else ""
         channel_label_result = channel_label_result[:-3]
 
         # Log missing channel input, if amount of channels is one
@@ -775,8 +775,8 @@ class Scope:
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are subtracted={len(channels)}")
 
-        return Channel(channels[0].channel_time, channel_data_result, channel_unit=channels[0].channel_unit,
-                       channel_label=channel_label_result, channel_color=None, channel_source=None, channel_linestyle=None, modulename=class_modulename)
+        return Channel(channels[0].time, channel_data_result, unit=channels[0].unit,
+                       label=channel_label_result, color=None, source=None, linestyle=None, modulename=class_modulename)
 
     @staticmethod
     def plot_channels(*channel: List['Channel'], timebase: str = 's', figure_size: Optional[Tuple] = None,
@@ -828,27 +828,27 @@ class Scope:
             for plot_list in channel:
                 count_legend_entries = 0
                 for channel_dataset in plot_list:
-                    plt.plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
-                             label=channel_dataset.channel_label, color=channel_dataset.channel_color,
-                             linestyle=channel_dataset.channel_linestyle)
-                    if channel_dataset.channel_label is not None:
+                    plt.plot(channel_dataset.time / time_factor, channel_dataset.data,
+                             label=channel_dataset.label, color=channel_dataset.color,
+                             linestyle=channel_dataset.linestyle)
+                    if channel_dataset.label is not None:
                         count_legend_entries += 1
                 plt.grid()
                 # plot legend in case of labels only. Otherwise, there would appear an empty box.
                 if count_legend_entries != 0:
                     plt.legend()
                 plt.xlabel(f'Time in {timebase}')
-                if channel_dataset.channel_unit is None:
+                if channel_dataset.unit is None:
                     pass
-                elif channel_dataset.channel_unit.lower() == 'v':
-                    plt.ylabel(f"Voltage in {channel_dataset.channel_unit}")
-                elif channel_dataset.channel_unit.lower() == 'a':
-                    plt.ylabel(f"Current in {channel_dataset.channel_unit}")
-                elif channel_dataset.channel_unit.lower() == 'w':
-                    plt.ylabel(f"Power in {channel_dataset.channel_unit}")
+                elif channel_dataset.unit.lower() == 'v':
+                    plt.ylabel(f"Voltage in {channel_dataset.unit}")
+                elif channel_dataset.unit.lower() == 'a':
+                    plt.ylabel(f"Current in {channel_dataset.unit}")
+                elif channel_dataset.unit.lower() == 'w':
+                    plt.ylabel(f"Power in {channel_dataset.unit}")
                 else:
                     # in case of no matches, use a custom label. The channel_unit is used for this.
-                    plt.ylabel(channel_dataset.channel_unit)
+                    plt.ylabel(channel_dataset.unit)
             # Log flow control
             logging.debug(f"{class_modulename} :FlCtl Amount of plots within one channel={len(plot_list)}")
 
@@ -857,29 +857,29 @@ class Scope:
             for plot_count, plot_list in enumerate(channel):
                 count_legend_entries = 0
                 for channel_dataset in plot_list:
-                    axs[plot_count].plot(channel_dataset.channel_time / time_factor, channel_dataset.channel_data,
-                                         label=channel_dataset.channel_label, color=channel_dataset.channel_color,
-                                         linestyle=channel_dataset.channel_linestyle)
-                    if channel_dataset.channel_label is not None:
+                    axs[plot_count].plot(channel_dataset.time / time_factor, channel_dataset.data,
+                                         label=channel_dataset.label, color=channel_dataset.color,
+                                         linestyle=channel_dataset.linestyle)
+                    if channel_dataset.label is not None:
                         count_legend_entries += 1
                 axs[plot_count].grid()
                 # plot legend in case of labels only. Otherwise, there would appear an empty box.
                 if count_legend_entries != 0:
                     axs[plot_count].legend()
                 axs[plot_count].set_xlabel(f'Time in {timebase}')
-                if channel_dataset.channel_unit is None:
+                if channel_dataset.unit is None:
                     pass
-                elif channel_dataset.channel_unit.lower() == 'v':
-                    axs[plot_count].set_ylabel(f"Voltage in {channel_dataset.channel_unit}")
-                elif channel_dataset.channel_unit.lower() == 'a':
-                    axs[plot_count].set_ylabel(f"Current in {channel_dataset.channel_unit}")
-                elif channel_dataset.channel_unit.lower() == 'w':
-                    axs[plot_count].set_ylabel(f"Power in {channel_dataset.channel_unit}")
-                elif channel_dataset.channel_unit.lower() == 'j':
-                    axs[plot_count].set_ylabel(f"Energy in {channel_dataset.channel_unit}")
+                elif channel_dataset.unit.lower() == 'v':
+                    axs[plot_count].set_ylabel(f"Voltage in {channel_dataset.unit}")
+                elif channel_dataset.unit.lower() == 'a':
+                    axs[plot_count].set_ylabel(f"Current in {channel_dataset.unit}")
+                elif channel_dataset.unit.lower() == 'w':
+                    axs[plot_count].set_ylabel(f"Power in {channel_dataset.unit}")
+                elif channel_dataset.unit.lower() == 'j':
+                    axs[plot_count].set_ylabel(f"Energy in {channel_dataset.unit}")
                 else:
                     # in case of no matches, use a custom label. The channel_unit is used for this.
-                    axs[plot_count].set_ylabel(channel_dataset.channel_unit)
+                    axs[plot_count].set_ylabel(channel_dataset.unit)
             # Log flow control
             logging.debug(f"{class_modulename} :FlCtl Amount of plots within multiple channels={plot_count}")
 
@@ -1038,23 +1038,23 @@ class Scope:
         :rtype: list[list[float]]
         """
         # Init minimum and maximum values
-        global_min_x = float(np.min(channels[0].channel_time))
-        global_max_x = np.max(channels[0].channel_time)
-        global_min_y = np.min(channels[0].channel_data)
-        global_max_y = np.max(channels[0].channel_data)
+        global_min_x = float(np.min(channels[0].time))
+        global_max_x = np.max(channels[0].time)
+        global_min_y = np.min(channels[0].data)
+        global_max_y = np.max(channels[0].data)
 
         # For-loop over channels
         for channel in channels[1:]:
-            global_min_x = np.min([global_min_x, np.min(channel.channel_time)])
-            global_max_x = np.max([global_max_x, np.max(channel.channel_time)])
-            global_min_y = np.min([global_min_y, np.min(channel.channel_data)])
-            global_max_y = np.max([global_max_y, np.max(channel.channel_data)])
+            global_min_x = np.min([global_min_x, np.min(channel.time)])
+            global_max_x = np.max([global_max_x, np.max(channel.time)])
+            global_min_y = np.min([global_min_y, np.min(channel.data)])
+            global_max_y = np.max([global_max_y, np.max(channel.data)])
 
         # Search minimal difference
         min_diff_channel = 0
         # For-loop over channels to calculate the minimum distance between the values
         for channel_id, channel in enumerate(channels[1:], start=1):
-            validity, min_diff = Scope.__calculate_min_diff(channel.channel_time, channel_id)
+            validity, min_diff = Scope.__calculate_min_diff(channel.time, channel_id)
             # Check, if the value is valid
             if validity:
                 # Check, if a minimum is not set (min_diff_channel == 0
@@ -1236,25 +1236,25 @@ class Scope:
         for count, channel_dataset in enumerate(channel_datasets):
             if not isinstance(channel_dataset, Channel):
                 raise TypeError("channel_dataset must be type Scope.")
-            modified_time = channel_dataset.channel_time
-            modified_data = channel_dataset.channel_data
+            modified_time = channel_dataset.time
+            modified_data = channel_dataset.data
 
             if shift is not None:
-                modified_time = channel_dataset.channel_time + shift[count]
+                modified_time = channel_dataset.time + shift[count]
             if scale is not None:
                 modified_data = modified_data * scale[count]
             if offset is not None:
                 modified_data = modified_data + offset[count]
 
-            plt.plot(modified_time/time_factor, modified_data, label=channel_dataset.channel_label,
-                     color=channel_dataset.channel_color, linestyle=channel_dataset.channel_linestyle)
+            plt.plot(modified_time / time_factor, modified_data, label=channel_dataset.label,
+                     color=channel_dataset.color, linestyle=channel_dataset.linestyle)
         plt.xlabel(f"time in {timebase}")
-        if channel_datasets[0].channel_unit is not None:
-            if channel_datasets[0].channel_unit.lower() == 'a':
+        if channel_datasets[0].unit is not None:
+            if channel_datasets[0].unit.lower() == 'a':
                 plt.ylabel('Current in A')
-            elif channel_datasets[0].channel_unit.lower() == 'u':
+            elif channel_datasets[0].unit.lower() == 'u':
                 plt.ylabel('Voltage in V')
-            elif channel_datasets[0].channel_unit.lower() == 'w':
+            elif channel_datasets[0].unit.lower() == 'w':
                 plt.ylabel('Power in W')
         plt.legend()
         plt.grid()
@@ -1284,10 +1284,10 @@ class Scope:
         """
         if not isinstance(plot, bool):
             raise TypeError("plot must be type bool.")
-        period_vector = np.array([channel.channel_time, channel.channel_data])
+        period_vector = np.array([channel.time, channel.data])
 
         # Log flow control
-        logging.debug(f"{channel.modulename} :Amount of channel data={len(channel.channel_data)}")
+        logging.debug(f"{channel.modulename} :Amount of channel data={len(channel.data)}")
 
         return functions.fft(period_vector, mode='time', plot=plot)
 
@@ -1313,7 +1313,7 @@ class Scope:
             raise TypeError("start_time must be type float/int/None.")
 
         if start_time is None:
-            start_time = channel.channel_time[0]
+            start_time = channel.time[0]
         # check for correct input parameter
         if time_period is None and f0 is None:
             raise ValueError("give a time period or a fundamental frequency")
@@ -1362,12 +1362,12 @@ class Scope:
         # https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html
         b, a = signal.butter(order, angular_frequency_rad, btype="lowpass")
         zi = signal.lfilter_zi(b, a)
-        z, _ = signal.lfilter(b, a, channel.channel_data, zi=zi * channel.channel_data[0])
+        z, _ = signal.lfilter(b, a, channel.data, zi=zi * channel.data[0])
         z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
-        y = signal.filtfilt(b, a, channel.channel_data)
+        y = signal.filtfilt(b, a, channel.data)
 
         # overwrite scope data of the copy
-        scope_copy.channel_data = y
+        scope_copy.data = y
         return scope_copy
 
     @staticmethod
@@ -1394,11 +1394,11 @@ class Scope:
         channel_copy = Scope.copy(channel)
 
         # calculate the derivative, using findiff-toolbox
-        d_dx = FinDiff(0, channel.channel_time, order)
-        df_dx = d_dx(channel.channel_data)
+        d_dx = FinDiff(0, channel.time, order)
+        df_dx = d_dx(channel.data)
 
         # apply the derivative to the scope channel copy
-        channel_copy.channel_data = df_dx
+        channel_copy.data = df_dx
 
         return channel_copy
 
@@ -1416,9 +1416,9 @@ class Scope:
             raise TypeError("channel must be type Scope.")
 
         # Log flow control
-        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
+        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.data)}")
 
-        return np.sqrt(np.mean(channel.channel_data ** 2))
+        return np.sqrt(np.mean(channel.data ** 2))
 
     @staticmethod
     def calc_mean(channel: Channel) -> Any:
@@ -1434,9 +1434,9 @@ class Scope:
             raise TypeError("channel must be type Scope.")
 
         # Log flow control
-        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
+        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.data)}")
 
-        return np.mean(channel.channel_data)
+        return np.mean(channel.data)
 
     @staticmethod
     def calc_absmean(channel: Channel) -> Any:
@@ -1452,9 +1452,9 @@ class Scope:
             raise TypeError("channel must be type Scope.")
 
         # Log flow control
-        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
+        logging.debug(f"{channel.modulename} :Number of channel data={len(channel.data)}")
 
-        return np.mean(np.abs(channel.channel_data))
+        return np.mean(np.abs(channel.data))
 
     @staticmethod
     def calc_abs(channel: Channel) -> Channel:
@@ -1472,11 +1472,11 @@ class Scope:
         channel_modified = copy.deepcopy(channel)
 
         # Log flow control
-        logging.debug(f"{channel_modified.modulename} :Number of channel data={len(channel_modified.channel_data)}")
+        logging.debug(f"{channel_modified.modulename} :Number of channel data={len(channel_modified.data)}")
 
-        channel_modified.channel_data = np.abs(channel_modified.channel_data)
-        if channel_modified.channel_label is not None:
-            channel_modified.channel_label = '|' + channel_modified.channel_label + '|'
+        channel_modified.data = np.abs(channel_modified.data)
+        if channel_modified.label is not None:
+            channel_modified.label = '|' + channel_modified.label + '|'
 
         return channel_modified
 
@@ -1495,12 +1495,12 @@ class Scope:
 
         channel_modified = copy.deepcopy(channel)
 
-        channel_modified.channel_data = channel_modified.channel_data ** 2
-        if channel_modified.channel_label is not None:
-            channel_modified.channel_label = channel_modified.channel_label + '²'
+        channel_modified.data = channel_modified.data ** 2
+        if channel_modified.label is not None:
+            channel_modified.label = channel_modified.label + '²'
 
         # Log flow control
-        logging.debug(f"{channel_modified.modulename} :Number of channel data={len(channel_modified.channel_data)}")
+        logging.debug(f"{channel_modified.modulename} :Number of channel data={len(channel_modified.data)}")
 
         return channel_modified
 

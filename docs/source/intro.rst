@@ -60,13 +60,13 @@ The ``Scope`` module provides functionalities for editing and evaluating individ
 Impedance
 #########
 The ``Impedance`` module provides functionalities to evaluate impedance curves.
-``Impedance`` creates, imports, edits or evaluates ``ImpedanceCurve``.
+``Impedance`` creates, imports, edits or evaluates ``ImpedanceChannel``.
 
-- ``generate_``: Generates a new ``ImpedanceCurve``
-- ``no prefix``: Is applied to a ``ImpedanceCurve`` and results in a new ``ImpedanceCurve`` (e.g. ``modify()`` modifies an ``ImpedanceCurve``)
-- ``from_``: Generates a ``ImpedanceCurve`` from an impedance analyzer data set, a simulation program or a calculation (e.g. ``from_waynekerr`` generates a ``ImpedanceCurve`` from a real measurement file)
-- ``calc_``: Calculates individual values from a ``ImpedanceCurve`` (e.g. ``calc_rlc()`` calculates the equivalent resistance, inductance and capacitance)
-- ``plot_``: Plots ``ImpedanceCurve`` (e.g. ``plot_impedance()`` plots the given ``ImpedanceCurves``)
+- ``generate_``: Generates a new ``ImpedanceChannel``
+- ``no prefix``: Is applied to a ``ImpedanceChannel`` and results in a new ``ImpedanceChannel`` (e.g. ``modify()`` modifies an ``ImpedanceChannel``)
+- ``from_``: Generates a ``ImpedanceChannel`` from an impedance analyzer data set, a simulation program or a calculation (e.g. ``from_waynekerr`` generates a ``ImpedanceChannel`` from a real measurement file)
+- ``calc_``: Calculates individual values from a ``ImpedanceChannel`` (e.g. ``calc_rlc()`` calculates the equivalent resistance, inductance and capacitance)
+- ``plot_``: Plots ``ImpedanceChannel`` (e.g. ``plot_impedance()`` plots the given ``ImpedanceChannels``)
 
 
 
@@ -95,7 +95,7 @@ pySignalScope function documentation
 .. autoclass:: pysignalscope.Scope
    :members: 
      
-.. autoclass:: pysignalscope.ImpedanceCurve
+.. autoclass:: pysignalscope.ImpedanceChannel
    :members:
    
 .. autoclass:: pysignalscope.Impedance

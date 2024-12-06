@@ -145,7 +145,7 @@ class ScopeChShift:
 
         # Read channel data for the plot
         for channel in channels:
-            cur_channelplot, = ScopeChShift.zoom_ax.plot(channel.channel_time, channel.channel_data, label=channel.channel_label, color=channel.channel_color)
+            cur_channelplot, = ScopeChShift.zoom_ax.plot(channel.time, channel.data, label=channel.label, color=channel.color)
             ScopeChShift.channelplotlist.append(cur_channelplot)
             ScopeChShift.shiftlist.append([0, 0])
 

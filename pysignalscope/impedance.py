@@ -12,7 +12,7 @@ from numpy import typing as npt
 import matplotlib.pyplot as plt
 
 # own libraries
-from pysignalscope.impedance_dataclass import ImpedanceCurve
+from pysignalscope.impedance_dataclass import ImpedanceChannel
 
 supported_measurement_devices = ['waynekerr', 'agilent']
 
@@ -24,7 +24,7 @@ class Impedance:
     def generate_impedance_object(channel_frequency: Union[List, npt.ArrayLike], channel_impedance: Union[List, npt.ArrayLike],
                                   channel_phase: Union[List, npt.ArrayLike],
                                   channel_label: str = None, channel_unit: str = None, channel_color: str = None,
-                                  channel_source: str = None, channel_linestyle: str = None) -> ImpedanceCurve:
+                                  channel_source: str = None, channel_linestyle: str = None) -> ImpedanceChannel:
         """
         Generate the impedance object.
 
@@ -120,28 +120,28 @@ class Impedance:
         else:
             raise TypeError("channel_linestyle must be type str or None.")
 
-        return ImpedanceCurve(
-            channel_frequency=channel_frequency,
-            channel_impedance=channel_impedance,
-            channel_phase=channel_phase,
-            channel_label=channel_label,
-            channel_unit=channel_unit,
-            channel_color=channel_color,
-            channel_source=channel_source,
-            channel_linestyle=channel_linestyle)
+        return ImpedanceChannel(
+            frequency=channel_frequency,
+            impedance=channel_impedance,
+            phase=channel_phase,
+            label=channel_label,
+            unit=channel_unit,
+            color=channel_color,
+            source=channel_source,
+            linestyle=channel_linestyle)
 
     @staticmethod
-    def modify(channel: ImpedanceCurve, channel_impedance_factor: float = None, channel_impedance_offset: float = None,
+    def modify(channel: ImpedanceChannel, channel_impedance_factor: float = None, channel_impedance_offset: float = None,
                channel_label: str = None, channel_unit: str = None, channel_color: str = None,
                channel_source: str = None, channel_linestyle: str = None,
-               channel_frequency_cut_min: float = None, channel_frequency_cut_max: float = None) -> ImpedanceCurve:
+               channel_frequency_cut_min: float = None, channel_frequency_cut_max: float = None) -> ImpedanceChannel:
         """
         Modify channel data like metadata or add a factor or offset to channel data.
 
         Useful for classes with channel_frequency/data, but without labels or units.
 
         :param channel: Impedance object to modify
-        :type channel: ImpedanceCurve
+        :type channel: ImpedanceChannel
         :param channel_impedance_factor: multiply channel.channel_impedance by channel_impedance_factor
         :type channel_impedance_factor: float
         :param channel_impedance_offset: add an offset to channel.channel_impedance
@@ -161,62 +161,62 @@ class Impedance:
         :param channel_linestyle: linestyle of channel, e.g. '--'
         :type channel_linestyle: str
         :return: Modified impedance object
-        :rtype: ImpedanceCurve
+        :rtype: ImpedanceChannel
         """
         # deep copy to not modify the original input data
         modified_channel = copy.deepcopy(channel)
 
         if channel_label is not None:
-            modified_channel.channel_label = channel_label
+            modified_channel.label = channel_label
         if channel_unit is not None:
-            modified_channel.channel_unit = channel_unit
+            modified_channel.unit = channel_unit
         if channel_impedance_factor is not None:
-            modified_channel.channel_impedance = modified_channel.channel_impedance * channel_impedance_factor
+            modified_channel.impedance = modified_channel.impedance * channel_impedance_factor
         if channel_impedance_offset is not None:
-            modified_channel.channel_impedance = modified_channel.channel_impedance + channel_impedance_offset
+            modified_channel.impedance = modified_channel.impedance + channel_impedance_offset
         if channel_color is not None:
-            modified_channel.channel_color = channel_color
+            modified_channel.color = channel_color
         if channel_source is not None:
-            modified_channel.channel_source = channel_source
+            modified_channel.source = channel_source
         if channel_linestyle is not None:
-            modified_channel.channel_linestyle = channel_linestyle
+            modified_channel.linestyle = channel_linestyle
 
         if channel_frequency_cut_min is not None:
             index_list_to_remove = []
-            for count, value in enumerate(modified_channel.channel_frequency):
+            for count, value in enumerate(modified_channel.frequency):
                 if value < channel_frequency_cut_min:
                     index_list_to_remove.append(count)
-            modified_channel.channel_frequency = np.delete(modified_channel.channel_frequency, index_list_to_remove)
-            modified_channel.channel_impedance = np.delete(modified_channel.channel_impedance, index_list_to_remove)
-            modified_channel.channel_phase = np.delete(modified_channel.channel_phase, index_list_to_remove)
+            modified_channel.frequency = np.delete(modified_channel.frequency, index_list_to_remove)
+            modified_channel.impedance = np.delete(modified_channel.impedance, index_list_to_remove)
+            modified_channel.phase = np.delete(modified_channel.phase, index_list_to_remove)
 
         if channel_frequency_cut_max is not None:
             index_list_to_remove = []
-            for count, value in enumerate(modified_channel.channel_frequency):
+            for count, value in enumerate(modified_channel.frequency):
                 if value > channel_frequency_cut_max:
                     index_list_to_remove.append(count)
-            modified_channel.channel_frequency = np.delete(modified_channel.channel_frequency, index_list_to_remove)
-            modified_channel.channel_impedance = np.delete(modified_channel.channel_impedance, index_list_to_remove)
-            modified_channel.channel_phase = np.delete(modified_channel.channel_phase, index_list_to_remove)
+            modified_channel.frequency = np.delete(modified_channel.frequency, index_list_to_remove)
+            modified_channel.impedance = np.delete(modified_channel.impedance, index_list_to_remove)
+            modified_channel.phase = np.delete(modified_channel.phase, index_list_to_remove)
 
         return modified_channel
 
     @staticmethod
-    def copy(channel: ImpedanceCurve) -> ImpedanceCurve:
+    def copy(channel: ImpedanceChannel) -> ImpedanceChannel:
         """
         Create a deepcopy of Channel.
 
         :param channel: Impedance object
-        :type channel: ImpedanceCurve
+        :type channel: ImpedanceChannel
         :return: Deepcopy of the impedance object
-        :rtype: ImpedanceCurve
+        :rtype: ImpedanceChannel
         """
-        if not isinstance(channel, ImpedanceCurve):
+        if not isinstance(channel, ImpedanceChannel):
             raise TypeError("channel must be type Impedance.")
         return copy.deepcopy(channel)
 
     @staticmethod
-    def from_waynekerr(csv_filename: str, channel_label: Optional[str] = None) -> 'ImpedanceCurve':
+    def from_waynekerr(csv_filename: str, channel_label: Optional[str] = None) -> 'ImpedanceChannel':
         """
         Bring csv-data from wayne kerr 6515b to Impedance.
 
@@ -238,14 +238,14 @@ class Impedance:
                                                    channel_source='Impedance Analyzer Wayne Kerr 6515b', channel_label=channel_label)
 
     @staticmethod
-    def from_kemet_ksim(csv_filename: str) -> 'ImpedanceCurve':
+    def from_kemet_ksim(csv_filename: str) -> 'ImpedanceChannel':
         """
         Import data from kemet "ksim" tool.
 
         :param csv_filename: path to csv-file
         :type csv_filename: str
         :return: Impedance object
-        :rtype: ImpedanceCurve
+        :rtype: ImpedanceChannel
         """
         impedance_measurement = np.genfromtxt(csv_filename, delimiter=',', dtype=float, skip_header=1,
                                               encoding='latin1')
@@ -269,10 +269,10 @@ class Impedance:
         """
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=[x / 25.4 for x in figure_size] if figure_size is not None else None)
         for channel in channel_list:
-            ax1.loglog(channel.channel_frequency, channel.channel_impedance, label=channel.channel_label,
-                       color=channel.channel_color, linestyle=channel.channel_linestyle)
-            ax2.semilogx(channel.channel_frequency, channel.channel_phase, label=channel.channel_label,
-                         color=channel.channel_color, linestyle=channel.channel_linestyle)
+            ax1.loglog(channel.frequency, channel.impedance, label=channel.label,
+                       color=channel.color, linestyle=channel.linestyle)
+            ax2.semilogx(channel.frequency, channel.phase, label=channel.label,
+                         color=channel.color, linestyle=channel.linestyle)
 
         ax1.grid()
         ax1.legend()
@@ -294,12 +294,12 @@ class Impedance:
         """
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
         for channel in channel_list:
-            ax1.semilogx(channel.channel_frequency,
-                         1e6 * channel.channel_impedance * np.sin(np.deg2rad(channel.channel_phase)) / channel.channel_frequency / 2 / np.pi,
-                         label=channel.channel_label, color=channel.channel_color, linestyle=channel.channel_linestyle)
-            ax2.semilogx(channel.channel_frequency,
-                         channel.channel_impedance * np.cos(np.deg2rad(channel.channel_phase)),
-                         label=channel.channel_label, color=channel.channel_color, linestyle=channel.channel_linestyle)
+            ax1.semilogx(channel.frequency,
+                         1e6 * channel.impedance * np.sin(np.deg2rad(channel.phase)) / channel.frequency / 2 / np.pi,
+                         label=channel.label, color=channel.color, linestyle=channel.linestyle)
+            ax2.semilogx(channel.frequency,
+                         channel.impedance * np.cos(np.deg2rad(channel.phase)),
+                         label=channel.label, color=channel.color, linestyle=channel.linestyle)
 
         ax1.grid()
         ax1.legend()
@@ -311,12 +311,12 @@ class Impedance:
         plt.show()
 
     @staticmethod
-    def calc_re_im_parts(channel: ImpedanceCurve, show_figure: bool = True):
+    def calc_re_im_parts(channel: ImpedanceChannel, show_figure: bool = True):
         """
         Calculate real and imaginary part of Impedance measurement.
 
         :param channel: Impedance object
-        :type channel: ImpedanceCurve
+        :type channel: ImpedanceChannel
         :param show_figure: Plot figure if true
         :type show_figure: bool
         :return: List with [(channel_frequency, frequency_real_part), (channel_frequency, frequency_imag_part)]
@@ -326,38 +326,38 @@ class Impedance:
         frequency_imag_part = []
         complex_impedance = []
 
-        for count_frequency, _ in enumerate(channel.channel_frequency):
-            impedance = channel.channel_impedance[count_frequency] * np.exp(1j * channel.channel_phase[count_frequency] * 2 * np.pi / 360)
+        for count_frequency, _ in enumerate(channel.frequency):
+            impedance = channel.impedance[count_frequency] * np.exp(1j * channel.phase[count_frequency] * 2 * np.pi / 360)
             complex_impedance.append(impedance)
             frequency_real_part.append(np.real(complex_impedance[count_frequency]))
             frequency_imag_part.append(np.imag(complex_impedance[count_frequency]))
 
         if show_figure:
             fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
-            ax1.loglog(channel.channel_frequency, frequency_real_part)
+            ax1.loglog(channel.frequency, frequency_real_part)
             ax1.grid()
             ax1.set_xlabel('frequency in Hz')
             ax1.set_ylabel('real (impedance)')
 
-            ax2.loglog(channel.channel_frequency, frequency_imag_part)
+            ax2.loglog(channel.frequency, frequency_imag_part)
             ax2.set_xlabel('frequency in Hz')
             ax2.set_ylabel('imag (impedance)')
             ax2.grid()
             fig.show()
 
-        frequency = copy.deepcopy(channel.channel_frequency)
+        frequency = copy.deepcopy(channel.frequency)
 
         return [(frequency, frequency_real_part), (frequency, frequency_imag_part)]
 
     @staticmethod
-    def calc_rlc(channel: ImpedanceCurve, type_rlc: str, f_calc_c: float, f_calc_l: float, plot_figure: bool = False) -> tuple:
+    def calc_rlc(channel: ImpedanceChannel, type_rlc: str, f_calc_c: float, f_calc_l: float, plot_figure: bool = False) -> tuple:
         """
         Calculate R, L, C values for given impedance curve.
 
         Calculated values will be drawn in a plot for comparison with the given data.
 
         :param channel: Impedance channel object
-        :type channel: ImpedanceCurve
+        :type channel: ImpedanceChannel
         :param type_rlc: Type 'R', 'L', 'C'
         :type type_rlc: str
         :param f_calc_c: Choose the frequency for calculation of C-value
@@ -377,18 +377,18 @@ class Impedance:
         >>> recalculated_r, recalculated_l, recalculated_c = pss.Impedance.calc_rlc(example_data_rlc, 'l', f_calc_l=10e3, f_calc_c=10e7, plot_figure=True)
         """
         # # Calculate R, L, C
-        z_calc_c = np.interp(f_calc_c, channel.channel_frequency, channel.channel_impedance)
-        z_calc_l = np.interp(f_calc_l, channel.channel_frequency, channel.channel_impedance)
-        phase_calc_c = np.interp(f_calc_c, channel.channel_frequency, channel.channel_phase)
-        phase_calc_l = np.interp(f_calc_l, channel.channel_frequency, channel.channel_phase)
+        z_calc_c = np.interp(f_calc_c, channel.frequency, channel.impedance)
+        z_calc_l = np.interp(f_calc_l, channel.frequency, channel.impedance)
+        phase_calc_c = np.interp(f_calc_c, channel.frequency, channel.phase)
+        phase_calc_l = np.interp(f_calc_l, channel.frequency, channel.phase)
 
         c_calc = 1 / (2 * np.pi * f_calc_c * z_calc_c)
         l_calc = z_calc_l / (2 * np.pi * f_calc_l)
 
         # # Calculate R at resonance frequency
         f_calc_r = 1 / (2 * np.pi * np.sqrt(l_calc * c_calc))
-        z_calc_r = np.interp(f_calc_r, channel.channel_frequency, channel.channel_impedance)
-        phase_calc_r = np.interp(f_calc_r, channel.channel_frequency, channel.channel_phase)
+        z_calc_r = np.interp(f_calc_r, channel.frequency, channel.impedance)
+        phase_calc_r = np.interp(f_calc_r, channel.frequency, channel.phase)
         r_calc = z_calc_r
 
         if plot_figure:
@@ -411,8 +411,8 @@ class Impedance:
             fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
 
             # subplot 1 for impedance
-            ax1.loglog(channel.channel_frequency, channel.channel_impedance, linestyle=linestyle_measurement, color=color_measurement, label='measurement')
-            ax1.loglog(recalculated_curve.channel_frequency, abs(recalculated_curve.channel_impedance), linestyle=linestyle_calculation,
+            ax1.loglog(channel.frequency, channel.impedance, linestyle=linestyle_measurement, color=color_measurement, label='measurement')
+            ax1.loglog(recalculated_curve.frequency, abs(recalculated_curve.impedance), linestyle=linestyle_calculation,
                        color=color_calculation, label='recalculated data')
             ax1.grid()
             ax1.legend()
@@ -422,8 +422,8 @@ class Impedance:
             ax1.plot(f_calc_l, z_calc_l, marker=markerstyle, color=color_measurement)
 
             # subplot 2 for phase
-            ax2.semilogx(channel.channel_frequency, channel.channel_phase, linestyle=linestyle_measurement, color=color_measurement, label='measurement')
-            ax2.semilogx(recalculated_curve.channel_frequency, recalculated_curve.channel_phase, linestyle=linestyle_calculation, color=color_calculation,
+            ax2.semilogx(channel.frequency, channel.phase, linestyle=linestyle_measurement, color=color_measurement, label='measurement')
+            ax2.semilogx(recalculated_curve.frequency, recalculated_curve.phase, linestyle=linestyle_calculation, color=color_calculation,
                          label='recalculated data')
             ax2.grid()
             ax2.set(xlabel='Frequency in Hz', ylabel='Phase in degree')
@@ -438,7 +438,7 @@ class Impedance:
 
     @staticmethod
     def from_rlc(type_rlc: str, resistance: Union[float, np.array], inductance: Union[float, np.array],
-                 capacitance: Union[float, np.array]) -> 'ImpedanceCurve':
+                 capacitance: Union[float, np.array]) -> 'ImpedanceChannel':
         """
         Calculate the impedance over frequency for R - L - C - combination.
 
@@ -451,7 +451,7 @@ class Impedance:
         :param capacitance: capacitance
         :type capacitance: bool
         :return: Impedance object
-        :rtype: ImpedanceCurve
+        :rtype: ImpedanceChannel
 
         :Example:
 
@@ -501,7 +501,7 @@ class Impedance:
 
     @staticmethod
     def check_capacitor_from_waynekerr(csv_filename: str, channel_label: str,
-                                       target_capacitance: float, plot_figure: bool = True) -> 'ImpedanceCurve':
+                                       target_capacitance: float, plot_figure: bool = True) -> 'ImpedanceChannel':
         """
         Check a capacitor impedance .csv-curve against a target capacitance.
 
@@ -519,7 +519,7 @@ class Impedance:
         :type plot_figure: bool
 
         :return: measured capacitor as impedance curve
-        :rtype: ImpedanceCurve
+        :rtype: ImpedanceChannel
         """
         f_calc_c = 100
         f_calc_l = 15e6
@@ -534,12 +534,12 @@ class Impedance:
         return capacitor_impedance
 
     @staticmethod
-    def save(impedance_object: ImpedanceCurve, filepath: str) -> None:
+    def save(impedance_object: ImpedanceChannel, filepath: str) -> None:
         """
         Save an impedance object to hard disk.
 
         :param impedance_object: impedance object
-        :type impedance_object: ImpedanceCurve
+        :type impedance_object: ImpedanceChannel
         :param filepath: filepath including file name
         :type filepath: str
         """
@@ -552,21 +552,21 @@ class Impedance:
             file_path = os.path.curdir
         if not os.path.exists(file_path):
             os.makedirs(file_path, exist_ok=True)
-        if not isinstance(impedance_object, ImpedanceCurve):
+        if not isinstance(impedance_object, ImpedanceChannel):
             raise TypeError("impedance_object must be of type Impedance.")
 
         with open(filepath, 'wb') as handle:
             pickle.dump(impedance_object, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     @staticmethod
-    def load(filepath: str) -> ImpedanceCurve:
+    def load(filepath: str) -> ImpedanceChannel:
         """
         Load an impedance file from the hard disk.
 
         :param filepath: filepath
         :type filepath: str
         :return: loaded impedance object
-        :rtype: ImpedanceCurve
+        :rtype: ImpedanceChannel
         """
         if not isinstance(filepath, str):
             raise TypeError("filepath must be of type str.")
@@ -575,8 +575,8 @@ class Impedance:
         if not os.path.exists(filepath):
             raise ValueError(f"{filepath} does not exist.")
         with open(filepath, 'rb') as handle:
-            loaded_scope_object: ImpedanceCurve = pickle.load(handle)
-        if not isinstance(loaded_scope_object, ImpedanceCurve):
+            loaded_scope_object: ImpedanceChannel = pickle.load(handle)
+        if not isinstance(loaded_scope_object, ImpedanceChannel):
             raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
 
         return loaded_scope_object
