@@ -33,7 +33,7 @@ class HandleScope:
 
     @staticmethod
     def generate_scope_object(channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
-                              channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+                              channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
                               channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> Scope:
         """
         Generate a scope object.
@@ -79,7 +79,7 @@ class HandleScope:
             raise ValueError("channel time not strictly increasing.")
 
         # check channel_label for a valid type
-        if isinstance(channel_label, str) or channel_label is None:
+        if isinstance(channel_label, str) or isinstance(channel_color, tuple) or channel_label is None:
             channel_label = channel_label
         else:
             raise TypeError("channel_label must be type str or None.")
@@ -89,7 +89,7 @@ class HandleScope:
         else:
             raise TypeError("channel_unit must be type str or None.")
         # check channel_color for a valid type
-        if isinstance(channel_color, str) or channel_color is None:
+        if isinstance(channel_color, str) or channel_color is None or isinstance(channel_color, tuple):
             channel_color = channel_color
         else:
             raise TypeError("channel_color must be type str or None.")
@@ -117,7 +117,7 @@ class HandleScope:
 
     @staticmethod
     def modify(channel: Scope, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
-               channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Optional[str] = None,
+               channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
                channel_source: Optional[str] = None, channel_time_shift: Optional[float] = None,
                channel_time_shift_rotate: Optional[float] = None,
                channel_time_cut_min: Optional[float] = None, channel_time_cut_max: Optional[float] = None,
@@ -185,13 +185,13 @@ class HandleScope:
             pass
         else:
             raise TypeError("channel_data_offset must be type float or None")
-        if isinstance(channel_color, str):
+        if isinstance(channel_color, str) or isinstance(channel_color, tuple):
             channel_modified.channel_color = channel_color
             modify_flag = True
         elif channel_color is None:
             pass
         else:
-            raise TypeError("channel_color must be type str or None")
+            raise TypeError("channel_color must be type str or tuple or None")
         if isinstance(channel_source, str):
             channel_modified.channel_source = channel_source
             modify_flag = True
@@ -657,6 +657,7 @@ class HandleScope:
 
         The default use-case is calculating energy loss (variable naming is for the use case to calculate
         switch energy from power loss curve, e.g. from double-pulse measurement)
+
         :param channel_power: channel with power
         :type channel_power: Scope
         :param channel_label: channel label
@@ -767,10 +768,12 @@ class HandleScope:
         """
         Plot channel datasets.
 
-        Examples:
+        :Examples:
+
         >>> import pysignalscope as pss
         >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
         >>> pss.HandleScope.plot_channels([ch1, ch2, ch3],[ch4])
+
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
 
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
@@ -869,7 +872,8 @@ class HandleScope:
         """
         Check if the  value is within the given range.
 
-        Example for a valid value:
+        :Example for a valid value:
+
         >>> bool valid
         >>> value = 10.2
         >>> valid = HandleScope.check_limits(value, 3.2,11.3)
@@ -877,6 +881,7 @@ class HandleScope:
         >>>     print(f"{value} is within the limit")
         >>> else:
         >>>     print(f"{value} is invalid")
+
         The  value will be check according the given limits.
         If the value is within the limit the method provide True as return value.
 
@@ -909,7 +914,8 @@ class HandleScope:
 
         Calculate the minimal absolute differene of the values within the array (values will not be sorted).
 
-        Example for a valid value:
+        :Example for a valid value:
+
         >>> bool valid
         >>> channel5 = np.array([1, 2.4, 3.4, 4.4, 5])
         >>> valid, mindiff = HandleScope.calculate_min_diff(channel5,5)
@@ -917,6 +923,7 @@ class HandleScope:
         >>>     print(f"{mindiff} is the minimum difference")
         >>> else:
         >>>     print("Minimum difference could not be calculated")
+
         The minimum difference of a channel are calculated. A difference of 0 is ignored.
         The validity is set to false, if the array is not sorted in ascending order or the array contains only 1 value.
 
@@ -959,6 +966,7 @@ class HandleScope:
         >>> import pysignalscope as pss
         >>> ch1, ch2, ch3, ch4 = pss.HandleScope.from_tektronix('tektronix_csv_file.csv')
         >>> pss.HandleScope.plot_shiftchannels([ch1, ch2])
+
         Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
         left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
         If you release the left mouse button the area is marked. By moving the mouse within the area an perform
@@ -986,14 +994,14 @@ class HandleScope:
         :type shiftstep_y: float
         :param displayrange_x: Display range limits in x-direction (min_x, max_x)  (optional parameter)
                             Definition: delta_min_x = 100 * 'minimum distance between 2 samples', min_x = 'minimal x-value (of all channels)',
-                                        max_x = 'maximal x-value (of all channels)',  delta_x = max_x-min_x
+                            max_x = 'maximal x-value (of all channels)',  delta_x = max_x-min_x
                             The range for displayrange_x[0]: From min_x-delta_x to max_x-delta_min_x
                             The range for displayrange_x[1]: From min_x+delta_min_x to max_x+delta_x
                             and displayrange_x[1]-displayrange_x[0]>=delta_min_x
         :type displayrange_x: tuple of float
         :param displayrange_y: Display range limits in y-direction (min_y, max_y) (optional parameter)
                             Definition: delta_y = max_y-min_y, min_y = 'minimal y-value (of all channels)',
-                                        max_y = 'maximal y-value (of all channels)',  delta_min_y = delta_y/100
+                            max_y = 'maximal y-value (of all channels)',  delta_min_y = delta_y/100
                             The range for displayrange_y[0]: From min_y-delta_y to max_y-delta_min_y*50
                             The range for displayrange_y[1]: From min_y+delta_min_y*50 to max_y-delta_y
                             and displayrange_y[1]-displayrange_y[0]>=delta_min_y*50
@@ -1421,7 +1429,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: rms(self.channel_data).
+        :return: rms(self.channel_data).
+        :rtype: Any
         """
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
@@ -1435,7 +1444,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: mean(self.channel_data).
+        :return: mean(self.channel_data)
+        :rtype: any
         """
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
@@ -1449,7 +1459,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: abs(mean(self.channel_data)).
+        :return: abs(mean(self.channel_data))
+        :rtype: Any
         """
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.channel_data)}")
@@ -1463,7 +1474,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: abs(channel.channel_data).
+        :return: abs(channel.channel_data).
+        :rtype: Scope
         """
         channel_modified = copy.deepcopy(channel)
 
@@ -1483,7 +1495,8 @@ class HandleScope:
 
         :param channel: Scope channel object
         :type channel: Scope
-        Returns: channel.channel_data ** 2.
+        :return: channel.channel_data ** 2 as scope object
+        :rtype: Scope
         """
         channel_modified = copy.deepcopy(channel)
 
