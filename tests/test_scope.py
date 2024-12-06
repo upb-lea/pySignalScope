@@ -225,6 +225,50 @@ def test_derivative():
     with pytest.raises(ValueError):
         pss.Scope.derivative(sample_scope_object, order=-2)
 
+def test_eq():
+    """Test __eq__()."""
+    ch_1 = pss.Scope.generate_channel([1, 2, 3], [4, 5, 6],
+                                      channel_unit="A", channel_label="label", channel_color="red",
+                                      channel_source="source", channel_linestyle='--')
+    ch_2 = pss.Scope.copy(ch_1)
+    # assert both channels are the same
+    assert ch_1 == ch_2
+
+    # not the same: different time
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2.channel_time = np.array([2, 2.1, 3])
+    assert not (ch_1 == ch_2)
+
+    # not the same: different data
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2.channel_data = np.array([2, 2.1, 3])
+    assert not (ch_1 == ch_2)
+
+    # not the same: different units
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2 = pss.Scope.modify(ch_2, channel_unit="U")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different labels
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2 = pss.Scope.modify(ch_2, channel_label="aaa")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different colors
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2 = pss.Scope.modify(ch_2, channel_color="blue")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different sources
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2 = pss.Scope.modify(ch_2, channel_source="asdf")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different linestyles
+    ch_2 = pss.Scope.copy(ch_1)
+    ch_2 = pss.Scope.modify(ch_2, channel_label=".-")
+    assert not (ch_1 == ch_2)
+
 def test_save_load():
     """Unit test for save and load."""
     # assumption: the given scope object is valid
@@ -235,13 +279,7 @@ def test_save_load():
     # save + load: working example
     pss.Scope.save(example, "test_example")
     loaded_example = pss.Scope.load("test_example.pkl")
-    assert (example.channel_time == loaded_example.channel_time).all()
-    assert (example.channel_data == loaded_example.channel_data).all()
-    assert example.channel_unit == loaded_example.channel_unit
-    assert example.channel_label == loaded_example.channel_label
-    assert example.channel_color == loaded_example.channel_color
-    assert example.channel_source == loaded_example.channel_source
-    assert example.channel_linestyle == loaded_example.channel_linestyle
+    assert example == loaded_example
 
     # save: wrong file path type
     with pytest.raises(TypeError):
@@ -275,13 +313,7 @@ def test_copy():
                                                 channel_source="source", channel_linestyle='--')
     object_copy = pss.Scope.copy(object_to_copy)
 
-    assert (object_to_copy.channel_time == object_copy.channel_time).all()
-    assert (object_to_copy.channel_data == object_copy.channel_data).all()
-    assert object_to_copy.channel_unit == object_copy.channel_unit
-    assert object_to_copy.channel_label == object_copy.channel_label
-    assert object_to_copy.channel_color == object_copy.channel_color
-    assert object_to_copy.channel_source == object_copy.channel_source
-    assert object_to_copy.channel_linestyle == object_copy.channel_linestyle
+    assert object_to_copy == object_copy
 
 def test_add():
     """Unit test for add()."""
