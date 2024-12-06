@@ -142,8 +142,8 @@ def test_generate_impedance_object():
 def test_save_load():
     """Unit test for save and load."""
     # assumption: the given scope object is valid
-    example = pss.Impedance.generate_impedance_object([1, 2, 3], [4, 5, 6],
-                                                      channel_phase=[10, 20, 30],
+    example = pss.Impedance.generate_impedance_object([0.1, 1, 1.2, 2.1, 3], [0, 5.1, 1.2, 2.1, 3],
+                                                      channel_phase=[-4, -5.9, 0, 6, 1.2],
                                                       channel_unit="A", channel_label="label", channel_color="red",
                                                       channel_source="source", channel_linestyle='--')
 
@@ -186,7 +186,7 @@ def test_copy():
         pss.Impedance.copy("not-a-channel")
 
     # test for valid copy
-    object_to_copy = pss.Impedance.generate_impedance_object([1, 2, 3], [4, 5, 6], [7, 8, 9],
+    object_to_copy = pss.Impedance.generate_impedance_object([0.1, 1, 1.2, 2.1, 3], [0, 5.1, 1.2, 2.1, 3], [-4, -5.9, 0, 6, 1.2],
                                                              channel_unit="A", channel_label="label", channel_color="red",
                                                              channel_source="source", channel_linestyle='--')
     object_copy = pss.Impedance.copy(object_to_copy)

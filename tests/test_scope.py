@@ -281,7 +281,7 @@ def test_eq():
 def test_save_load():
     """Unit test for save and load."""
     # assumption: the given scope object is valid
-    example = pss.Scope.generate_channel([1, 2, 3], [4, 5, 6],
+    example = pss.Scope.generate_channel([-1, 2, 3.3], [-4, 5.0, 6.9],
                                          channel_unit="A", channel_label="label", channel_color="red",
                                          channel_source="source", channel_linestyle='--')
 
@@ -317,7 +317,7 @@ def test_copy():
         pss.Scope.copy("not-a-channel")
 
     # test for valid copy
-    object_to_copy = pss.Scope.generate_channel([1, 2, 3], [4, 5, 6],
+    object_to_copy = pss.Scope.generate_channel([-1, 2, 3.3], [-4, 5.0, 6.9],
                                                 channel_unit="A", channel_label="label", channel_color="red",
                                                 channel_source="source", channel_linestyle='--')
     object_copy = pss.Scope.copy(object_to_copy)
