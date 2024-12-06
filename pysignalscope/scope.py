@@ -657,6 +657,7 @@ class HandleScope:
 
         The default use-case is calculating energy loss (variable naming is for the use case to calculate
         switch energy from power loss curve, e.g. from double-pulse measurement)
+
         :param channel_power: channel with power
         :type channel_power: Scope
         :param channel_label: channel label
