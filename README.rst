@@ -38,10 +38,35 @@ The lower plot shows the post-processing of the filtered signal. This is multipl
 
 .. image:: docs/source/figures/function_overview.png
 
+Have a look at the `Scope example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__ and at the `Impedance example <https://github.com/upb-lea/pySignalScope/blob/main/examples/impedance_example.py>`__ to see what you can do with this toolbox.
 
-Examples
---------
-Have a look at the `example <examples/scope_example.py>`__, to see what you can do with this toolbox.
+Naming convention
+-------------------
+This toolbox is divided into two modules: The functionality of an oscilloscope (``Scope``) and the functionality of an impedance analyzer (``Impedance``).
+
+Scope
+#####
+The ``Scope`` module provides functionalities for editing and evaluating individual channels that are also provided by a real oscilloscope - just on a PC.
+``Scope`` creates, imports, edits or evaluates ``Channels``. The following prefixes apply:
+
+- ``generate_``: Generates a new ``Channel``
+- ``no prefix``: Is applied to a ``Channel`` and results in a new ``Channel`` (e.g. ``add()`` adds two channels)
+- ``from_``: Generates a ``Channel`` from an oscilloscope data set, a simulation program or a calculation (e.g. ``from_tektronix`` generates a ``Channel`` from a tektronix scope file)
+- ``calc_``: Calculates individual values from a ``Channel`` (e.g. ``calc_rms()`` calculates the RMS from a given ``Channel``)
+- ``plot_``: Plots channels in the desired arrangement (e.g. ``plot_channels()`` plots the given ``Channels``)
+
+Impedance
+#########
+The ``Impedance`` module provides functionalities to evaluate impedance curves.
+``Impedance`` creates, imports, edits or evaluates ``ImpedanceChannel``.
+
+- ``generate_``: Generates a new ``ImpedanceChannel``
+- ``no prefix``: Is applied to a ``ImpedanceChannel`` and results in a new ``ImpedanceChannel`` (e.g. ``modify()`` modifies an ``ImpedanceChannel``)
+- ``from_``: Generates a ``ImpedanceChannel`` from an impedance analyzer data set, a simulation program or a calculation (e.g. ``from_waynekerr`` generates a ``ImpedanceChannel`` from a real measurement file)
+- ``calc_``: Calculates individual values from a ``ImpedanceChannel`` (e.g. ``calc_rlc()`` calculates the equivalent resistance, inductance and capacitance)
+- ``plot_``: Plots ``ImpedanceChannel`` (e.g. ``plot_impedance()`` plots the given ``ImpedanceChannels``)
+
+
 
 Documentation
 ---------------------------------------
