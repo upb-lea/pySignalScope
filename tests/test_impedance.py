@@ -36,6 +36,14 @@ def test_generate_impedance_object():
     with pytest.raises(ValueError):
         pss.Impedance.generate_impedance_object(channel_frequency=[-1, -3, 1], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
 
+    # empty frequency, impedance and phase
+    with (pytest.raises(ValueError)):
+        pss.Impedance.generate_impedance_object(channel_frequency=[], channel_impedance=[1, 2, 3], channel_phase=[1, 2, 3])
+    with (pytest.raises(ValueError)):
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[], channel_phase=[1, 2, 3])
+    with (pytest.raises(ValueError)):
+        pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2, 3], channel_phase=[])
+
     # channel_frequency: non-equidistant values and negative valid values
     impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[-3.3, -2.2, -1.1, 0, 1.2],
                                                                channel_impedance=[-1, -2.1, -3.2, 4.4, -2.7], channel_phase=[-1, -2.1, -4, 3.3, 5])

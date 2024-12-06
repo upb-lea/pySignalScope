@@ -71,6 +71,11 @@ class Scope:
             raise ValueError("NaN is not allowed in channel_data.")
         if np.any(np.isinf(channel_data)):
             raise ValueError("inf is not allowed in channel_data.")
+        # check for empty data
+        if channel_time.size == 0:
+            raise ValueError("Not allowed: channel_time is empty")
+        if channel_data.size == 0:
+            raise ValueError("Not allowed: channel_data is empty")
         # check if channel_time and channel_data have the same length
         if len(channel_time) != len(channel_data):
             raise ValueError("channel_time and channel_data must be same length.")

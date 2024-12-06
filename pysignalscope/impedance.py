@@ -75,6 +75,13 @@ class Impedance:
             raise ValueError("NaN is not allowed in channel_phase.")
         if np.any(np.isinf(channel_phase)):
             raise ValueError("inf is not allowed in channel_phase.")
+        # check for empty data
+        if channel_frequency.size == 0:
+            raise ValueError("Not allowed: channel_frequency is empty")
+        if channel_impedance.size == 0:
+            raise ValueError("Not allowed: channel_impedance is empty")
+        if channel_phase.size == 0:
+            raise ValueError("Not allowed: channel_phase is empty")
 
         # check if channel_frequency and channel_impedance have the same length
         if len(channel_frequency) != len(channel_impedance):

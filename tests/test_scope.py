@@ -35,7 +35,12 @@ def test_generate_channel():
     # invalid time data negative and positive values. Time values in wrong order.
     with pytest.raises(ValueError):
         pss.Scope.generate_channel(channel_time=[-1, -3, 1], channel_data=[1, 2, 3])
-
+    # empty time
+    with pytest.raises(ValueError):
+        pss.Scope.generate_channel(channel_time=[], channel_data=[1, 2, 3])
+    # empty data
+    with pytest.raises(ValueError):
+        pss.Scope.generate_channel(channel_time=[1, 2, 3], channel_data=[])
     # channel_time: non-equidistant values and negative valid values
     scope_object = pss.Scope.generate_channel(channel_time=[-3.3, -2.2, -1.1, 0, 1.2], channel_data=[-1, -2.1, -3.2, 4.4, -2.7])
     numpy.testing.assert_equal(scope_object.channel_time, [-3.3, -2.2, -1.1, 0, 1.2])
