@@ -183,11 +183,53 @@ def test_copy():
                                                              channel_source="source", channel_linestyle='--')
     object_copy = pss.Impedance.copy(object_to_copy)
 
-    assert (object_to_copy.channel_frequency == object_copy.channel_frequency).all()
-    assert (object_to_copy.channel_impedance == object_copy.channel_impedance).all()
-    assert (object_to_copy.channel_phase == object_copy.channel_phase).all()
-    assert object_to_copy.channel_unit == object_copy.channel_unit
-    assert object_to_copy.channel_label == object_copy.channel_label
-    assert object_to_copy.channel_color == object_copy.channel_color
-    assert object_to_copy.channel_source == object_copy.channel_source
-    assert object_to_copy.channel_linestyle == object_copy.channel_linestyle
+    assert object_copy == object_copy
+
+def test_eq():
+    """Test __eq__()."""
+    ch_1 = pss.Impedance.generate_impedance_object([1, 2, 3], [4, 5, 6], [7, 8, 9],
+                                                   channel_unit="A", channel_label="label", channel_color="red",
+                                                   channel_source="source", channel_linestyle='--')
+    ch_2 = pss.Impedance.copy(ch_1)
+    # assert both channels are the same
+    assert ch_1 == ch_2
+
+    # not the same: different frequency
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2.channel_frequency = np.array([2, 2.1, 3])
+    assert not (ch_1 == ch_2)
+
+    # not the same: different impedance data
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2.channel_impedance = np.array([2, 2.1, 3])
+    assert not (ch_1 == ch_2)
+
+    # not the same: different phase
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2.channel_phase = np.array([2, 2.1, 3])
+    assert not (ch_1 == ch_2)
+
+    # not the same: different units
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2 = pss.Impedance.modify(ch_2, channel_unit="U")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different labels
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2 = pss.Impedance.modify(ch_2, channel_label="aaa")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different colors
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2 = pss.Impedance.modify(ch_2, channel_color="blue")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different sources
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2 = pss.Impedance.modify(ch_2, channel_source="asdf")
+    assert not (ch_1 == ch_2)
+
+    # not the same: different line styles
+    ch_2 = pss.Impedance.copy(ch_1)
+    ch_2 = pss.Impedance.modify(ch_2, channel_label=".-")
+    assert not (ch_1 == ch_2)

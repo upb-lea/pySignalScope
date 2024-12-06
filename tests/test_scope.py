@@ -264,7 +264,7 @@ def test_eq():
     ch_2 = pss.Scope.modify(ch_2, channel_source="asdf")
     assert not (ch_1 == ch_2)
 
-    # not the same: different linestyles
+    # not the same: different line styles
     ch_2 = pss.Scope.copy(ch_1)
     ch_2 = pss.Scope.modify(ch_2, channel_label=".-")
     assert not (ch_1 == ch_2)
