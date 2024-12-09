@@ -24,7 +24,11 @@ jobs:
       run: |
         python --version
         pip install sphinx sphinx_rtd_theme sphinxcontrib-email
+        pip install pytest
         pip install -e .
+        echo Start testing...
+        # run tests before building the documentation to set the environment variable IS_TEST
+        pytest tests
         cd docs
         make html
 #    - name: Build HTML
