@@ -49,7 +49,7 @@ def test_generate_impedance_object():
                                                                channel_impedance=[-1, -2.1, -3.2, 4.4, -2.7], channel_phase=[-1, -2.1, -4, 3.3, 5])
     np.testing.assert_equal(impedance_object.frequency, [-3.3, -2.2, -1.1, 0, 1.2])
     np.testing.assert_equal(impedance_object.impedance, [-1, -2.1, -3.2, 4.4, -2.7])
-    np.testing.assert_equal(impedance_object.phase, [-1, -2.1, -4, 3.3, 5])
+    np.testing.assert_equal(impedance_object.phase_deg, [-1, -2.1, -4, 3.3, 5])
 
     # channel_frequency: same x-data, should fail.
     with pytest.raises(ValueError):
@@ -60,28 +60,28 @@ def test_generate_impedance_object():
     impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, 2, 3.1], channel_phase=[1, 2.1, 4])
     np.testing.assert_equal(impedance_object.frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.impedance, [1, 2, 3.1])
-    np.testing.assert_equal(impedance_object.phase, [1, 2.1, 4])
+    np.testing.assert_equal(impedance_object.phase_deg, [1, 2.1, 4])
 
     # valid negative data, mixed int and float
     impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[-1, -2.1, -3.2],
                                                                channel_phase=[-2, -2.2, -5])
     np.testing.assert_equal(impedance_object.frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.impedance, [-1, -2.1, -3.2])
-    np.testing.assert_equal(impedance_object.phase, [-2, -2.2, -5])
+    np.testing.assert_equal(impedance_object.phase_deg, [-2, -2.2, -5])
 
     # valid mixed positive and negative data, mixed int and float
     impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1, -2.1, -3.2],
                                                                channel_phase=[2, -3.3, -3])
     np.testing.assert_equal(impedance_object.frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.impedance, [1, -2.1, -3.2])
-    np.testing.assert_equal(impedance_object.phase, [2, -3.3, -3])
+    np.testing.assert_equal(impedance_object.phase_deg, [2, -3.3, -3])
 
     # very high, very low and very small mixed values
     impedance_object = pss.Impedance.generate_impedance_object(channel_frequency=[1, 2, 3], channel_impedance=[1e25, -3.4e34, 3.1e-17],
                                                                channel_phase=[1e32, -3.3e33, 3.33e-17])
     np.testing.assert_equal(impedance_object.frequency, [1, 2, 3])
     np.testing.assert_equal(impedance_object.impedance, [1e25, -3.4e34, 3.1e-17])
-    np.testing.assert_equal(impedance_object.phase, [1e32, -3.3e33, 3.33e-17])
+    np.testing.assert_equal(impedance_object.phase_deg, [1e32, -3.3e33, 3.33e-17])
 
     # invalid frequency value
     with pytest.raises(ValueError):
@@ -152,7 +152,7 @@ def test_save_load():
     loaded_example = pss.Impedance.load("test_example.pkl")
     assert (example.frequency == loaded_example.frequency).all()
     assert (example.impedance == loaded_example.impedance).all()
-    assert (example.phase == loaded_example.phase).all()
+    assert (example.phase_deg == loaded_example.phase_deg).all()
     assert example.unit == loaded_example.unit
     assert example.label == loaded_example.label
     assert example.color == loaded_example.color
@@ -214,7 +214,7 @@ def test_eq():
 
     # not the same: different phase
     ch_2 = pss.Impedance.copy(ch_1)
-    ch_2.phase = np.array([2, 2.1, 3])
+    ch_2.phase_deg = np.array([2, 2.1, 3])
     assert not (ch_1 == ch_2)
 
     # not the same: different units

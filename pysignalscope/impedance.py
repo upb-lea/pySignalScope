@@ -123,7 +123,7 @@ class Impedance:
         return ImpedanceChannel(
             frequency=channel_frequency,
             impedance=channel_impedance,
-            phase=channel_phase,
+            phase_deg=channel_phase,
             label=channel_label,
             unit=channel_unit,
             color=channel_color,
@@ -188,7 +188,7 @@ class Impedance:
                     index_list_to_remove.append(count)
             modified_channel.frequency = np.delete(modified_channel.frequency, index_list_to_remove)
             modified_channel.impedance = np.delete(modified_channel.impedance, index_list_to_remove)
-            modified_channel.phase = np.delete(modified_channel.phase, index_list_to_remove)
+            modified_channel.phase_deg = np.delete(modified_channel.phase_deg, index_list_to_remove)
 
         if channel_frequency_cut_max is not None:
             index_list_to_remove = []
@@ -197,7 +197,7 @@ class Impedance:
                     index_list_to_remove.append(count)
             modified_channel.frequency = np.delete(modified_channel.frequency, index_list_to_remove)
             modified_channel.impedance = np.delete(modified_channel.impedance, index_list_to_remove)
-            modified_channel.phase = np.delete(modified_channel.phase, index_list_to_remove)
+            modified_channel.phase_deg = np.delete(modified_channel.phase_deg, index_list_to_remove)
 
         return modified_channel
 
@@ -271,7 +271,7 @@ class Impedance:
         for channel in channel_list:
             ax1.loglog(channel.frequency, channel.impedance, label=channel.label,
                        color=channel.color, linestyle=channel.linestyle)
-            ax2.semilogx(channel.frequency, channel.phase, label=channel.label,
+            ax2.semilogx(channel.frequency, channel.phase_deg, label=channel.label,
                          color=channel.color, linestyle=channel.linestyle)
 
         ax1.grid()
@@ -295,10 +295,10 @@ class Impedance:
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
         for channel in channel_list:
             ax1.semilogx(channel.frequency,
-                         1e6 * channel.impedance * np.sin(np.deg2rad(channel.phase)) / channel.frequency / 2 / np.pi,
+                         1e6 * channel.impedance * np.sin(np.deg2rad(channel.phase_deg)) / channel.frequency / 2 / np.pi,
                          label=channel.label, color=channel.color, linestyle=channel.linestyle)
             ax2.semilogx(channel.frequency,
-                         channel.impedance * np.cos(np.deg2rad(channel.phase)),
+                         channel.impedance * np.cos(np.deg2rad(channel.phase_deg)),
                          label=channel.label, color=channel.color, linestyle=channel.linestyle)
 
         ax1.grid()
@@ -327,7 +327,7 @@ class Impedance:
         complex_impedance = []
 
         for count_frequency, _ in enumerate(channel.frequency):
-            impedance = channel.impedance[count_frequency] * np.exp(1j * channel.phase[count_frequency] * 2 * np.pi / 360)
+            impedance = channel.impedance[count_frequency] * np.exp(1j * channel.phase_deg[count_frequency] * 2 * np.pi / 360)
             complex_impedance.append(impedance)
             frequency_real_part.append(np.real(complex_impedance[count_frequency]))
             frequency_imag_part.append(np.imag(complex_impedance[count_frequency]))
@@ -379,8 +379,8 @@ class Impedance:
         # # Calculate R, L, C
         z_calc_c = np.interp(f_calc_c, channel.frequency, channel.impedance)
         z_calc_l = np.interp(f_calc_l, channel.frequency, channel.impedance)
-        phase_calc_c = np.interp(f_calc_c, channel.frequency, channel.phase)
-        phase_calc_l = np.interp(f_calc_l, channel.frequency, channel.phase)
+        phase_calc_c = np.interp(f_calc_c, channel.frequency, channel.phase_deg)
+        phase_calc_l = np.interp(f_calc_l, channel.frequency, channel.phase_deg)
 
         c_calc = 1 / (2 * np.pi * f_calc_c * z_calc_c)
         l_calc = z_calc_l / (2 * np.pi * f_calc_l)
@@ -388,7 +388,7 @@ class Impedance:
         # # Calculate R at resonance frequency
         f_calc_r = 1 / (2 * np.pi * np.sqrt(l_calc * c_calc))
         z_calc_r = np.interp(f_calc_r, channel.frequency, channel.impedance)
-        phase_calc_r = np.interp(f_calc_r, channel.frequency, channel.phase)
+        phase_calc_r = np.interp(f_calc_r, channel.frequency, channel.phase_deg)
         r_calc = z_calc_r
 
         if plot_figure:
@@ -422,8 +422,8 @@ class Impedance:
             ax1.plot(f_calc_l, z_calc_l, marker=markerstyle, color=color_measurement)
 
             # subplot 2 for phase
-            ax2.semilogx(channel.frequency, channel.phase, linestyle=linestyle_measurement, color=color_measurement, label='measurement')
-            ax2.semilogx(recalculated_curve.frequency, recalculated_curve.phase, linestyle=linestyle_calculation, color=color_calculation,
+            ax2.semilogx(channel.frequency, channel.phase_deg, linestyle=linestyle_measurement, color=color_measurement, label='measurement')
+            ax2.semilogx(recalculated_curve.frequency, recalculated_curve.phase_deg, linestyle=linestyle_calculation, color=color_calculation,
                          label='recalculated data')
             ax2.grid()
             ax2.set(xlabel='Frequency in Hz', ylabel='Phase in degree')

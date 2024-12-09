@@ -14,7 +14,7 @@ class ImpedanceChannel:
     # mandatory data
     frequency: np.array  #: mandatory: frequency data (mandatory)
     impedance: np.array  #: mandatory: impedance data (mandatory)
-    phase: np.array  #: mandatory: phase data (mandatory)
+    phase_deg: np.array  #: mandatory: phase data in degree (mandatory)
 
     # optional data
     label: Union[str]  #: channel label displayed in a plot (optional)
@@ -35,7 +35,7 @@ class ImpedanceChannel:
             return NotImplemented("Type Channel must be compared to type Channel.")
         return (array_eq(self.frequency, other.frequency) and \
                 array_eq(self.impedance, other.impedance) and \
-                array_eq(self.phase, other.phase) and \
+                array_eq(self.phase_deg, other.phase_deg) and \
                 (self.label == other.label) and \
                 (self.unit == other.unit) and \
                 (self.color == other.color) and \
