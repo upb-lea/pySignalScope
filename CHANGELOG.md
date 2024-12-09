@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-## [0.2.0] - 2024-12-xx
+## [0.2.0] - 2024-12-09
 Many improvements have been included in the update. 
 This has changed the API. Please check the documentation and the new examples.
 ### Added

@@ -8,6 +8,7 @@ import pickle
 
 # 3rd party libraries
 import numpy as np
+import matplotlib
 from matplotlib import pyplot as plt
 from lecroyutils.control import LecroyScope
 from scipy import signal
@@ -18,6 +19,12 @@ import pysignalscope.functions as functions
 from pysignalscope.logconfig import setup_logging
 from pysignalscope.scope_dataclass import Channel
 from pysignalscope.channelshift import ScopeChShift as scope_ch_shift
+
+# in case of GitHubs CI, use Agg instead of TkAgg (normal usage)
+if "IS_TEST" in os.environ:
+    matplotlib.use('Agg')
+else:
+    matplotlib.use('TkAgg')
 
 # - Logging setup ---------------------------------------------------------------------------------
 setup_logging()

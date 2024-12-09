@@ -36,7 +36,7 @@ jobs:
           
             pip install pylint 
             pylint $(git ls-files '*.py')
-      - name: check linting using pycodestyle
+      - name: tkinter
         run: |
           # try to install tkinter
           sudo apt install python3-tk
