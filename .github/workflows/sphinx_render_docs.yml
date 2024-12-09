@@ -25,6 +25,8 @@ jobs:
         python --version
         pip install sphinx sphinx_rtd_theme sphinxcontrib-email
         pip install pytest
+        # try to install tkinter
+        sudo apt install python3-tk
         pip install -e .
         echo Start testing...
         # run tests before building the documentation to set the environment variable IS_TEST
