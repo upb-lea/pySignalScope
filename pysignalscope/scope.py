@@ -8,6 +8,8 @@ import pickle
 
 # 3rd party libraries
 import numpy as np
+import matplotlib
+matplotlib.use('TKAgg')
 from matplotlib import pyplot as plt
 from lecroyutils.control import LecroyScope
 from scipy import signal
