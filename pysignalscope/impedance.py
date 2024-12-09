@@ -23,8 +23,8 @@ class Impedance:
     @staticmethod
     def generate_impedance_object(channel_frequency: Union[List, npt.ArrayLike], channel_impedance: Union[List, npt.ArrayLike],
                                   channel_phase: Union[List, npt.ArrayLike],
-                                  channel_label: str = None, channel_unit: str = None, channel_color: str = None,
-                                  channel_source: str = None, channel_linestyle: str = None) -> ImpedanceChannel:
+                                  channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
+                                  channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> ImpedanceChannel:
         """
         Generate the impedance object.
 
