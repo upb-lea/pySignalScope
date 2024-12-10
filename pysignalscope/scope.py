@@ -1,4 +1,4 @@
-"""Classes and methods to process scope data (from real scopes or from simulation tools) like in a real scope."""
+"""Classes and methods to process channel data (from real scopes or from simulation tools) like in a real scope."""
 # python libraries
 import copy
 import os.path
@@ -35,245 +35,245 @@ class_modulename = "scope"
 # - Class definition ------------------------------------------------------------------------------
 
 class Scope:
-    """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
+    """Class to share channel figures (multiple in a scope) in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
     @staticmethod
-    def generate_channel(channel_time: Union[List[float], np.ndarray], channel_data: Union[List[float], np.ndarray],
-                         channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
-                         channel_source: Optional[str] = None, channel_linestyle: Optional[str] = None) -> Channel:
+    def generate_channel(time: Union[List[float], np.ndarray], data: Union[List[float], np.ndarray],
+                         label: Optional[str] = None, unit: Optional[str] = None, color: Union[str, tuple, None] = None,
+                         source: Optional[str] = None, linestyle: Optional[str] = None) -> Channel:
         """
-        Generate a scope object.
+        Generate a channel object.
 
-        :param channel_time: time series
-        :type channel_time: Union[List[float], np.ndarray]
-        :param channel_data: channel data
-        :type channel_data: Union[List[float], np.ndarray]
-        :param channel_label: channel label
-        :type channel_label: Optional[str]
-        :param channel_unit: channel unit
-        :type channel_unit: Optional[str]
-        :param channel_color: channel color
-        :type channel_color: Optional[str]
-        :param channel_source: channel source
-        :type channel_source: Optional[str]
-        :param channel_linestyle: channel linestyle
-        :type channel_linestyle: Optional[str]
+        :param time: time series
+        :type time: Union[List[float], np.ndarray]
+        :param data: channel data
+        :type data: Union[List[float], np.ndarray]
+        :param label: channel label
+        :type label: Optional[str]
+        :param unit: channel unit
+        :type unit: Optional[str]
+        :param color: channel color
+        :type color: Optional[str]
+        :param source: channel source
+        :type source: Optional[str]
+        :param linestyle: channel linestyle
+        :type linestyle: Optional[str]
         """
-        # check channel_time for a valid type, convert to numpy if necessary
-        if isinstance(channel_time, List):
-            channel_time = np.array(channel_time)
-        elif isinstance(channel_time, np.ndarray):
-            channel_time = channel_time
+        # check time for a valid type, convert to numpy if necessary
+        if isinstance(time, List):
+            time = np.array(time)
+        elif isinstance(time, np.ndarray):
+            time = time
         else:
-            raise TypeError("channel_time must be type list or ArrayLike.")
-        # check channel_data for a valid type, convert to numpy if necessary
-        if isinstance(channel_data, List):
-            channel_data = np.array(channel_data)
-        elif isinstance(channel_data, np.ndarray):
-            channel_data = channel_data
+            raise TypeError("time must be type list or ArrayLike.")
+        # check data for a valid type, convert to numpy if necessary
+        if isinstance(data, List):
+            data = np.array(data)
+        elif isinstance(data, np.ndarray):
+            data = data
         else:
-            raise TypeError("channel_data must be type list or ArrayLike")
-        # check for single non-allowed values in channel_data
-        if np.any(np.isnan(channel_data)):
-            raise ValueError("NaN is not allowed in channel_data.")
-        if np.any(np.isinf(channel_data)):
-            raise ValueError("inf is not allowed in channel_data.")
+            raise TypeError("data must be type list or ArrayLike")
+        # check for single non-allowed values in data
+        if np.any(np.isnan(data)):
+            raise ValueError("NaN is not allowed in data.")
+        if np.any(np.isinf(data)):
+            raise ValueError("inf is not allowed in data.")
         # check for empty data
-        if channel_time.size == 0:
-            raise ValueError("Not allowed: channel_time is empty")
-        if channel_data.size == 0:
-            raise ValueError("Not allowed: channel_data is empty")
-        # check if channel_time and channel_data have the same length
-        if len(channel_time) != len(channel_data):
-            raise ValueError("channel_time and channel_data must be same length.")
-        # check if channel_time is strictly increasing
-        if not np.all(np.diff(channel_time) > 0):
+        if time.size == 0:
+            raise ValueError("Not allowed: time is empty")
+        if data.size == 0:
+            raise ValueError("Not allowed: data is empty")
+        # check if time and data have the same length
+        if len(time) != len(data):
+            raise ValueError("time and data must be same length.")
+        # check if time is strictly increasing
+        if not np.all(np.diff(time) > 0):
             raise ValueError("channel time not strictly increasing.")
 
-        # check channel_label for a valid type
-        if isinstance(channel_label, str) or isinstance(channel_color, tuple) or channel_label is None:
-            channel_label = channel_label
+        # check label for a valid type
+        if isinstance(label, str) or isinstance(color, tuple) or label is None:
+            label = label
         else:
-            raise TypeError("channel_label must be type str or None.")
+            raise TypeError("label must be type str or None.")
         # check channel unit for a valid type
-        if isinstance(channel_unit, str) or channel_unit is None:
-            channel_unit = channel_unit
+        if isinstance(unit, str) or unit is None:
+            unit = unit
         else:
-            raise TypeError("channel_unit must be type str or None.")
-        # check channel_color for a valid type
-        if isinstance(channel_color, str) or channel_color is None or isinstance(channel_color, tuple):
-            channel_color = channel_color
+            raise TypeError("unit must be type str or None.")
+        # check color for a valid type
+        if isinstance(color, str) or color is None or isinstance(color, tuple):
+            color = color
         else:
-            raise TypeError("channel_color must be type str or None.")
-        # check channel_source for a valid type
-        if isinstance(channel_source, str) or channel_source is None:
-            channel_source = channel_source
+            raise TypeError("color must be type str or None.")
+        # check source for a valid type
+        if isinstance(source, str) or source is None:
+            source = source
         else:
-            raise TypeError("channel_source must be type str or None.")
-        # check channel_linestyle for a valid type
-        if isinstance(channel_linestyle, str) or channel_linestyle is None:
-            channel_linestyle = channel_linestyle
+            raise TypeError("source must be type str or None.")
+        # check linestyle for a valid type
+        if isinstance(linestyle, str) or linestyle is None:
+            linestyle = linestyle
         else:
-            raise TypeError("channel_linestyle must be type str or None.")
+            raise TypeError("linestyle must be type str or None.")
 
-        return Channel(time=channel_time,
-                       data=channel_data,
-                       label=channel_label,
-                       unit=channel_unit,
-                       color=channel_color,
-                       source=channel_source,
-                       linestyle=channel_linestyle,
+        return Channel(time=time,
+                       data=data,
+                       label=label,
+                       unit=unit,
+                       color=color,
+                       source=source,
+                       linestyle=linestyle,
                        modulename=class_modulename)
 
     # - Method modify ------------------------------------------------------------------------------
 
     @staticmethod
-    def modify(channel: Channel, channel_data_factor: Optional[float] = None, channel_data_offset: Optional[float] = None,
-               channel_label: Optional[str] = None, channel_unit: Optional[str] = None, channel_color: Union[str, tuple, None] = None,
-               channel_source: Optional[str] = None, channel_time_shift: Optional[float] = None,
-               channel_time_shift_rotate: Optional[float] = None,
-               channel_time_cut_min: Optional[float] = None, channel_time_cut_max: Optional[float] = None,
-               channel_linestyle: Optional[str] = None) -> Channel:
+    def modify(channel: Channel, data_factor: Optional[float] = None, data_offset: Optional[float] = None,
+               label: Optional[str] = None, unit: Optional[str] = None, color: Union[str, tuple, None] = None,
+               source: Optional[str] = None, time_shift: Optional[float] = None,
+               time_shift_rotate: Optional[float] = None,
+               time_cut_min: Optional[float] = None, time_cut_max: Optional[float] = None,
+               linestyle: Optional[str] = None) -> Channel:
         """
         Modify channel data like metadata or add a factor or offset to channel data.
 
-        Useful for classes with channel_time/data, but without labels or units.
+        Useful for classes with time/data, but without labels or units.
 
         :param channel: Scope channel object
         :type channel: Channel
-        :param channel_data_factor: multiply self.channel_data by channel_data_factor
-        :type channel_data_factor: float
-        :param channel_data_offset: add an offset to self.channel_data
-        :type channel_data_offset: float
-        :param channel_label: label to add to the Channel-class
-        :type channel_label: str
-        :param channel_unit: unit to add to the Channel-class
-        :type channel_unit: str
-        :param channel_color: Color of a channel
-        :type channel_color: str
-        :param channel_source: Source of a channel, e.g. 'GeckoCIRCUITS', 'Numpy', 'Tektronix-Scope', ...
-        :type channel_source: str
-        :param channel_time_shift: add time to the time base
-        :type channel_time_shift: float
-        :param channel_time_shift_rotate: shifts a signal by the given time, but the end of the signal will
+        :param data_factor: multiply self.data by data_factor
+        :type data_factor: float
+        :param data_offset: add an offset to self.data
+        :type data_offset: float
+        :param label: label to add to the Channel-class
+        :type label: str
+        :param unit: unit to add to the Channel-class
+        :type unit: str
+        :param color: Color of a channel
+        :type color: str
+        :param source: Source of a channel, e.g. 'GeckoCIRCUITS', 'Numpy', 'Tektronix-Scope', ...
+        :type source: str
+        :param time_shift: add time to the time base
+        :type time_shift: float
+        :param time_shift_rotate: shifts a signal by the given time, but the end of the signal will
             come to the beginning of the signal. Only recommended for periodic signals!
-        :type channel_time_shift_rotate: float
-        :param channel_time_cut_min: removes all time units smaller than the given one
-        :type channel_time_cut_min: float
-        :param channel_time_cut_max: removes all time units bigger than the given one
-        :type channel_time_cut_max: float
-        :param channel_linestyle: channel linestyle, e.g. '--'
-        :type channel_linestyle: str
-        :return: Scope object
+        :type time_shift_rotate: float
+        :param time_cut_min: removes all time units smaller than the given one
+        :type time_cut_min: float
+        :param time_cut_max: removes all time units bigger than the given one
+        :type time_cut_max: float
+        :param linestyle: channel linestyle, e.g. '--'
+        :type linestyle: str
+        :return: Channel object
         :rtype: Channel
         """
         channel_modified = copy.deepcopy(channel)
 
-        if isinstance(channel_label, str):
-            channel_modified.label = channel_label
+        if isinstance(label, str):
+            channel_modified.label = label
             modify_flag = True
-        elif channel_label is None:
+        elif label is None:
             pass
         else:
-            raise TypeError("channel_label must be type str or None")
-        if isinstance(channel_unit, str):
-            channel_modified.unit = channel_unit
+            raise TypeError("label must be type str or None")
+        if isinstance(unit, str):
+            channel_modified.unit = unit
             modify_flag = True
-        elif channel_unit is None:
+        elif unit is None:
             pass
         else:
-            raise TypeError("channel_unit must be type str or None")
-        if isinstance(channel_data_factor, (int, float)):
-            channel_modified.data = channel_modified.data * channel_data_factor
+            raise TypeError("unit must be type str or None")
+        if isinstance(data_factor, (int, float)):
+            channel_modified.data = channel_modified.data * data_factor
             modify_flag = True
-        elif channel_data_factor is None:
+        elif data_factor is None:
             pass
         else:
-            raise TypeError("channel_data_factor must be type float or None")
-        if isinstance(channel_data_offset, (int, float)):
-            channel_modified.data = channel_modified.data + channel_data_offset
+            raise TypeError("data_factor must be type float or None")
+        if isinstance(data_offset, (int, float)):
+            channel_modified.data = channel_modified.data + data_offset
             modify_flag = True
-        elif channel_data_offset is None:
+        elif data_offset is None:
             pass
         else:
-            raise TypeError("channel_data_offset must be type float or None")
-        if isinstance(channel_color, str) or isinstance(channel_color, tuple):
-            channel_modified.color = channel_color
+            raise TypeError("data_offset must be type float or None")
+        if isinstance(color, str) or isinstance(color, tuple):
+            channel_modified.color = color
             modify_flag = True
-        elif channel_color is None:
+        elif color is None:
             pass
         else:
-            raise TypeError("channel_color must be type str or tuple or None")
-        if isinstance(channel_source, str):
-            channel_modified.source = channel_source
+            raise TypeError("color must be type str or tuple or None")
+        if isinstance(source, str):
+            channel_modified.source = source
             modify_flag = True
-        elif channel_source is None:
+        elif source is None:
             pass
         else:
-            raise TypeError("channel_source must be type str or None")
-        if isinstance(channel_time_shift, (int, float)):
-            channel_modified.time = channel_modified.time + channel_time_shift
+            raise TypeError("source must be type str or None")
+        if isinstance(time_shift, (int, float)):
+            channel_modified.time = channel_modified.time + time_shift
             modify_flag = True
-        elif channel_time_shift is None:
+        elif time_shift is None:
             pass
         else:
-            raise TypeError("channel_time_shift must be type float or None")
-        if isinstance(channel_time_shift_rotate, (int, float)):
+            raise TypeError("time_shift must be type float or None")
+        if isinstance(time_shift_rotate, (int, float)):
             # figure out current max time
             current_max_time = channel_modified.time[-1]
             current_period = current_max_time - channel_modified.time[0]
             # shift all times
-            channel_modified.time = channel_modified.time + channel_time_shift_rotate
+            channel_modified.time = channel_modified.time + time_shift_rotate
             channel_modified.time[channel_modified.time > current_max_time] = (
                 channel_modified.time[channel_modified.time > current_max_time] - current_period)
-            # due to rolling time-shift, channel_time and channel_data needs to be re-sorted.
+            # due to rolling time-shift, time and data needs to be re-sorted.
             new_index = np.argsort(channel_modified.time)
             channel_modified.time = np.array(channel_modified.time)[new_index]
             channel_modified.data = np.array(channel_modified.data)[new_index]
             modify_flag = True
-        elif channel_time_shift_rotate is None:
+        elif time_shift_rotate is None:
             pass
         else:
-            raise TypeError("channel_time_shift_rotate must be type str or None")
+            raise TypeError("time_shift_rotate must be type str or None")
 
-        if isinstance(channel_time_cut_min, (int, float)):
+        if isinstance(time_cut_min, (int, float)):
             index_list_to_remove = []
-            if channel_time_cut_min < channel_modified.time[0]:
-                raise ValueError(f"channel_cut_time_min ({channel_time_cut_min}) < start of channel_time ({channel_modified.time[0]}). "
+            if time_cut_min < channel_modified.time[0]:
+                raise ValueError(f"channel_cut_time_min ({time_cut_min}) < start of time ({channel_modified.time[0]}). "
                                  f"This is not allowed!")
             for count, value in enumerate(channel_modified.time):
-                if value < channel_time_cut_min:
+                if value < time_cut_min:
                     index_list_to_remove.append(count)
             channel_modified.time = np.delete(channel_modified.time, index_list_to_remove)
             channel_modified.data = np.delete(channel_modified.data, index_list_to_remove)
             modify_flag = True
-        elif channel_time_cut_min is None:
+        elif time_cut_min is None:
             pass
         else:
-            raise TypeError("channel_time_cut_min must be type float or None")
+            raise TypeError("time_cut_min must be type float or None")
 
-        if isinstance(channel_time_cut_max, (int, float)):
+        if isinstance(time_cut_max, (int, float)):
             index_list_to_remove = []
-            if channel_time_cut_max > channel_modified.time[-1]:
-                raise ValueError(f"channel_cut_time_max ({channel_time_cut_max}) > end of channel_time ({channel_modified.time[-1]}). "
+            if time_cut_max > channel_modified.time[-1]:
+                raise ValueError(f"channel_cut_time_max ({time_cut_max}) > end of time ({channel_modified.time[-1]}). "
                                  f"This is not allowed!")
             for count, value in enumerate(channel_modified.time):
-                if value > channel_time_cut_max:
+                if value > time_cut_max:
                     index_list_to_remove.append(count)
             channel_modified.time = np.delete(channel_modified.time, index_list_to_remove)
             channel_modified.data = np.delete(channel_modified.data, index_list_to_remove)
             modify_flag = True
-        elif channel_time_cut_max is None:
+        elif time_cut_max is None:
             pass
         else:
-            raise TypeError("channel_time_cut_max must be type float or None")
-        if isinstance(channel_linestyle, str):
-            channel_modified.linestyle = channel_linestyle
+            raise TypeError("time_cut_max must be type float or None")
+        if isinstance(linestyle, str):
+            channel_modified.linestyle = linestyle
             modify_flag = True
-        elif channel_linestyle is None:
+        elif linestyle is None:
             pass
         else:
-            raise TypeError("channel_linestyle must be type str or None")
+            raise TypeError("linestyle must be type str or None")
 
         # Log flow control
         logging.debug(f"{channel_modified.modulename} :FlCtl")
@@ -291,7 +291,7 @@ class Scope:
         :type channel: Channel
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
         return copy.deepcopy(channel)
 
     @staticmethod
@@ -305,7 +305,7 @@ class Scope:
         :param csv_file: csv-file from tektronix scope
         :type csv_file: str
         :return: tuple of Channel, depending on the channel count stored in the .csv-file
-        :rtype: list[Channel, Scope, Scope, Scope]
+        :rtype: list[Channel, Channel, Channel, Channel]
 
         :Example:
 
@@ -324,8 +324,8 @@ class Scope:
         channel_list = []
         for channel_count in range(1, channel_counts + 1):
             channel_list.append(Scope.generate_channel(
-                channel_time=time, channel_data=file[:, channel_count], channel_source=channel_source,
-                channel_label=None, channel_unit=None, channel_color=None, channel_linestyle=None))
+                time=time, data=file[:, channel_count], source=channel_source,
+                label=None, unit=None, color=None, linestyle=None))
 
         # Log user error Empty csv-file
         if channel_count == 0:
@@ -345,8 +345,8 @@ class Scope:
 
         :param csv_files: csv-file from tektronix scope
         :type csv_files: str
-        :return: List of Scope objects
-        :rtype: List['Scope']
+        :return: List of Channel objects
+        :rtype: List['Channel']
 
         :Example single channel:
 
@@ -373,8 +373,8 @@ class Scope:
                 logging.info(f"{class_modulename} : file {csv_file}->Invalid file or file without content")
 
             tektronix_channels.append(Scope.generate_channel(
-                time, ch1_data, channel_source=channel_source, channel_label=os.path.basename(csv_file).replace('.csv', ''),
-                channel_unit=None, channel_linestyle=None, channel_color=None))
+                time, ch1_data, source=channel_source, label=os.path.basename(csv_file).replace('.csv', ''),
+                unit=None, linestyle=None, color=None))
 
         # Log user error Empty csv-file
         if not tektronix_channels:
@@ -394,8 +394,8 @@ class Scope:
 
         :param csv_file: csv-file from tektronix scope
         :type csv_file: str
-        :return: List of Scope objects
-        :rtype: List['Scope']
+        :return: List of Channel objects
+        :rtype: List['Channel']
 
         :Example multiple channel csv-file:
 
@@ -414,8 +414,8 @@ class Scope:
         channel_list = []
         for channel_count in range(1, channel_counts + 1):
             channel_list.append(Scope.generate_channel(
-                time, file[:, channel_count], channel_source=channel_source, channel_color=None, channel_linestyle=None,
-                channel_unit=None, channel_label=None))
+                time, file[:, channel_count], source=channel_source, color=None, linestyle=None,
+                unit=None, label=None))
 
         # Log user error Empty csv-file
         if channel_count == 0:
@@ -435,8 +435,8 @@ class Scope:
 
         :param csv_files: csv-file from tektronix scope
         :type csv_files: str
-        :return: List of scope objects
-        :rtype: List['Scope']
+        :return: List of Channel objects
+        :rtype: List['Channel']
 
         :Example single channel:
 
@@ -459,9 +459,9 @@ class Scope:
             ch1_data = file[:, 1]
 
             lecroy_channel.append(Scope.generate_channel(
-                channel_time=time, channel_data=ch1_data, channel_source=channel_source,
-                channel_label=os.path.basename(csv_file).replace('.csv', ''), channel_unit=None,
-                channel_color=None, channel_linestyle=None))
+                time=time, data=ch1_data, source=channel_source,
+                label=os.path.basename(csv_file).replace('.csv', ''), unit=None,
+                color=None, linestyle=None))
 
         # Log user error Empty csv-file
         if not lecroy_channel:
@@ -473,64 +473,64 @@ class Scope:
         return lecroy_channel
 
     @staticmethod
-    def from_lecroy_remote(channel_number: int, ip_address: str, channel_label: str):
+    def from_lecroy_remote(scope_channel_number: int, ip_address: str, label: str) -> Channel:
         """
-        Get the data of a LeCroy oscilloscope and return a scope object with the collected data.
+        Get the data of a LeCroy oscilloscope and return a Channel object with the collected data.
 
-        :param channel_number: number of the channel
-        :type channel_number: int
+        :param scope_channel_number: number of the channel
+        :type scope_channel_number: int
         :param ip_address: ip-address of the oscilloscope
         :type ip_address: str
-        :param channel_label: label name of channel
-        :type channel_label: str
-        :return: Scope object with collected data
-        :rtype: 'Scope'
+        :param label: label name of channel
+        :type label: str
+        :return: Channel object with collected data
+        :rtype: 'Channel'
         """
-        if not isinstance(channel_number, int):
+        if not isinstance(scope_channel_number, int):
             raise TypeError("channel_number must be type int.")
         if not isinstance(ip_address, str):
             raise TypeError("ip_address must be type str.")
-        if not isinstance(channel_label, str):
-            raise TypeError("channel_label must be type str.")
+        if not isinstance(label, str):
+            raise TypeError("label must be type str.")
 
         channel_source = "LeCroy scope"
 
         scope = LecroyScope(ip_address)
 
-        if channel_number == 1:
+        if scope_channel_number == 1:
             channel = "C1"
-        elif channel_number == 2:
+        elif scope_channel_number == 2:
             channel = "C2"
-        elif channel_number == 3:
+        elif scope_channel_number == 3:
             channel = "C3"
-        elif channel_number == 4:
+        elif scope_channel_number == 4:
             channel = "C4"
-        elif channel_number == 5:
+        elif scope_channel_number == 5:
             channel = "C5"
-        elif channel_number == 6:
+        elif scope_channel_number == 6:
             channel = "C6"
-        elif channel_number == 7:
+        elif scope_channel_number == 7:
             channel = "C7"
-        elif channel_number == 8:
+        elif scope_channel_number == 8:
             channel = "C8"
         else:  # "else-case"
             channel = None
             # Log user info
-            logging.info(f"{class_modulename} : Requested channel number {channel_number} is out of range (1-8)")
+            logging.info(f"{class_modulename} : Requested channel number {scope_channel_number} is out of range (1-8)")
             print("No fitting channel found!")
 
         # Log flow control
-        logging.debug(f"{class_modulename} :FlCtl Channel number: {channel_number} Assigned  channel: {channel}")
+        logging.debug(f"{class_modulename} :FlCtl Channel number: {scope_channel_number} Assigned  channel: {channel}")
 
         if channel is not None:
             data = scope.waveform(channel)
             return Scope.generate_channel(
-                channel_time=data.x, channel_data=data.y, channel_source=channel_source, channel_label=channel_label,
-                channel_color=None, channel_linestyle=None, channel_unit=None)
+                time=data.x, data=data.y, source=channel_source, label=label,
+                color=None, linestyle=None, unit=None)
 
     @staticmethod
     def from_numpy(period_vector_t_i: np.ndarray, mode: str = 'rad', f0: Union[float, None] = None,
-                   channel_label: Optional[str] = None, channel_unit: Optional[str] = None) -> 'Channel':
+                   label: Optional[str] = None, unit: Optional[str] = None) -> 'Channel':
         """
         Bring a numpy or list array to an instance of Channel.
 
@@ -540,10 +540,10 @@ class Scope:
         :type mode: str
         :param f0: fundamental frequency in Hz
         :type f0: float
-        :param channel_label: channel label
-        :type channel_label: str
-        :param channel_unit: channel unit
-        :type channel_unit: str
+        :param label: channel label
+        :type label: str
+        :param unit: channel unit
+        :type unit: str
 
         :Example:
 
@@ -570,8 +570,8 @@ class Scope:
             raise ValueError("Mode not available. Choose: 'rad', 'deg', 'time'")
 
         single_dataset_channel = Scope.generate_channel(period_vector_t_i[0], period_vector_t_i[1],
-                                                        channel_label=channel_label, channel_unit=channel_unit, channel_color=None,
-                                                        channel_linestyle=None, channel_source=None)
+                                                        label=label, unit=unit, color=None,
+                                                        linestyle=None, source=None)
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of Data: 1")
@@ -622,8 +622,8 @@ class Scope:
 
             if count_var != 0:
                 list_return_dataset.append(Scope.generate_channel(
-                    channel_time=time_modified, channel_data=list_simulation_data[count_var], channel_label=variable,
-                    channel_source=channel_source, channel_unit=None, channel_linestyle=None, channel_color=None))
+                    time=time_modified, data=list_simulation_data[count_var], label=variable,
+                    source=channel_source, unit=None, linestyle=None, color=None))
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Value of count_var {count_var}")
@@ -631,31 +631,31 @@ class Scope:
         return list_return_dataset
 
     @staticmethod
-    def multiply(channel_voltage: 'Channel', channel_current: 'Channel', channel_label: Optional[str] = None) -> 'Channel':
+    def multiply(channel_1: 'Channel', channel_2: 'Channel', label: Optional[str] = None) -> 'Channel':
         """
-        calculate the power of two datasets.
+        Multiply two datasets, e.g. to calculate the power from voltage and current.
 
-        :param channel_voltage: dataset with voltage information
-        :type channel_voltage: Channel
-        :param channel_current: dataset with current information
-        :type channel_current: Channel
-        :param channel_label: label for new dataset_channel
-        :type channel_label: str
-        :return: power in a dataset
+        :param channel_1: channel_1, e.g. voltage channel
+        :type channel_1: Channel
+        :param channel_2: channel_2, e.g. current channel
+        :type channel_2: Channel
+        :param label: label for new dataset_channel
+        :type label: str
+        :return: Multiplication of two datasets, e.g. power from voltage and current
         :rtype: Channel
         """
-        if not isinstance(channel_voltage, Channel):
-            raise TypeError("channel_voltage must be type Scope.")
-        if not isinstance(channel_current, Channel):
-            raise TypeError("channel_current must be type Scope.")
-        if not isinstance(channel_label, str) != channel_label is not None:
-            raise TypeError("channel_label must be type str or None.")
+        if not isinstance(channel_1, Channel):
+            raise TypeError("channel_voltage must be type Channel.")
+        if not isinstance(channel_2, Channel):
+            raise TypeError("channel_current must be type Channel.")
+        if not isinstance(label, str) != label is not None:
+            raise TypeError("label must be type str or None.")
 
-        channel_data = channel_voltage.data * channel_current.data
-        if channel_label is None and channel_voltage.label is not None \
-                and channel_current.label is not None:
-            channel_label = f"{channel_voltage.label} * {channel_current.label}"
-        channel_power = Channel(channel_voltage.time, channel_data, label=channel_label,
+        channel_data = channel_1.data * channel_2.data
+        if label is None and channel_1.label is not None \
+                and channel_2.label is not None:
+            label = f"{channel_1.label} * {channel_2.label}"
+        channel_power = Channel(channel_1.time, channel_data, label=label,
                                 unit='W', color=None, linestyle=None, source=None, modulename=class_modulename)
 
         # Log flow control
@@ -664,49 +664,49 @@ class Scope:
         return channel_power
 
     @staticmethod
-    def integrate(channel_power: 'Channel', channel_label: Optional[str] = None):
+    def integrate(channel: 'Channel', label: Optional[str] = None):
         """
         Integrate a channels signal.
 
         The default use-case is calculating energy loss (variable naming is for the use case to calculate
         switch energy from power loss curve, e.g. from double-pulse measurement)
 
-        :param channel_power: channel with power
-        :type channel_power: Channel
-        :param channel_label: channel label
-        :type channel_label: Optional[str]
-        :return: returns a scope-class, what integrates the input values
+        :param channel: channel with power
+        :type channel: Channel
+        :param label: channel label
+        :type label: Optional[str]
+        :return: returns a Channel-class, what integrates the input values
         :rtype: Channel
         """
-        if not isinstance(channel_power, Channel):
-            raise TypeError("channel_power must be type Scope.")
-        if not isinstance(channel_label, str):
-            raise TypeError("channel_label must be type str.")
+        if not isinstance(channel, Channel):
+            raise TypeError("channel_power must be type Channel.")
+        if not isinstance(label, str):
+            raise TypeError("label must be type str.")
         channel_energy = np.array([])
-        timestep = channel_power.time[2] - channel_power.time[1]
-        for count, _ in enumerate(channel_power.time):
+        timestep = channel.time[2] - channel.time[1]
+        for count, _ in enumerate(channel.time):
             if count == 0:
                 # set first energy value to zero
                 channel_energy = np.append(channel_energy, 0)
             else:
                 # using euler method
-                energy = (np.nan_to_num(channel_power.data[count]) + np.nan_to_num(channel_power.data[count - 1])) / 2 * timestep
+                energy = (np.nan_to_num(channel.data[count]) + np.nan_to_num(channel.data[count - 1])) / 2 * timestep
                 channel_energy = np.append(channel_energy, channel_energy[-1] + energy)
-        if channel_label is None:
+        if label is None:
             # Log missing user input
             logging.info(f"{class_modulename} :Label was not defined. So default value is used", class_modulename)
-            channel_label = "Energy"
+            label = "Energy"
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Amount of channel data elements={count}")
 
-        return Channel(channel_power.time, channel_energy, label=channel_label, unit='J', color=None, source=None,
+        return Channel(channel.time, channel_energy, label=label, unit='J', color=None, source=None,
                        linestyle=None, modulename=class_modulename)
 
     @staticmethod
     def add(*channels: 'Channel') -> 'Channel':
         """
-        Add channel_data of several Channels.
+        Add data of several Channels.
 
         :param channels: Input channels
         :type channels: Channel
@@ -719,11 +719,11 @@ class Scope:
         # check input type and time data points
         for channel in channels:
             if not isinstance(channel, Channel):
-                raise TypeError("channel must be type Scope.")
+                raise TypeError("channel must be type Channel.")
             if channel.time.all() != channels[0].time.all():
-                raise ValueError("Can not add data. Different Channel.channel_time length!")
+                raise ValueError("Can not add data. Different Channel.time length!")
             if not (channel.time == channels[0].time).all():
-                raise ValueError("Can not add data. Different Channel.channel_time values!")
+                raise ValueError("Can not add data. Different Channel.time values!")
 
         channel_data_result = np.zeros_like(channels[0].data)
         channel_label_result = ''
@@ -745,7 +745,7 @@ class Scope:
     @staticmethod
     def subtract(*channels: 'Channel') -> 'Channel':
         """
-        Subtract channel_data of several Channels.
+        Subtract data of several Channels.
 
         :param channels: Input channels
         :type channels: Channel
@@ -758,11 +758,11 @@ class Scope:
         # check input type and time data points
         for channel in channels:
             if not isinstance(channel, Channel):
-                raise TypeError("channel must be type Scope.")
+                raise TypeError("channel must be type Channel.")
             if channel.time.all() != channels[0].time.all():
-                raise ValueError("Can not add data. Different Channel.channel_time length!")
+                raise ValueError("Can not add data. Different Channel.time length!")
             if not (channel.time == channels[0].time).all():
-                raise ValueError("Can not add data. Different Channel.channel_time values!")
+                raise ValueError("Can not add data. Different Channel.time values!")
 
         channel_data_result = np.zeros_like(channels[0].data)
         channel_label_result = ''
@@ -799,8 +799,8 @@ class Scope:
 
         Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.
 
-        Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
-        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
+        Y-axis labels are set according to the unit, presented in the last curve for the subplot.
+        For own axis labeling, use as unit for the last channel your label, e.g. r"$i_T$ in A".
         Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
 
         :param channel: list of datasets
@@ -854,7 +854,7 @@ class Scope:
                 elif channel_dataset.unit.lower() == 'w':
                     plt.ylabel(f"Power in {channel_dataset.unit}")
                 else:
-                    # in case of no matches, use a custom label. The channel_unit is used for this.
+                    # in case of no matches, use a custom label. The unit is used for this.
                     plt.ylabel(channel_dataset.unit)
             # Log flow control
             logging.debug(f"{class_modulename} :FlCtl Amount of plots within one channel={len(plot_list)}")
@@ -885,7 +885,7 @@ class Scope:
                 elif channel_dataset.unit.lower() == 'j':
                     axs[plot_count].set_ylabel(f"Energy in {channel_dataset.unit}")
                 else:
-                    # in case of no matches, use a custom label. The channel_unit is used for this.
+                    # in case of no matches, use a custom label. The unit is used for this.
                     axs[plot_count].set_ylabel(channel_dataset.unit)
             # Log flow control
             logging.debug(f"{class_modulename} :FlCtl Amount of plots within multiple channels={plot_count}")
@@ -1010,8 +1010,8 @@ class Scope:
         There is a zoom limit in both directions. In this case, the rectangle shows the possible area (becomes larger),
         after you have release the left mouse button.
 
-        Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
-        For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
+        Y-axis labels are set according to the unit, presented in the last curve for the subplot.
+        For own axis labeling, use as unit for the last channel your label, e.g. r"$i_T$ in A".
         Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
         The parameters has to fullfill conditions:
         Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
@@ -1205,14 +1205,14 @@ class Scope:
         return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
 
     @staticmethod
-    def compare_channels(*channel_datasets: 'Channel', shift: Optional[List[Union[None, float]]] = None,
+    def compare_channels(*channels: 'Channel', shift: Optional[List[Union[None, float]]] = None,
                          scale: Optional[List[Union[None, float]]] = None, offset: Optional[List[Union[None, float]]] = None,
                          timebase: str = 's'):
         """
         Graphical comparison for datasets. Note: Datasets need to be type Channel.
 
-        :param channel_datasets: dataset according to Channel
-        :type channel_datasets: Channel
+        :param channels: dataset according to Channel
+        :type channels: Channel
         :param shift: phase shift in a list for every input dataset
         :type shift: list[Union[None, float]]
         :param scale: channel scale factor in a list for every input dataset
@@ -1240,9 +1240,9 @@ class Scope:
             time_factor = 1
             timebase = 's'
 
-        for count, channel_dataset in enumerate(channel_datasets):
+        for count, channel_dataset in enumerate(channels):
             if not isinstance(channel_dataset, Channel):
-                raise TypeError("channel_dataset must be type Scope.")
+                raise TypeError("channel must be type Channel.")
             modified_time = channel_dataset.time
             modified_data = channel_dataset.data
 
@@ -1256,19 +1256,19 @@ class Scope:
             plt.plot(modified_time / time_factor, modified_data, label=channel_dataset.label,
                      color=channel_dataset.color, linestyle=channel_dataset.linestyle)
         plt.xlabel(f"time in {timebase}")
-        if channel_datasets[0].unit is not None:
-            if channel_datasets[0].unit.lower() == 'a':
+        if channels[0].unit is not None:
+            if channels[0].unit.lower() == 'a':
                 plt.ylabel('Current in A')
-            elif channel_datasets[0].unit.lower() == 'u':
+            elif channels[0].unit.lower() == 'u':
                 plt.ylabel('Voltage in V')
-            elif channel_datasets[0].unit.lower() == 'w':
+            elif channels[0].unit.lower() == 'w':
                 plt.ylabel('Power in W')
         plt.legend()
         plt.grid()
         plt.show()
 
         # Log flow control
-        logging.debug(f"{class_modulename} :Amount of displayed datasets={len(channel_datasets)}")
+        logging.debug(f"{class_modulename} :Amount of displayed datasets={len(channels)}")
 
     @staticmethod
     def fft(channel: Channel, plot: bool = True):
@@ -1301,7 +1301,7 @@ class Scope:
     @staticmethod
     def short_to_period(channel: Channel, f0: Union[float, int, None] = None, time_period: Union[float, int, None] = None,
                         start_time: Union[float, int, None] = None):
-        """Short a given Scope object to a period.
+        """Short a given Channel object to a period.
 
         :param channel: Scope channel object
         :type channel: Channel
@@ -1329,7 +1329,7 @@ class Scope:
             end_time = start_time + time_period
         elif f0 is not None:
             end_time = start_time + 1/f0
-        channel = Scope.modify(channel, channel_time_cut_min=start_time, channel_time_cut_max=end_time)
+        channel = Scope.modify(channel, time_cut_min=start_time, time_cut_max=end_time)
         # Log flow control
         logging.debug(f"{channel.modulename} :Time range: {start_time} to {end_time}")
 
@@ -1348,11 +1348,11 @@ class Scope:
         :type order: int
         :param angular_frequency_rad: angular frequency in rad. Valid for values 0...1. Smaller value means lower filter frequency.
         :type angular_frequency_rad: float
-        :return: Scope object with filtered channel_data
+        :return: Channel object with filtered data
         :rtype: Channel
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be of type Scope.")
+            raise TypeError("channel must be of type Channel.")
         if not isinstance(order, int):
             raise TypeError("order must be of type int.")
         if order <= 0:
@@ -1362,7 +1362,7 @@ class Scope:
         if angular_frequency_rad >= 1 or angular_frequency_rad <= 0:
             raise ValueError("angular_frequency_rad must be in interval ]0...1[.")
 
-        # introduce scope copy for further channel modifications
+        # introduce Channel copy for further channel modifications
         scope_copy = Scope.copy(channel)
 
         # filter adapted according to scipy example, see also:
@@ -1380,19 +1380,19 @@ class Scope:
     @staticmethod
     def derivative(channel: Channel, order: int = 1) -> Channel:
         """
-        Get the derivative of the channel_data.
+        Get the derivative of the data.
 
         In case of measured input signal, it is useful to apply a low-pass filter first.
 
-        :param channel: Scope object
+        :param channel: Channel object
         :type channel: Channel
         :param order: oder of derivative, e.g. 1st order, ...
         :type order: int
-        :return: Scope object
+        :return: Channel object
         :rtype: Channel
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
         if not isinstance(order, int):
             raise TypeError("order must be type integer.")
         if order <= 0:
@@ -1404,7 +1404,7 @@ class Scope:
         d_dx = FinDiff(0, channel.time, order)
         df_dx = d_dx(channel.data)
 
-        # apply the derivative to the scope channel copy
+        # apply the derivative to the channel copy
         channel_copy.data = df_dx
 
         return channel_copy
@@ -1415,12 +1415,12 @@ class Scope:
         Calculate the RMS of a given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
         :param channel: Scope channel object
-        :type channel: Scope
-        :return: rms(self.channel_data).
+        :type channel: Channel
+        :return: rms(self.data).
         :rtype: Any
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
 
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.data)}")
@@ -1433,12 +1433,12 @@ class Scope:
         Calculate the mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
         :param channel: Scope channel object
-        :type channel: Scope
-        :return: mean(self.channel_data)
+        :type channel: Channel
+        :return: mean(self.data)
         :rtype: any
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
 
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.data)}")
@@ -1451,12 +1451,12 @@ class Scope:
         Calculate the absolute mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.
 
         :param channel: Scope channel object
-        :type channel: Scope
-        :return: abs(mean(self.channel_data))
+        :type channel: Channel
+        :return: abs(mean(self.data))
         :rtype: Any
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
 
         # Log flow control
         logging.debug(f"{channel.modulename} :Number of channel data={len(channel.data)}")
@@ -1469,12 +1469,12 @@ class Scope:
         Modify the existing scope channel so that the signal is rectified.
 
         :param channel: Scope channel object
-        :type channel: Scope
-        :return: abs(channel.channel_data).
-        :rtype: Scope
+        :type channel: Channel
+        :return: abs(channel.data).
+        :rtype: Channel
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
 
         channel_modified = copy.deepcopy(channel)
 
@@ -1493,12 +1493,12 @@ class Scope:
         Square the data channel.
 
         :param channel: Scope channel object
-        :type channel: Scope
-        :return: channel.channel_data ** 2 as scope object
-        :rtype: Scope
+        :type channel: Channel
+        :return: channel.data ** 2 as Channel object
+        :rtype: Channel
         """
         if not isinstance(channel, Channel):
-            raise TypeError("channel must be type Scope.")
+            raise TypeError("channel must be type Channel.")
 
         channel_modified = copy.deepcopy(channel)
 
@@ -1530,12 +1530,12 @@ class Scope:
         logging.debug(f"{class_modulename} :Name of file to save={fig_name}.pdf")
 
     @staticmethod
-    def save(scope_object: Channel, filepath: str) -> None:
+    def save(channel: Channel, filepath: str) -> None:
         """
-        Save a scope object to hard disk.
+        Save a Channel object to hard disk.
 
-        :param scope_object: scope object
-        :type scope_object: Channel
+        :param channel: Channel object
+        :type channel: Channel
         :param filepath: filepath including file name
         :type filepath: str
         """
@@ -1548,20 +1548,20 @@ class Scope:
             file_path = os.path.curdir
         if not os.path.exists(file_path):
             os.makedirs(file_path, exist_ok=True)
-        if not isinstance(scope_object, Channel):
-            raise TypeError("scope_object must be of type Scope.")
+        if not isinstance(channel, Channel):
+            raise TypeError("channel must be of type Channel.")
 
         with open(filepath, 'wb') as handle:
-            pickle.dump(scope_object, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(channel, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     @staticmethod
     def load(filepath: str) -> Channel:
         """
-        Load a scope file from the hard disk.
+        Load a Channel file from the hard disk.
 
         :param filepath: filepath
         :type filepath: str
-        :return: loaded Scope object
+        :return: loaded Channel object
         :rtype: Channel
         """
         if not isinstance(filepath, str):
@@ -1573,7 +1573,7 @@ class Scope:
         with open(filepath, 'rb') as handle:
             loaded_scope_object: Channel = pickle.load(handle)
         if not isinstance(loaded_scope_object, Channel):
-            raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
+            raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Channel.")
 
         return loaded_scope_object
 
