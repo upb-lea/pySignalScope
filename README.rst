@@ -21,7 +21,7 @@ Bring the originally different input formats into common plots to make compariso
 With the ``Impedance functionality``, ``ImpedanceChannels`` can be read in, edited and compared.
 A conversion to e.g. the inductance value is possible with just one command.
 
-.. image:: docs/source/figures/introduction.png
+.. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/introduction.png
 
 
 Getting started
@@ -51,7 +51,7 @@ This is multiplied by a small gain, provided with an offset and shortened to a p
 The label, color and line style are changed.
 The signals are then plotted with just one plot command.
 
-.. image:: docs/source/figures/function_overview.png
+.. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/function_overview.png
 
 Have a look at the `Scope example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__ and at the `Impedance example <https://github.com/upb-lea/pySignalScope/blob/main/examples/impedance_example.py>`__ to see what you can do with this toolbox.
 
