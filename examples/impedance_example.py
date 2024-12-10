@@ -8,9 +8,9 @@ example_data_rlc = pss.Impedance.from_rlc('l', 1000, 500e-6, 10e-12)
 
 # modify the data, e.g. change the color.
 # For color changes, you can use standard colors or colors from the leapythontoolbox, see this example
-example_data_0mm5 = pss.Impedance.modify(example_data_0mm5, channel_color="red", channel_unit="random unit")
-example_data_1mm5 = pss.Impedance.modify(example_data_1mm5, channel_color=pss.gnome_colors["blue"])
-example_data_rlc = pss.Impedance.modify(example_data_rlc, channel_color=pss.gnome_colors["green"], channel_label="from rlc")
+example_data_0mm5 = pss.Impedance.modify(example_data_0mm5, color="red", unit="random unit")
+example_data_1mm5 = pss.Impedance.modify(example_data_1mm5, color=pss.gnome_colors["blue"])
+example_data_rlc = pss.Impedance.modify(example_data_rlc, color=pss.gnome_colors["green"], label="from rlc")
 
 # # recalculate rlc data from a impedance curve
 recalculated_r, recalculated_l, recalculated_c = (pss.Impedance.calc_rlc(example_data_rlc, 'l', f_calc_l=10e3, f_calc_c=10e7, plot_figure=True))

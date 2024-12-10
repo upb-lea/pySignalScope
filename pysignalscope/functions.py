@@ -13,7 +13,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
 
     Output vector includes only frequencies with amplitudes > 1% of input signal
 
-    :Example:
+    :Minimal Example:
 
     >>> import pysignalscope as sp
     >>> import numpy as np
