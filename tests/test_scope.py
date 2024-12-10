@@ -68,7 +68,7 @@ def test_values_of_generate_channel(tst_channel_time: [], tst_channel_data: [], 
     # Check if expected test result is no error
     if error_flag is False:
         # channel_time: non-equidistant values and negative valid values
-        scope_object = pss.Scope.generate_channel(channel_time=tst_channel_time, channel_data=tst_channel_data)
+        scope_object = pss.Scope.generate_channel(time=tst_channel_time, data=tst_channel_data)
         numpy.testing.assert_equal(scope_object.time, exp_scope_obj_or_err["channel_time"])
         numpy.testing.assert_equal(scope_object.data, exp_scope_obj_or_err["channel_data"])
     else:  # generate_channel raises an error
@@ -120,13 +120,13 @@ def test_attributes_of_test_generate_channel(tst_channel_label, tst_channel_unit
     # Check if expected test result is no error
     if error_flag is False:
         # channel_time: non-equidistant values and negative valid values
-        scope_object = pss.Scope.generate_channel(channel_time=tst_channel_time,
-                                                  channel_data=tst_channel_data,
-                                                  channel_label=tst_channel_label,
-                                                  channel_unit=tst_channel_unit,
-                                                  channel_color=tst_channel_color,
-                                                  channel_source=tst_channel_source,
-                                                  channel_linestyle=tst_channel_linestyle)
+        scope_object = pss.Scope.generate_channel(time=tst_channel_time,
+                                                  data=tst_channel_data,
+                                                  label=tst_channel_label,
+                                                  unit=tst_channel_unit,
+                                                  color=tst_channel_color,
+                                                  source=tst_channel_source,
+                                                  linestyle=tst_channel_linestyle)
         # verification of function result
         numpy.testing.assert_equal(scope_object.time, tst_channel_time)
         numpy.testing.assert_equal(scope_object.data, tst_channel_data)
@@ -137,13 +137,13 @@ def test_attributes_of_test_generate_channel(tst_channel_label, tst_channel_unit
         numpy.testing.assert_equal(scope_object.linestyle, tst_channel_linestyle)
     else:  # generate_channel raises an error
         with pytest.raises(exp_error):
-            scope_object = pss.Scope.generate_channel(channel_time=tst_channel_time,
-                                                      channel_data=tst_channel_data,
-                                                      channel_label=tst_channel_label,
-                                                      channel_unit=tst_channel_unit,
-                                                      channel_color=tst_channel_color,
-                                                      channel_source=tst_channel_source,
-                                                      channel_linestyle=tst_channel_linestyle)
+            scope_object = pss.Scope.generate_channel(time=tst_channel_time,
+                                                      data=tst_channel_data,
+                                                      label=tst_channel_label,
+                                                      unit=tst_channel_unit,
+                                                      color=tst_channel_color,
+                                                      source=tst_channel_source,
+                                                      linestyle=tst_channel_linestyle)
 
 #########################################################################################################
 # test of from_numpy
@@ -205,7 +205,7 @@ def test_from_numpy(valid_input_flag: bool, tst_mode, tst_f0, exp_factor_or_erro
     if error_flag is False:
         # channel_time: non-equidistant values and negative valid values
         scope_object = pss.Scope.from_numpy(period_vector_t_i, mode=tst_mode, f0=tst_f0,
-                                            channel_label=tst_label, channel_unit=tst_unit)
+                                            label=tst_label, unit=tst_unit)
         # verification of attributes
         numpy.testing.assert_equal(scope_object.label, tst_label)
         numpy.testing.assert_equal(scope_object.unit, tst_unit)
@@ -216,11 +216,11 @@ def test_from_numpy(valid_input_flag: bool, tst_mode, tst_f0, exp_factor_or_erro
         if valid_input_flag is True:
             with pytest.raises(exp_factor_or_error):
                 scope_object = pss.Scope.from_numpy(period_vector_t_i, mode=tst_mode, f0=tst_f0,
-                                                    channel_label=tst_label, channel_unit=tst_unit)
+                                                    label=tst_label, unit=tst_unit)
         else:
             with pytest.raises(exp_factor_or_error):
                 scope_object = pss.Scope.from_numpy(period_vector_t_i_invalid, mode=tst_mode, f0=tst_f0,
-                                                    channel_label=tst_label, channel_unit=tst_unit)
+                                                    label=tst_label, unit=tst_unit)
 
 #########################################################################################################
 # test of low_pass_filter
@@ -344,8 +344,8 @@ def test_derivative(tst_vector, tst_order, exp_result_or_error, error_flag: bool
 def test_eq():
     """Test __eq__()."""
     ch_1 = pss.Scope.generate_channel([1, 2, 3], [4, 5, 6],
-                                      channel_unit="A", channel_label="label", channel_color="red",
-                                      channel_source="source", channel_linestyle='--')
+                                      unit="A", label="label", color="red",
+                                      source="source", linestyle='--')
     ch_2 = pss.Scope.copy(ch_1)
     # assert both channels are the same
     assert ch_1 == ch_2
@@ -362,27 +362,27 @@ def test_eq():
 
     # not the same: different units
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2 = pss.Scope.modify(ch_2, channel_unit="U")
+    ch_2 = pss.Scope.modify(ch_2, unit="U")
     assert not (ch_1 == ch_2)
 
     # not the same: different labels
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2 = pss.Scope.modify(ch_2, channel_label="aaa")
+    ch_2 = pss.Scope.modify(ch_2, label="aaa")
     assert not (ch_1 == ch_2)
 
     # not the same: different colors
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2 = pss.Scope.modify(ch_2, channel_color="blue")
+    ch_2 = pss.Scope.modify(ch_2, color="blue")
     assert not (ch_1 == ch_2)
 
     # not the same: different sources
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2 = pss.Scope.modify(ch_2, channel_source="asdf")
+    ch_2 = pss.Scope.modify(ch_2, source="asdf")
     assert not (ch_1 == ch_2)
 
     # not the same: different line styles
     ch_2 = pss.Scope.copy(ch_1)
-    ch_2 = pss.Scope.modify(ch_2, channel_label=".-")
+    ch_2 = pss.Scope.modify(ch_2, label=".-")
     assert not (ch_1 == ch_2)
 
 #########################################################################################################
@@ -393,8 +393,8 @@ def test_save_load():
     """Unit test for save and load."""
     # assumption: the given scope object is valid
     example = pss.Scope.generate_channel([-1, 2, 3.3], [-4, 5.0, 6.9],
-                                         channel_unit="A", channel_label="label", channel_color="red",
-                                         channel_source="source", channel_linestyle='--')
+                                         unit="A", label="label", color="red",
+                                         source="source", linestyle='--')
 
     # save + load: working example
     pss.Scope.save(example, "test_example")
@@ -433,8 +433,8 @@ def test_copy():
 
     # test for valid copy
     object_to_copy = pss.Scope.generate_channel([-1, 2, 3.3], [-4, 5.0, 6.9],
-                                                channel_unit="A", channel_label="label", channel_color="red",
-                                                channel_source="source", channel_linestyle='--')
+                                                unit="A", label="label", color="red",
+                                                source="source", linestyle='--')
     object_copy = pss.Scope.copy(object_to_copy)
 
     assert object_to_copy == object_copy
@@ -446,11 +446,11 @@ def test_copy():
 def test_add():
     """Unit test for add()."""
     # sample data
-    channel_1 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2], channel_data=[1, 2, 3])
-    channel_2 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
-    channel_3 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
-    channel_4 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2], channel_data=[2, 4, 6])
-    channel_5 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2, 3.3], channel_data=[2, 4, 6, 9])
+    channel_1 = pss.Scope.generate_channel(time=[1, 1.1, 2], data=[1, 2, 3])
+    channel_2 = pss.Scope.generate_channel(time=[1, 1.1, 2.2], data=[1, 2, 3])
+    channel_3 = pss.Scope.generate_channel(time=[1, 1.1, 2.2], data=[1, 2, 3])
+    channel_4 = pss.Scope.generate_channel(time=[1, 1.1, 2.2], data=[2, 4, 6])
+    channel_5 = pss.Scope.generate_channel(time=[1, 1.1, 2.2, 3.3], data=[2, 4, 6, 9])
 
     # wrong input type
     with pytest.raises(TypeError):
@@ -473,11 +473,11 @@ def test_add():
 def test_subtract():
     """Unit test for add()."""
     # sample data
-    channel_1 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2], channel_data=[1, 2, 3])
-    channel_2 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
-    channel_3 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2], channel_data=[1, 2, 3])
-    channel_4 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2], channel_data=[0, 0, 0])
-    channel_5 = pss.Scope.generate_channel(channel_time=[1, 1.1, 2.2, 3.3], channel_data=[2, 4, 6, 9])
+    channel_1 = pss.Scope.generate_channel(time=[1, 1.1, 2], data=[1, 2, 3])
+    channel_2 = pss.Scope.generate_channel(time=[1, 1.1, 2.2], data=[1, 2, 3])
+    channel_3 = pss.Scope.generate_channel(time=[1, 1.1, 2.2], data=[1, 2, 3])
+    channel_4 = pss.Scope.generate_channel(time=[1, 1.1, 2.2], data=[0, 0, 0])
+    channel_5 = pss.Scope.generate_channel(time=[1, 1.1, 2.2, 3.3], data=[2, 4, 6, 9])
 
     # wrong input type
     with pytest.raises(TypeError):
