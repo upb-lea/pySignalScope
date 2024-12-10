@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      IS_TEST: True
     permissions:
       contents: write
     steps:
@@ -31,7 +33,6 @@ jobs:
         echo Start testing...
         # run tests before building the documentation to set the environment variable IS_TEST
         pytest tests
-        IS_TEST = True
         cd docs
         make html
 #    - name: Build HTML
