@@ -9,7 +9,7 @@ import numpy as np
 
 @dataclasses.dataclass(eq=False)
 class ImpedanceChannel:
-    """Dataclass for impedance objects in a special format, to keep labels, units and voltages belonging to a certain curve."""
+    """Dataclass for ImpedanceChannel objects in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
     # mandatory data
     frequency: np.array  #: mandatory: frequency data (mandatory)
