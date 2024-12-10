@@ -1203,11 +1203,20 @@ class Scope:
         """
         unifies the sampling rate of datasets.
 
+        :Examples:
+
+        >>> import pysignalscope as pss
+        >>> ch1 = pss.Scope.generate_channel([-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        >>>                                  [-8, -2, 10.5, 11, 13, 14, 16, 20, 17, 14, 9, 1])
+        >>> ch2 = pss.Scope.generate_channel([-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5],
+        >>>                                  [10, 2, 7.5, -2.5, 4, 8, 4, 10, 2, 20, 5])
+        >>> result_list= pss.Scope.unify_sampling_rate(ch1,ch2,sample_calc_mode="min")
+
         :param channel_datasets: dataset according to Channel
         :type channel_datasets: Channel
         :param sample_calc_mode: keyword, which define the sampling rate calculation 'avg', 'max', 'min' 'user'
         :type sample_calc_mode: str
-        :param sampling_rate: sampling rate defined by the user (only valid, if granularity is set to 'user'
+        :param sampling_rate: sampling rate defined by the user (only valid, if sample_calc_mode is set to 'user'
         :type sampling_rate: Optional[float]
         :param shift: shift of the sample rate from origin. None corresponds to a shift to first time point of first channel
         :type shift: Optional[float]
@@ -1215,8 +1224,8 @@ class Scope:
         :type mastermode: bool
 
         If the mastermode is 'True' (default), only the first data set is used for  sampling rate calculation.
-        This parameter is ignored, if the granularity approach is set to 'user'
-        For the calculation of the data rate following approaches can be select by parameter 'granularity':
+        This parameter is ignored, if the sample_calc_mode approach is set to 'user'
+        For the calculation of the data rate following approaches can be select by parameter 'sample_calc_mode':
         'avg' = Average sampling rate: The sampling rate shall be calculated by the average distance of the sampling rate.
         'max' = Maximal sampling rate: The sampling rate shall be calculated by the minimum distance between two sample points.
         'min' = Minimal sampling rate: The sampling rate shall be calculated by the maximal distance between two sample points.
@@ -1231,13 +1240,7 @@ class Scope:
         # check if channel_datasets contains minimum 1 channel
         if len(channel_datasets) == 0:
             raise TypeError("channel_datasets must contain minimum one channel.")
-        # check parameter sampling_rate
-        if isinstance(sampling_rate, float):
-            if sampling_rate < 0:
-                raise TypeError("sampling_rate must greater 0.")
-        elif sampling_rate is not None:
-            raise TypeError("sampling_rate must be type float.")
-        # check parameter granularity for correct keyword
+        # check parameter sample_calc_mode for correct keyword
         if not isinstance(sample_calc_mode, str):
             raise TypeError("sample_calc_mode must be type string.")
         elif sample_calc_mode == 'user':
@@ -1254,6 +1257,17 @@ class Scope:
             sm_calc_mode = 3
         else:
             raise ValueError("sample_calc_mode must be one of the keyword 'avg', 'max', 'min' or 'user'")
+
+        # check parameter sampling_rate
+        if isinstance(sampling_rate, (float, int)):
+            # Log, if mode is not 'user'
+            if not sm_calc_mode == 0:
+                logging.info(f"{class_modulename} :Parameter 'sampling_rate' will be ignored due to sample_calc_mode is not 'user'")
+            if sampling_rate <= 0:
+                raise ValueError("sampling_rate must greater 0.0")
+        elif sampling_rate is not None:
+            raise TypeError("sampling_rate must be type float.")
+
         # check parameter shift
         if (not isinstance(shift, (float, int))) and (shift is not None):
             raise TypeError("shift must be type float.")
@@ -1264,6 +1278,9 @@ class Scope:
 
         # calculate the all parameterstime range for each data set
         for count, channel_dataset in enumerate(channel_datasets):
+            # check if dataset has got minimum 2 entries
+            if len(channel_dataset.time) < 2:
+                raise ValueError(f"input channel no.{count+1} has got less than 2 sample points. Minimum 2 sample points are required")
             # time range
             ch_range.append([np.min(channel_dataset.time), np.max(channel_dataset.time)])
             # sum of time range
@@ -1316,14 +1333,9 @@ class Scope:
             raise ValueError("sampling_rate is too high and exeed memory capacity.")
 
         # check if shift is not set
-        if not isinstance(shift, float):
-            # calculate shift
-            shift = np.mod(channel_dataset.time[0], period)
-        else:
-            shift = np.mod(shift, period)
-
-        # debug
-        print(f"Periode: {period} shift {shift}")
+        if not isinstance(shift, (float, int)):
+            # Initialize shift
+            shift = 0
 
         # result list
         unified_datasets = []
@@ -1333,8 +1345,13 @@ class Scope:
 
         # for loop over all channels
         for dataset_id, channel_dataset in enumerate(channel_datasets):
-            # Calculate the first sample point
-            sm_point = channel_dataset.time[0] + np.mod((channel_dataset.time[0] - adj_period), period)
+            # calculate the first sample point
+            d_sm_point = np.mod((channel_dataset.time[0] - adj_period), period)
+            # check if period matches
+            if d_sm_point == 0:
+                d_sm_point = period
+            # calculate the first sample point
+            sm_point = channel_dataset.time[0] - d_sm_point + period
             # create new scope object as copy from origin dataset, but with empty time and data arrays
             unified_dataset = copy.deepcopy(channel_dataset)
             unified_dataset.time = np.array([])
@@ -1368,6 +1385,9 @@ class Scope:
             # check if the data set is empty
             if len(unified_dataset.time) == 0:
                 logging.warning(f"Dataset : {data_set_id} is empty.")
+
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are provided={len(unified_datasets)}")
 
         return unified_datasets
 
