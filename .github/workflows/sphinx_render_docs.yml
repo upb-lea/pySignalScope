@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      IS_TEST: True
     permissions:
       contents: write
     steps:
