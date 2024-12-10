@@ -264,7 +264,7 @@ class Impedance:
 
         :param channel_list: List with impedances
         :type channel_list: List
-        :param figure_size: figure size as tuple in inch, e.g. (4,3)
+        :param figure_size: figure size as tuple in mm, e.g. (80, 80)
         :type figure_size: Tuple
         """
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=[x / 25.4 for x in figure_size] if figure_size is not None else None)
@@ -593,6 +593,8 @@ class Impedance:
         :return: Impedance channel as inductance
         :rtype: ImpedanceChannel
         """
+        if not isinstance(channel, ImpedanceChannel):
+            raise TypeError("channel must be type ImpedanceChannel.")
         inductance_phase = 90 * np.ones_like(channel.phase_deg)
         inductance_impedance = channel.impedance * np.sin(np.deg2rad(channel.phase_deg))
 
@@ -612,6 +614,8 @@ class Impedance:
         :return: Impedance channel as inductance
         :rtype: ImpedanceChannel
         """
+        if not isinstance(channel, ImpedanceChannel):
+            raise TypeError("channel must be type ImpedanceChannel.")
         resistance_phase = np.zeros_like(channel.phase_deg)
         resistance_impedance = channel.impedance * np.cos(np.deg2rad(channel.phase_deg))
 
@@ -631,9 +635,58 @@ class Impedance:
         :return: Impedance channel as inductance
         :rtype: ImpedanceChannel
         """
+        if not isinstance(channel, ImpedanceChannel):
+            raise TypeError("channel must be type ImpedanceChannel.")
         capacitance_phase = -90 * np.ones_like(channel.phase_deg)
         capacitance_impedance = -channel.impedance * np.sin(np.deg2rad(channel.phase_deg))
 
         capacitance_channel = Impedance.generate_impedance_object(channel.frequency, channel_impedance=capacitance_impedance, channel_phase=capacitance_phase)
 
         return capacitance_channel
+
+    @staticmethod
+    def plot_component(channel: ImpedanceChannel, figure_size: Optional[Tuple] = None) -> None:
+        """
+        Plot the component values.
+
+        Phase must be -90°, 0°, +90° for all entries.
+
+        :param channel: Impedance
+        :type channel: List
+        :param figure_size: figure size as tuple in mm, e.g. (80, 80)
+        :type figure_size: Tuple
+        """
+        if not isinstance(channel, ImpedanceChannel):
+            raise TypeError("channel must be type ImpedanceChannel.")
+
+        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=[x / 25.4 for x in figure_size] if figure_size is not None else None)
+
+        # type resistor
+        if np.array_equal(channel.phase_deg, np.zeros_like(channel.phase_deg)):
+            ax1.semilogx(channel.frequency, channel.impedance)
+            ax1.set_ylabel(r"Resistance / $\Omega$")
+
+        # type capacitance
+        elif np.array_equal(channel.phase_deg, -90 * np.ones_like(channel.phase_deg)):
+            capacitance = 1 / channel.impedance / 2 / np.pi / channel.frequency
+            capacitance[capacitance <= 0] = np.nan
+            ax1.semilogx(channel.frequency, capacitance)
+            ax1.set_ylabel(r"Capacitance / F")
+
+        # type inductance
+        elif np.array_equal(channel.phase_deg, 90 * np.ones_like(channel.phase_deg)):
+            inductance = channel.impedance / 2 / np.pi / channel.frequency
+            inductance[inductance <= 0] = np.nan
+            ax1.semilogx(channel.frequency, inductance)
+            ax1.set_ylabel(r"Inductance / H")
+        else:
+            raise ValueError("Can not detect type of component. Phase must be -90°, 0°, +90° for all entries.")
+
+        ax1.set_xlabel("Frequency / Hz")
+        ax1.grid()
+        ax2.semilogx(channel.frequency, channel.phase_deg)
+        ax2.grid()
+        ax2.set_xlabel("Frequency / Hz")
+        ax2.set_ylabel("Phase / °")
+
+        plt.show()

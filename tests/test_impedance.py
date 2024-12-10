@@ -241,3 +241,34 @@ def test_eq():
     ch_2 = pss.Impedance.copy(ch_1)
     ch_2 = pss.Impedance.modify(ch_2, channel_label=".-")
     assert not (ch_1 == ch_2)
+
+def test_to_resistance():
+    """Test to_resistance()."""
+    rlc = pss.Impedance.from_rlc(type_rlc="c", resistance=0.1, inductance=10e-9, capacitance=1e-6)
+    r = pss.Impedance.to_resistance(rlc)
+    # positive test
+    assert np.array_equal(r.phase_deg, np.zeros_like(r.phase_deg))
+    np.testing.assert_array_almost_equal(r.impedance, 0.1 * np.ones_like(r.impedance))
+    # type test
+    with pytest.raises(TypeError):
+        pss.Impedance.to_resistance("trial")
+
+def test_to_inductance():
+    """Test to_resistance()."""
+    rlc = pss.Impedance.from_rlc(type_rlc="c", resistance=0.1, inductance=10e-9, capacitance=1e-6)
+    inductance = pss.Impedance.to_inductance(rlc)
+    # positive test
+    assert np.array_equal(inductance.phase_deg, 90 * np.ones_like(inductance.phase_deg))
+    # type test
+    with pytest.raises(TypeError):
+        pss.Impedance.to_inductance("trial")
+
+def test_to_capacitance():
+    """Test to_resistance()."""
+    rlc = pss.Impedance.from_rlc(type_rlc="c", resistance=0.1, inductance=10e-9, capacitance=1e-6)
+    capacitance = pss.Impedance.to_capacitance(rlc)
+    # positive test
+    assert np.array_equal(capacitance.phase_deg, -90 * np.ones_like(capacitance.phase_deg))
+    # type test
+    with pytest.raises(TypeError):
+        pss.Impedance.to_capacitance("trial")
