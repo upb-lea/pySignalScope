@@ -580,3 +580,60 @@ class Impedance:
             raise TypeError(f"Loaded object is of type {type(loaded_scope_object)}, but should be type Scope.")
 
         return loaded_scope_object
+
+    @staticmethod
+    def to_inductance(channel: ImpedanceChannel) -> ImpedanceChannel:
+        """
+        Convert an ImpedanceChannel to a pure inductance ImpedanceChannel.
+
+        Ignore the resistive and capacitive part by trigonometric operation.
+
+        :param channel: Impedance channel object
+        :type channel: ImpedanceChannel
+        :return: Impedance channel as inductance
+        :rtype: ImpedanceChannel
+        """
+        inductance_phase = 90 * np.ones_like(channel.phase_deg)
+        inductance_impedance = channel.impedance * np.sin(np.deg2rad(channel.phase_deg))
+
+        inductance_channel = Impedance.generate_impedance_object(channel.frequency, channel_impedance=inductance_impedance, channel_phase=inductance_phase)
+
+        return inductance_channel
+
+    @staticmethod
+    def to_resistance(channel: ImpedanceChannel) -> ImpedanceChannel:
+        """
+        Convert an ImpedanceChannel to a pure resistive ImpedanceChannel.
+
+        Ignore the inductive and capacitive part by trigonometric operation.
+
+        :param channel: Impedance channel object
+        :type channel: ImpedanceChannel
+        :return: Impedance channel as inductance
+        :rtype: ImpedanceChannel
+        """
+        resistance_phase = np.zeros_like(channel.phase_deg)
+        resistance_impedance = channel.impedance * np.cos(np.deg2rad(channel.phase_deg))
+
+        resistance_channel = Impedance.generate_impedance_object(channel.frequency, channel_impedance=resistance_impedance, channel_phase=resistance_phase)
+
+        return resistance_channel
+
+    @staticmethod
+    def to_capacitance(channel: ImpedanceChannel) -> ImpedanceChannel:
+        """
+        Convert an ImpedanceChannel to a pure capacitance ImpedanceChannel.
+
+        Ignore the resistive and inductive part by trigonometric operation.
+
+        :param channel: Impedance channel object
+        :type channel: ImpedanceChannel
+        :return: Impedance channel as inductance
+        :rtype: ImpedanceChannel
+        """
+        capacitance_phase = -90 * np.ones_like(channel.phase_deg)
+        capacitance_impedance = -channel.impedance * np.sin(np.deg2rad(channel.phase_deg))
+
+        capacitance_channel = Impedance.generate_impedance_object(channel.frequency, channel_impedance=capacitance_impedance, channel_phase=capacitance_phase)
+
+        return capacitance_channel
