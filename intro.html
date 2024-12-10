@@ -57,8 +57,84 @@
 <li class="toctree-l2"><a class="reference internal" href="#changelog"><span class="sectnum">1.7 </span>Changelog</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#module-pysignalscope.functions"><span class="sectnum">2 </span>pySignalScope function documentation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#pysignalscope-function-documentation"><span class="sectnum">2 </span>pySignalScope function documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.Channel"><code class="docutils literal notranslate"><span class="pre">Channel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.color"><code class="docutils literal notranslate"><span class="pre">Channel.color</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.data"><code class="docutils literal notranslate"><span class="pre">Channel.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.label"><code class="docutils literal notranslate"><span class="pre">Channel.label</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.linestyle"><code class="docutils literal notranslate"><span class="pre">Channel.linestyle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.source"><code class="docutils literal notranslate"><span class="pre">Channel.source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.time"><code class="docutils literal notranslate"><span class="pre">Channel.time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Channel.unit"><code class="docutils literal notranslate"><span class="pre">Channel.unit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.Scope"><code class="docutils literal notranslate"><span class="pre">Scope</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.add"><code class="docutils literal notranslate"><span class="pre">Scope.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.calc_abs"><code class="docutils literal notranslate"><span class="pre">Scope.calc_abs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.calc_absmean"><code class="docutils literal notranslate"><span class="pre">Scope.calc_absmean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.calc_mean"><code class="docutils literal notranslate"><span class="pre">Scope.calc_mean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.calc_rms"><code class="docutils literal notranslate"><span class="pre">Scope.calc_rms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.compare_channels"><code class="docutils literal notranslate"><span class="pre">Scope.compare_channels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.copy"><code class="docutils literal notranslate"><span class="pre">Scope.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.derivative"><code class="docutils literal notranslate"><span class="pre">Scope.derivative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.fft"><code class="docutils literal notranslate"><span class="pre">Scope.fft()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_geckocircuits"><code class="docutils literal notranslate"><span class="pre">Scope.from_geckocircuits()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_lecroy"><code class="docutils literal notranslate"><span class="pre">Scope.from_lecroy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_lecroy_remote"><code class="docutils literal notranslate"><span class="pre">Scope.from_lecroy_remote()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_numpy"><code class="docutils literal notranslate"><span class="pre">Scope.from_numpy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_tektronix"><code class="docutils literal notranslate"><span class="pre">Scope.from_tektronix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_tektronix_mso58"><code class="docutils literal notranslate"><span class="pre">Scope.from_tektronix_mso58()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.from_tektronix_mso58_multichannel"><code class="docutils literal notranslate"><span class="pre">Scope.from_tektronix_mso58_multichannel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.generate_channel"><code class="docutils literal notranslate"><span class="pre">Scope.generate_channel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.integrate"><code class="docutils literal notranslate"><span class="pre">Scope.integrate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.load"><code class="docutils literal notranslate"><span class="pre">Scope.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.low_pass_filter"><code class="docutils literal notranslate"><span class="pre">Scope.low_pass_filter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.modify"><code class="docutils literal notranslate"><span class="pre">Scope.modify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.multiply"><code class="docutils literal notranslate"><span class="pre">Scope.multiply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.plot_channels"><code class="docutils literal notranslate"><span class="pre">Scope.plot_channels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.plot_shiftchannels"><code class="docutils literal notranslate"><span class="pre">Scope.plot_shiftchannels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.save"><code class="docutils literal notranslate"><span class="pre">Scope.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.save_figure"><code class="docutils literal notranslate"><span class="pre">Scope.save_figure()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.short_to_period"><code class="docutils literal notranslate"><span class="pre">Scope.short_to_period()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.square"><code class="docutils literal notranslate"><span class="pre">Scope.square()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.subtract"><code class="docutils literal notranslate"><span class="pre">Scope.subtract()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.ImpedanceChannel"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.color"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.color</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.frequency"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.frequency</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.impedance"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.impedance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.label"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.label</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.linestyle"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.linestyle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.phase_deg"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.phase_deg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.source"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.ImpedanceChannel.unit"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel.unit</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.Impedance"><code class="docutils literal notranslate"><span class="pre">Impedance</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.calc_re_im_parts"><code class="docutils literal notranslate"><span class="pre">Impedance.calc_re_im_parts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.calc_rlc"><code class="docutils literal notranslate"><span class="pre">Impedance.calc_rlc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.check_capacitor_from_waynekerr"><code class="docutils literal notranslate"><span class="pre">Impedance.check_capacitor_from_waynekerr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.copy"><code class="docutils literal notranslate"><span class="pre">Impedance.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.from_kemet_ksim"><code class="docutils literal notranslate"><span class="pre">Impedance.from_kemet_ksim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.from_rlc"><code class="docutils literal notranslate"><span class="pre">Impedance.from_rlc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.from_waynekerr"><code class="docutils literal notranslate"><span class="pre">Impedance.from_waynekerr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.generate_impedance_object"><code class="docutils literal notranslate"><span class="pre">Impedance.generate_impedance_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.load"><code class="docutils literal notranslate"><span class="pre">Impedance.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.modify"><code class="docutils literal notranslate"><span class="pre">Impedance.modify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.plot_component"><code class="docutils literal notranslate"><span class="pre">Impedance.plot_component()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.plot_impedance"><code class="docutils literal notranslate"><span class="pre">Impedance.plot_impedance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.plot_inductance_and_ac_resistance"><code class="docutils literal notranslate"><span class="pre">Impedance.plot_inductance_and_ac_resistance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.save"><code class="docutils literal notranslate"><span class="pre">Impedance.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.to_capacitance"><code class="docutils literal notranslate"><span class="pre">Impedance.to_capacitance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.to_inductance"><code class="docutils literal notranslate"><span class="pre">Impedance.to_inductance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Impedance.to_resistance"><code class="docutils literal notranslate"><span class="pre">Impedance.to_resistance()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#pysignalscope.functions.fft"><code class="docutils literal notranslate"><span class="pre">fft()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.generalplotsettings.global_plot_settings_font_latex"><code class="docutils literal notranslate"><span class="pre">global_plot_settings_font_latex()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.generalplotsettings.global_plot_settings_font_sansserif"><code class="docutils literal notranslate"><span class="pre">global_plot_settings_font_sansserif()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pysignalscope.generalplotsettings.update_font_size"><code class="docutils literal notranslate"><span class="pre">update_font_size()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -163,9 +239,1147 @@
 <p>Find the changelog <a class="reference external" href="CHANGELOG.md">here</a>.</p>
 </section>
 </section>
-<section id="module-pysignalscope.functions">
-<span id="pysignalscope-function-documentation"></span><h1><span class="sectnum">2 </span>pySignalScope function documentation<a class="headerlink" href="#module-pysignalscope.functions" title="Link to this heading"></a></h1>
-<p>Functions uses by the scope, e.g. the fft-function.</p>
+<section id="pysignalscope-function-documentation">
+<h1><span class="sectnum">2 </span>pySignalScope function documentation<a class="headerlink" href="#pysignalscope-function-documentation" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pysignalscope.Channel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysignalscope.</span></span><span class="sig-name descname"><span class="pre">Channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modulename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Channel" title="Link to this definition"></a></dt>
+<dd><p>Dataclass for Channel objects in a special format, to keep labels, units and voltages belonging to a certain curve.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.color">
+<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.Channel.color" title="Link to this definition"></a></dt>
+<dd><p>channel color in a plot (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#pysignalscope.Channel.data" title="Link to this definition"></a></dt>
+<dd><p>data series of the channel (mandatory)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.label">
+<span class="sig-name descname"><span class="pre">label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.Channel.label" title="Link to this definition"></a></dt>
+<dd><p>channel label displayed in a plot (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.linestyle">
+<span class="sig-name descname"><span class="pre">linestyle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.Channel.linestyle" title="Link to this definition"></a></dt>
+<dd><p>channel linestyle in a plot (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.Channel.source" title="Link to this definition"></a></dt>
+<dd><p>channel source, additional meta data (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.time">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#pysignalscope.Channel.time" title="Link to this definition"></a></dt>
+<dd><p>time series of the channel (mandatory)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.Channel.unit">
+<span class="sig-name descname"><span class="pre">unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.Channel.unit" title="Link to this definition"></a></dt>
+<dd><p>channel unit displayed in a plot (optional)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pysignalscope.Scope">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysignalscope.</span></span><span class="sig-name descname"><span class="pre">Scope</span></span><a class="headerlink" href="#pysignalscope.Scope" title="Link to this definition"></a></dt>
+<dd><p>Class to share channel figures (multiple in a scope) in a special format, to keep labels, units and voltages belonging to a certain curve.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.add">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.add" title="Link to this definition"></a></dt>
+<dd><p>Add data of several Channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channels</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Input channels</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel resulting from added input channels</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.calc_abs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_abs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.calc_abs" title="Link to this definition"></a></dt>
+<dd><p>Modify the existing scope channel so that the signal is rectified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>abs(channel.data).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.calc_absmean">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_absmean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pysignalscope.Scope.calc_absmean" title="Link to this definition"></a></dt>
+<dd><p>Calculate the absolute mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>abs(mean(self.data))</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.calc_mean">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pysignalscope.Scope.calc_mean" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean of the given channel. Make sure to provide a SINGLE PERIOD of the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean(self.data)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.calc_rms">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#pysignalscope.Scope.calc_rms" title="Link to this definition"></a></dt>
+<dd><p>Calculate the RMS of a given channel. Make sure to provide a SINGLE PERIOD of the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>rms(self.data).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.compare_channels">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compare_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timebase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Scope.compare_channels" title="Link to this definition"></a></dt>
+<dd><p>Graphical comparison for datasets. Note: Datasets need to be type Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channels</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – dataset according to Channel</p></li>
+<li><p><strong>shift</strong> (<em>list</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>float</em><em>]</em><em>]</em>) – phase shift in a list for every input dataset</p></li>
+<li><p><strong>scale</strong> (<em>list</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>float</em><em>]</em><em>]</em>) – channel scale factor in a list for every input dataset</p></li>
+<li><p><strong>offset</strong> (<em>list</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>float</em><em>]</em><em>]</em>) – channel offset in a list for every input dataset</p></li>
+<li><p><strong>timebase</strong> (<em>str</em>) – timebase, can be ‘s’, ‘ms’, ‘us’, ‘ns’ or ‘ps’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.copy">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.copy" title="Link to this definition"></a></dt>
+<dd><p>Create a deepcopy of Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.derivative">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.derivative" title="Link to this definition"></a></dt>
+<dd><p>Get the derivative of the data.</p>
+<p>In case of measured input signal, it is useful to apply a low-pass filter first.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Channel object</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – oder of derivative, e.g. 1st order, …</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.fft">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Scope.fft" title="Link to this definition"></a></dt>
+<dd><p>Perform fft to the signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – True to show a figure</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy-array [[frequency-vector],[amplitude-vector],[phase-vector]]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>npt.NDArray[list]</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">channel_example</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="mf">10e-3</span><span class="p">,</span> <span class="mf">15e-3</span><span class="p">,</span> <span class="mf">20e-3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span> <span class="n">f0</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">channel_example</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_geckocircuits">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_geckocircuits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt_datafile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.from_geckocircuits" title="Link to this definition"></a></dt>
+<dd><p>Convert a gecko simulation file to Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>txt_datafile</strong> (<em>str</em>) – path to text file, generated by geckoCIRCUITS</p></li>
+<li><p><strong>f0</strong> (<em>float</em>) – fundamental frequency [optional]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Channels</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_lecroy">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_lecroy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">csv_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.from_lecroy" title="Link to this definition"></a></dt>
+<dd><p>Translate LeCroy csv-files to a list of Channel class objects.</p>
+<p>Note: insert multiple .csv-files to get a list of all channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>csv_files</strong> (<em>str</em>) – csv-file from tektronix scope</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Channel objects</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[‘Channel’]</p>
+</dd>
+<dt class="field-even">Example single channel<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">current_prim</span><span class="p">]</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_lecroy</span><span class="p">(</span><span class="s1">&#39;/path/to/lecroy/files/current_prim.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Example multiple channels channel<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">current_prim</span><span class="p">,</span> <span class="n">current_sec</span><span class="p">]</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_lecroy</span><span class="p">(</span><span class="s1">&#39;/path/one/current_prim.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;/path/two/current_sec.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_lecroy_remote">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_lecroy_remote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope_channel_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.from_lecroy_remote" title="Link to this definition"></a></dt>
+<dd><p>Get the data of a LeCroy oscilloscope and return a Channel object with the collected data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scope_channel_number</strong> (<em>int</em>) – number of the channel</p></li>
+<li><p><strong>ip_address</strong> (<em>str</em>) – ip-address of the oscilloscope</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label name of channel</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel object with collected data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>‘Channel’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_numpy">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_vector_t_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.from_numpy" title="Link to this definition"></a></dt>
+<dd><p>Bring a numpy or list array to an instance of Channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>period_vector_t_i</strong> (<em>npt.ArrayLike</em>) – input vector np.array([time], [signal])</p></li>
+<li><p><strong>mode</strong> (<em>str</em>) – ‘rad’ [default], ‘deg’ or ‘time’</p></li>
+<li><p><strong>f0</strong> (<em>float</em>) – fundamental frequency in Hz</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – channel label</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – channel unit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="mf">10e-3</span><span class="p">,</span> <span class="mf">15e-3</span><span class="p">,</span> <span class="mf">20e-3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span> <span class="n">f0</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_tektronix">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_tektronix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.from_tektronix" title="Link to this definition"></a></dt>
+<dd><p>Translate tektronix csv-file to a tuple of Channel.</p>
+<p>Note: Returns a tuple with four Channels (Tektronix stores multiple channel data in single .csv-file,
+this results to return of a tuple containing Channel’s)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>csv_file</strong> (<em>str</em>) – csv-file from tektronix scope</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of Channel, depending on the channel count stored in the .csv-file</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a>, <a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a>, <a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a>, <a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a>]</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">voltage</span><span class="p">,</span> <span class="n">current_prim</span><span class="p">,</span> <span class="n">current_sec</span><span class="p">]</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_tektronix</span><span class="p">(</span><span class="s1">&#39;/path/to/tektronix/file/tek0000.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_tektronix_mso58">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_tektronix_mso58</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">csv_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.from_tektronix_mso58" title="Link to this definition"></a></dt>
+<dd><p>Translate tektronix csv-files to a list of Channel class objects.</p>
+<p>Note: insert multiple .csv-files to get a list of all channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>csv_files</strong> (<em>str</em>) – csv-file from tektronix scope</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Channel objects</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[‘Channel’]</p>
+</dd>
+<dt class="field-even">Example single channel<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">current_prim</span><span class="p">]</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_tektronix_mso58</span><span class="p">(</span><span class="s1">&#39;/path/to/lecroy/files/current_prim.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Example multiple channels channel<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">current_prim</span><span class="p">,</span> <span class="n">current_sec</span><span class="p">]</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_tektronix_mso58</span><span class="p">(</span><span class="s1">&#39;/path/one/current_prim.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;/path/two/current_sec.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.from_tektronix_mso58_multichannel">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_tektronix_mso58_multichannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.from_tektronix_mso58_multichannel" title="Link to this definition"></a></dt>
+<dd><p>Translate tektronix csv-files to a list of Channel class objects.</p>
+<p>Note: insert multiple .csv-files to get a list of all channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>csv_file</strong> (<em>str</em>) – csv-file from tektronix scope</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Channel objects</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[‘Channel’]</p>
+</dd>
+<dt class="field-even">Example multiple channel csv-file<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">current_prim</span><span class="p">,</span> <span class="n">current_sec</span><span class="p">]</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_tektronix_mso58_multichannel</span><span class="p">(</span><span class="s1">&#39;/path/to/lecroy/files/currents.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.generate_channel">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.generate_channel" title="Link to this definition"></a></dt>
+<dd><p>Generate a channel object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>, </em><em>np.ndarray</em><em>]</em>) – time series</p></li>
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>, </em><em>np.ndarray</em><em>]</em>) – channel data</p></li>
+<li><p><strong>label</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – channel label</p></li>
+<li><p><strong>unit</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – channel unit</p></li>
+<li><p><strong>color</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – channel color</p></li>
+<li><p><strong>source</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – channel source</p></li>
+<li><p><strong>linestyle</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – channel linestyle</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.integrate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Scope.integrate" title="Link to this definition"></a></dt>
+<dd><p>Integrate a channels signal.</p>
+<p>The default use-case is calculating energy loss (variable naming is for the use case to calculate
+switch energy from power loss curve, e.g. from double-pulse measurement)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – channel with power</p></li>
+<li><p><strong>label</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – channel label</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>returns a Channel-class, what integrates the input values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.load" title="Link to this definition"></a></dt>
+<dd><p>Load a Channel file from the hard disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – filepath</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>loaded Channel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.low_pass_filter">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">low_pass_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angular_frequency_rad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.low_pass_filter" title="Link to this definition"></a></dt>
+<dd><p>Implement a butterworth filter on the given signal.</p>
+<p>See also: <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.lfilter.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Channel object</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – filter order</p></li>
+<li><p><strong>angular_frequency_rad</strong> (<em>float</em>) – angular frequency in rad. Valid for values 0…1. Smaller value means lower filter frequency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel object with filtered data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.modify">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_shift_rotate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_cut_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_cut_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.modify" title="Link to this definition"></a></dt>
+<dd><p>Modify channel data like metadata or add a factor or offset to channel data.</p>
+<p>Useful for classes with time/data, but without labels or units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p></li>
+<li><p><strong>data_factor</strong> (<em>float</em>) – multiply self.data by data_factor</p></li>
+<li><p><strong>data_offset</strong> (<em>float</em>) – add an offset to self.data</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label to add to the Channel-class</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – unit to add to the Channel-class</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – Color of a channel</p></li>
+<li><p><strong>source</strong> (<em>str</em>) – Source of a channel, e.g. ‘GeckoCIRCUITS’, ‘Numpy’, ‘Tektronix-Scope’, …</p></li>
+<li><p><strong>time_shift</strong> (<em>float</em>) – add time to the time base</p></li>
+<li><p><strong>time_shift_rotate</strong> (<em>float</em>) – shifts a signal by the given time, but the end of the signal will
+come to the beginning of the signal. Only recommended for periodic signals!</p></li>
+<li><p><strong>time_cut_min</strong> (<em>float</em>) – removes all time units smaller than the given one</p></li>
+<li><p><strong>time_cut_max</strong> (<em>float</em>) – removes all time units bigger than the given one</p></li>
+<li><p><strong>linestyle</strong> (<em>str</em>) – channel linestyle, e.g. ‘–’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.multiply">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multiply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.multiply" title="Link to this definition"></a></dt>
+<dd><p>Multiply two datasets, e.g. to calculate the power from voltage and current.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_1</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – channel_1, e.g. voltage channel</p></li>
+<li><p><strong>channel_2</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – channel_2, e.g. current channel</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label for new dataset_channel</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Multiplication of two datasets, e.g. power from voltage and current</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.plot_channels">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timebase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">figure</span></span></span><a class="headerlink" href="#pysignalscope.Scope.plot_channels" title="Link to this definition"></a></dt>
+<dd><p>Plot channel datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">ch3</span><span class="p">,</span> <span class="n">ch4</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_tektronix</span><span class="p">(</span><span class="s1">&#39;tektronix_csv_file.csv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">plot_channels</span><span class="p">([</span><span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">ch3</span><span class="p">],[</span><span class="n">ch4</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Plots two subplots. First one has ch1, ch2, ch3, second one has ch4.</p>
+<p>Y-axis labels are set according to the unit, presented in the last curve for the subplot.
+For own axis labeling, use as unit for the last channel your label, e.g. r”$i_T$ in A”.
+Note, that the r before the string gives the command to accept LaTeX formulas, like $$.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>list</em><em>[</em><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a><em>]</em>) – list of datasets</p></li>
+<li><p><strong>timebase</strong> (<em>str</em>) – timebase, can be ‘s’, ‘ms’, ‘us’, ‘ns’ or ‘ps’</p></li>
+<li><p><strong>figure_size</strong> (<em>Tuple</em>) – None for auto-fit; fig_size for matplotlib (width, length in mm)</p></li>
+<li><p><strong>figure_directory</strong> (<em>str</em>) – full path with file extension</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Plots</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.plot_shiftchannels">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_shiftchannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shiftstep_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shiftstep_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displayrange_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">displayrange_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.plot_shiftchannels" title="Link to this definition"></a></dt>
+<dd><p>Plot channel datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">,</span> <span class="n">ch3</span><span class="p">,</span> <span class="n">ch4</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">from_tektronix</span><span class="p">(</span><span class="s1">&#39;tektronix_csv_file.csv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">plot_shiftchannels</span><span class="p">([</span><span class="n">ch1</span><span class="p">,</span> <span class="n">ch2</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
+left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
+If you release the left mouse button the area is marked. By moving the mouse within the area an perform
+a button press, you confirm and you zoom in the area. If you perform the left mouse button click outside
+of the marked area, you reject the selection. You reject the selection always by clicking the right mouse button independent you zoom out.
+button. If no area is selected or wait for confirmation, the click on the right mouse button leads to zooming out.
+There is a zoom limit in both directions. In this case, the rectangle shows the possible area (becomes larger),
+after you have release the left mouse button.</p>
+<p>Y-axis labels are set according to the unit, presented in the last curve for the subplot.
+For own axis labeling, use as unit for the last channel your label, e.g. r”$i_T$ in A”.
+Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
+The parameters has to fullfill conditions:
+Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channels</strong> (<em>list</em><em>[</em><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a><em>]</em>) – list of datasets</p></li>
+<li><p><strong>shiftstep_x</strong> (<em>float</em>) – shift step in x-direction (optional parameter)
+Has to be in range ‘minimal difference of 2 points of the channels’
+to (‘displayed maximal x-value minus displayed minimal x-value’)/10</p></li>
+<li><p><strong>shiftstep_y</strong> (<em>float</em>) – shift step in y-direction (optional parameter)
+Has to be in range (‘displayed maximal y-value minus displayed minimal y-value’)/200
+to (‘displayed maximal y-value minus displayed minimal y-value’)/10</p></li>
+<li><p><strong>displayrange_x</strong> (<em>tuple</em><em> of </em><em>float</em>) – Display range limits in x-direction (min_x, max_x)  (optional parameter)
+Definition: delta_min_x = 100 * ‘minimum distance between 2 samples’, min_x = ‘minimal x-value (of all channels)’,
+max_x = ‘maximal x-value (of all channels)’,  delta_x = max_x-min_x
+The range for displayrange_x[0]: From min_x-delta_x to max_x-delta_min_x
+The range for displayrange_x[1]: From min_x+delta_min_x to max_x+delta_x
+and displayrange_x[1]-displayrange_x[0]&gt;=delta_min_x</p></li>
+<li><p><strong>displayrange_y</strong> (<em>tuple</em><em> of </em><em>float</em>) – Display range limits in y-direction (min_y, max_y) (optional parameter)
+Definition: delta_y = max_y-min_y, min_y = ‘minimal y-value (of all channels)’,
+max_y = ‘maximal y-value (of all channels)’,  delta_min_y = delta_y/100
+The range for displayrange_y[0]: From min_y-delta_y to max_y-delta_min_y*50
+The range for displayrange_y[1]: From min_y+delta_min_y*50 to max_y-delta_y
+and displayrange_y[1]-displayrange_y[0]&gt;=delta_min_y*50</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of x and y-shifts per channel</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.save">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.Scope.save" title="Link to this definition"></a></dt>
+<dd><p>Save a Channel object to hard disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Channel object</p></li>
+<li><p><strong>filepath</strong> (<em>str</em>) – filepath including file name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.save_figure">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Scope.save_figure" title="Link to this definition"></a></dt>
+<dd><p>Save the given figure object as pdf.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figure</strong> (<em>matplotlib.pyplot.figure</em>) – figure object</p></li>
+<li><p><strong>fig_name</strong> (<em>str</em>) – figure name for pdf file naming</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.short_to_period">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">short_to_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Scope.short_to_period" title="Link to this definition"></a></dt>
+<dd><p>Short a given Channel object to a period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p></li>
+<li><p><strong>f0</strong> (<em>float</em>) – frequency in Hz</p></li>
+<li><p><strong>time_period</strong> (<em>float</em>) – time period in seconds</p></li>
+<li><p><strong>start_time</strong> (<em>float</em>) – start time in seconds</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.square">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">square</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.square" title="Link to this definition"></a></dt>
+<dd><p>Square the data channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Scope channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>channel.data ** 2 as Channel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.subtract">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></span><a class="headerlink" href="#pysignalscope.Scope.subtract" title="Link to this definition"></a></dt>
+<dd><p>Subtract data of several Channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channels</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – Input channels</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel resulting from first input channel minus all following input channels</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel">Channel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysignalscope.</span></span><span class="sig-name descname"><span class="pre">ImpedanceChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impedance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_deg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.ImpedanceChannel" title="Link to this definition"></a></dt>
+<dd><p>Dataclass for ImpedanceChannel objects in a special format, to keep labels, units and voltages belonging to a certain curve.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.color">
+<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.color" title="Link to this definition"></a></dt>
+<dd><p>channel color displayed in a plot (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.frequency">
+<span class="sig-name descname"><span class="pre">frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.frequency" title="Link to this definition"></a></dt>
+<dd><p>frequency data (mandatory)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mandatory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.impedance">
+<span class="sig-name descname"><span class="pre">impedance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.impedance" title="Link to this definition"></a></dt>
+<dd><p>impedance data (mandatory)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mandatory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.label">
+<span class="sig-name descname"><span class="pre">label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.label" title="Link to this definition"></a></dt>
+<dd><p>channel label displayed in a plot (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.linestyle">
+<span class="sig-name descname"><span class="pre">linestyle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.linestyle" title="Link to this definition"></a></dt>
+<dd><p>channel linestyle displayed in a plot (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.phase_deg">
+<span class="sig-name descname"><span class="pre">phase_deg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.phase_deg" title="Link to this definition"></a></dt>
+<dd><p>phase data in degree (mandatory)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mandatory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.source" title="Link to this definition"></a></dt>
+<dd><p>channel source, additional meta data (optional)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pysignalscope.ImpedanceChannel.unit">
+<span class="sig-name descname"><span class="pre">unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pysignalscope.ImpedanceChannel.unit" title="Link to this definition"></a></dt>
+<dd><p>channel unit displayed in a plot (optional)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pysignalscope.Impedance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pysignalscope.</span></span><span class="sig-name descname"><span class="pre">Impedance</span></span><a class="headerlink" href="#pysignalscope.Impedance" title="Link to this definition"></a></dt>
+<dd><p>Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.calc_re_im_parts">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_re_im_parts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_figure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.Impedance.calc_re_im_parts" title="Link to this definition"></a></dt>
+<dd><p>Calculate real and imaginary part of Impedance measurement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance object</p></li>
+<li><p><strong>show_figure</strong> (<em>bool</em>) – Plot figure if true</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List with [(frequency, frequency_real_part), (frequency, frequency_imag_part)]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.calc_rlc">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_rlc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_rlc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_calc_c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_calc_l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#pysignalscope.Impedance.calc_rlc" title="Link to this definition"></a></dt>
+<dd><p>Calculate R, L, C values for given ImpedanceChannel.</p>
+<p>Calculated values will be drawn in a plot for comparison with the given data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance channel object</p></li>
+<li><p><strong>type_rlc</strong> (<em>str</em>) – Type ‘R’, ‘L’, ‘C’</p></li>
+<li><p><strong>f_calc_c</strong> (<em>float</em>) – Choose the frequency for calculation of C-value</p></li>
+<li><p><strong>f_calc_l</strong> (<em>float</em>) – Choose the frequency for calculation of L-value</p></li>
+<li><p><strong>plot_figure</strong> (<em>bool</em>) – True/False [default] to plot the figure</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Values for R, L, C</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">example_data_rlc</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Impedance</span><span class="o">.</span><span class="n">from_rlc</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">500e-6</span><span class="p">,</span> <span class="mf">10e-12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recalculated_r</span><span class="p">,</span> <span class="n">recalculated_l</span><span class="p">,</span> <span class="n">recalculated_c</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Impedance</span><span class="o">.</span><span class="n">calc_rlc</span><span class="p">(</span><span class="n">example_data_rlc</span><span class="p">,</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="n">f_calc_l</span><span class="o">=</span><span class="mf">10e3</span><span class="p">,</span> <span class="n">f_calc_c</span><span class="o">=</span><span class="mf">10e7</span><span class="p">,</span> <span class="n">plot_figure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.check_capacitor_from_waynekerr">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_capacitor_from_waynekerr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_capacitance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.check_capacitor_from_waynekerr" title="Link to this definition"></a></dt>
+<dd><p>Check a capacitor impedance .csv-curve against a target capacitance.</p>
+<p>Reads the .csv-curve from wayne kerr impedance analyzer, calculates r, l, and c from the measurement
+and shows the derivation from the target capacitance. Visualizes the curves in case of plot_figure is set
+to true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_filename</strong> (<em>str</em>) – filepath to Wayne Kerr impedance analyzer .csv-file</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – channel label for the plot</p></li>
+<li><p><strong>target_capacitance</strong> (<em>float</em>) – target capacitance in F</p></li>
+<li><p><strong>plot_figure</strong> (<em>bool</em>) – Set to True for plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>measured capacitor as impedance curve</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.copy">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.copy" title="Link to this definition"></a></dt>
+<dd><p>Create a deepcopy of ImpedanceChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Deepcopy of the impedance object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.from_kemet_ksim">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_kemet_ksim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.from_kemet_ksim" title="Link to this definition"></a></dt>
+<dd><p>Import data from kemet “ksim” tool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>csv_filename</strong> (<em>str</em>) – path to csv-file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ImpedanceChannel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.from_rlc">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rlc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_rlc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inductance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capacitance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.from_rlc" title="Link to this definition"></a></dt>
+<dd><p>Calculate the impedance over frequency for R - L - C - combination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_rlc</strong> (<em>str</em>) – Type of network, can be ‘R’, ‘L’ or ‘C’</p></li>
+<li><p><strong>resistance</strong> (<em>float</em>) – resistance</p></li>
+<li><p><strong>inductance</strong> (<em>float</em>) – inductance</p></li>
+<li><p><strong>capacitance</strong> (<em>bool</em>) – capacitance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Impedance object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">impedance_channel_object</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Impedance</span><span class="o">.</span><span class="n">from_rlc</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mf">10e-3</span><span class="p">,</span> <span class="mf">100e-9</span><span class="p">,</span> <span class="mf">36e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>Type C and RLC</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span><span class="n">R</span><span class="o">---</span><span class="n">L</span><span class="o">---</span><span class="n">C</span><span class="o">---</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Type R</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---+---</span><span class="n">R</span><span class="o">---</span><span class="n">L</span><span class="o">---+---</span>
+   <span class="o">|</span>           <span class="o">|</span>
+   <span class="o">+-----</span><span class="n">C</span><span class="o">-----+</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Type L</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---+---</span><span class="n">L</span><span class="o">---+---</span>
+   <span class="o">|</span>       <span class="o">|</span>
+   <span class="o">+---</span><span class="n">C</span><span class="o">---+</span>
+   <span class="o">|</span>       <span class="o">|</span>
+   <span class="o">+---</span><span class="n">R</span><span class="o">---+</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.from_waynekerr">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_waynekerr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.from_waynekerr" title="Link to this definition"></a></dt>
+<dd><p>Bring csv-data from wayne kerr 6515b to Impedance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_filename</strong> (<em>str</em>) – .csv filename from impedance analyzer</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label to add to the Channel-class, optional.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ImpedanceChannel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.generate_impedance_object">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_impedance_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impedance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.generate_impedance_object" title="Link to this definition"></a></dt>
+<dd><p>Generate the ImpedanceChannel object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>Union</em><em>[</em><em>List</em><em>, </em><em>npt.ArrayLike</em><em>]</em>) – channel frequency in Hz</p></li>
+<li><p><strong>impedance</strong> (<em>Union</em><em>[</em><em>List</em><em>, </em><em>npt.ArrayLike</em><em>]</em>) – channel impedance in Ohm</p></li>
+<li><p><strong>phase</strong> (<em>Union</em><em>[</em><em>List</em><em>, </em><em>npt.ArrayLike</em><em>]</em>) – channel phase in degree</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – channel label to show in plots</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – channel unit to show in plots</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – channel color</p></li>
+<li><p><strong>source</strong> (<em>str</em>) – Source, e.g. Measurement xy, Device yy</p></li>
+<li><p><strong>linestyle</strong> (<em>str</em>) – line style for the plot e.g. ‘–’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ImpedanceChannel</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.load" title="Link to this definition"></a></dt>
+<dd><p>Load an ImpedanceChannel file from the hard disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – filepath</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>loaded ImpedanceChannel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.modify">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">impedance_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">impedance_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linestyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_cut_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_cut_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.modify" title="Link to this definition"></a></dt>
+<dd><p>Modify channel data like metadata or add a factor or offset to channel data.</p>
+<p>Useful for ImpedanceChannel with frequency/data, but without labels or units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance object to modify</p></li>
+<li><p><strong>impedance_factor</strong> (<em>float</em>) – multiply channel.impedance by impedance_factor</p></li>
+<li><p><strong>impedance_offset</strong> (<em>float</em>) – add an offset to channel.impedance</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – label to add to the Channel-class</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – unit to add to the Channel-class</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – Color of a channel</p></li>
+<li><p><strong>source</strong> (<em>str</em>) – Source of a channel, e.g. ‘GeckoCIRCUITS’, ‘Numpy’, ‘Tektronix-Scope’, …</p></li>
+<li><p><strong>frequency_cut_min</strong> (<em>float</em>) – minimum frequency</p></li>
+<li><p><strong>frequency_cut_max</strong> (<em>float</em>) – maximum frequency</p></li>
+<li><p><strong>linestyle</strong> (<em>str</em>) – linestyle of channel, e.g. ‘–’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Modified ImpedanceChannel object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.plot_component">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.Impedance.plot_component" title="Link to this definition"></a></dt>
+<dd><p>Plot the component values.</p>
+<p>Phase must be -90°, 0°, +90° for all entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>List</em>) – Impedance</p></li>
+<li><p><strong>figure_size</strong> (<em>Tuple</em>) – figure size as tuple in mm, e.g. (80, 80)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.plot_impedance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_impedance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.Impedance.plot_impedance" title="Link to this definition"></a></dt>
+<dd><p>Plot and compare impedance channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_list</strong> (<em>List</em>) – List with impedances</p></li>
+<li><p><strong>figure_size</strong> (<em>Tuple</em>) – figure size as tuple in mm, e.g. (80, 80)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.plot_inductance_and_ac_resistance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_inductance_and_ac_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.Impedance.plot_inductance_and_ac_resistance" title="Link to this definition"></a></dt>
+<dd><p>Plot and compare inductance (in uH) and ac_resistance (Ohm) of impedance channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_list</strong> (<em>List</em>) – List with impedances</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.save">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.Impedance.save" title="Link to this definition"></a></dt>
+<dd><p>Save an ImpedanceChannel object to hard disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – impedance channel</p></li>
+<li><p><strong>filepath</strong> (<em>str</em>) – filepath including file name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.to_capacitance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_capacitance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.to_capacitance" title="Link to this definition"></a></dt>
+<dd><p>Convert an ImpedanceChannel to a pure capacitance ImpedanceChannel.</p>
+<p>Ignore the resistive and inductive part by trigonometric operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Impedance channel as inductance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.to_inductance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_inductance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.to_inductance" title="Link to this definition"></a></dt>
+<dd><p>Convert an ImpedanceChannel to a pure inductance ImpedanceChannel.</p>
+<p>Ignore the resistive and capacitive part by trigonometric operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Impedance channel as inductance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Impedance.to_resistance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.impedance_dataclass.ImpedanceChannel"><span class="pre">ImpedanceChannel</span></a></span></span><a class="headerlink" href="#pysignalscope.Impedance.to_resistance" title="Link to this definition"></a></dt>
+<dd><p>Convert an ImpedanceChannel to a pure resistive ImpedanceChannel.</p>
+<p>Ignore the inductive and capacitive part by trigonometric operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel"><em>ImpedanceChannel</em></a>) – Impedance channel object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Impedance channel as inductance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pysignalscope.ImpedanceChannel" title="pysignalscope.ImpedanceChannel">ImpedanceChannel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-pysignalscope.functions">Functions uses by the scope, e.g. the fft-function.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysignalscope.functions.fft">
 <span class="sig-prename descclassname"><span class="pre">pysignalscope.functions.</span></span><span class="sig-name descname"><span class="pre">fft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_vector_t_i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ffT'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'factor'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_value_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_value_harmonic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.functions.fft" title="Link to this definition"></a></dt>
@@ -208,6 +1422,31 @@ Note: count 1 is DC component, count 2 is the fundamental frequency</p></li>
 </dl>
 </dd></dl>
 
+<p id="module-pysignalscope.generalplotsettings">Set general plot settings, like LaTeX font.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pysignalscope.generalplotsettings.global_plot_settings_font_latex">
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">global_plot_settings_font_latex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.generalplotsettings.global_plot_settings_font_latex" title="Link to this definition"></a></dt>
+<dd><p>Set the plot fonts to LaTeX-font.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysignalscope.generalplotsettings.global_plot_settings_font_sansserif">
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">global_plot_settings_font_sansserif</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.generalplotsettings.global_plot_settings_font_sansserif" title="Link to this definition"></a></dt>
+<dd><p>Set the plot fonts to Sans-Serif-Font.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pysignalscope.generalplotsettings.update_font_size">
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">update_font_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.generalplotsettings.update_font_size" title="Link to this definition"></a></dt>
+<dd><p>Update the figure font size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>font_size</strong> (<em>int</em>) – font size</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p id="module-pysignalscope.colors">Definitions for different color schemes.</p>
 </section>
 
 
