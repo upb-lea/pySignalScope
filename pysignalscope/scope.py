@@ -37,6 +37,8 @@ class_modulename = "scope"
 class Scope:
     """Class to share channel figures (multiple in a scope) in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
+    unit_separator_plot = "/"
+
     @staticmethod
     def generate_channel(time: Union[List[float], np.ndarray], data: Union[List[float], np.ndarray],
                          label: Optional[str] = None, unit: Optional[str] = None, color: Union[str, tuple, None] = None,
@@ -848,11 +850,11 @@ class Scope:
                 if channel_dataset.unit is None:
                     pass
                 elif channel_dataset.unit.lower() == 'v':
-                    plt.ylabel(f"Voltage in {channel_dataset.unit}")
+                    plt.ylabel(f"Voltage {Scope.unit_separator_plot} {channel_dataset.unit}")
                 elif channel_dataset.unit.lower() == 'a':
-                    plt.ylabel(f"Current in {channel_dataset.unit}")
+                    plt.ylabel(f"Current {Scope.unit_separator_plot} {channel_dataset.unit}")
                 elif channel_dataset.unit.lower() == 'w':
-                    plt.ylabel(f"Power in {channel_dataset.unit}")
+                    plt.ylabel(f"Power {Scope.unit_separator_plot} {channel_dataset.unit}")
                 else:
                     # in case of no matches, use a custom label. The unit is used for this.
                     plt.ylabel(channel_dataset.unit)
@@ -877,13 +879,13 @@ class Scope:
                 if channel_dataset.unit is None:
                     pass
                 elif channel_dataset.unit.lower() == 'v':
-                    axs[plot_count].set_ylabel(f"Voltage in {channel_dataset.unit}")
+                    axs[plot_count].set_ylabel(f"Voltage {Scope.unit_separator_plot} {channel_dataset.unit}")
                 elif channel_dataset.unit.lower() == 'a':
-                    axs[plot_count].set_ylabel(f"Current in {channel_dataset.unit}")
+                    axs[plot_count].set_ylabel(f"Current {Scope.unit_separator_plot} {channel_dataset.unit}")
                 elif channel_dataset.unit.lower() == 'w':
-                    axs[plot_count].set_ylabel(f"Power in {channel_dataset.unit}")
+                    axs[plot_count].set_ylabel(f"Power {Scope.unit_separator_plot} {channel_dataset.unit}")
                 elif channel_dataset.unit.lower() == 'j':
-                    axs[plot_count].set_ylabel(f"Energy in {channel_dataset.unit}")
+                    axs[plot_count].set_ylabel(f"Energy {Scope.unit_separator_plot} {channel_dataset.unit}")
                 else:
                     # in case of no matches, use a custom label. The unit is used for this.
                     axs[plot_count].set_ylabel(channel_dataset.unit)
