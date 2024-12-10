@@ -1205,6 +1205,200 @@ class Scope:
         return ch_shift.channel_shift(channels, shiftstep_x, shiftstep_y, act_displayrange_x, act_displayrange_y)
 
     @staticmethod
+    def unify_sampling_rate(*channel_datasets: 'Channel', sample_calc_mode: str, sampling_rate: Optional[float] = None,
+                            shift: Optional[float] = None, mastermode: bool = True) -> list['Channel']:
+        """
+        unifies the sampling rate of datasets.
+
+        :Examples:
+
+        >>> import pysignalscope as pss
+        >>> ch1 = pss.Scope.generate_channel([-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        >>>                                  [-8, -2, 10.5, 11, 13, 14, 16, 20, 17, 14, 9, 1])
+        >>> ch2 = pss.Scope.generate_channel([-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5],
+        >>>                                  [10, 2, 7.5, -2.5, 4, 8, 4, 10, 2, 20, 5])
+        >>> result_list= pss.Scope.unify_sampling_rate(ch1,ch2,sample_calc_mode="min")
+
+        :param channel_datasets: dataset according to Channel
+        :type channel_datasets: Channel
+        :param sample_calc_mode: keyword, which define the sampling rate calculation 'avg', 'max', 'min' 'user'
+        :type sample_calc_mode: str
+        :param sampling_rate: sampling rate defined by the user (only valid, if sample_calc_mode is set to 'user'
+        :type sampling_rate: Optional[float]
+        :param shift: shift of the sample rate from origin. None corresponds to a shift to first time point of first channel
+        :type shift: Optional[float]
+        :param mastermode: Indicate, if only the first data set or all data sets are used for sampling rate calculation
+        :type mastermode: bool
+
+        If the mastermode is 'True' (default), only the first data set is used for  sampling rate calculation.
+        This parameter is ignored, if the sample_calc_mode approach is set to 'user'
+        For the calculation of the data rate following approaches can be select by parameter 'sample_calc_mode':
+        'avg' = Average sampling rate: The sampling rate shall be calculated by the average distance of the sampling rate.
+        'max' = Maximal sampling rate: The sampling rate shall be calculated by the minimum distance between two sample points.
+        'min' = Minimal sampling rate: The sampling rate shall be calculated by the maximal distance between two sample points.
+        'user' = Sampling rate is defined by the user. This selection raises an error, if the parameter 'sampling_rate'
+                 isn't a valid float value, which corresponds to the sampling frequency.
+        """
+        # check the parameter
+        # type of parameter channel
+        for channel_dataset in channel_datasets:
+            if not isinstance(channel_dataset, Channel):
+                raise TypeError("channel_dataset must be type Scope.")
+        # check if channel_datasets contains minimum 1 channel
+        if len(channel_datasets) == 0:
+            raise TypeError("channel_datasets must contain minimum one channel.")
+        # check parameter sample_calc_mode for correct keyword
+        if not isinstance(sample_calc_mode, str):
+            raise TypeError("sample_calc_mode must be type string.")
+        elif sample_calc_mode == 'user':
+            if not isinstance(sampling_rate, (float, int)):
+                raise TypeError("sampling_rate must be set.")
+            else:
+                sm_calc_mode = 0
+        elif sample_calc_mode == 'avg':
+            sm_calc_mode = 1
+        elif sample_calc_mode == 'min':
+            sm_calc_mode = 2
+            time_factor = 1.0
+        elif sample_calc_mode == 'max':
+            sm_calc_mode = 3
+        else:
+            raise ValueError("sample_calc_mode must be one of the keyword 'avg', 'max', 'min' or 'user'")
+
+        # check parameter sampling_rate
+        if isinstance(sampling_rate, (float, int)):
+            # Log, if mode is not 'user'
+            if not sm_calc_mode == 0:
+                logging.info(f"{class_modulename} :Parameter 'sampling_rate' will be ignored due to sample_calc_mode is not 'user'")
+            if sampling_rate <= 0:
+                raise ValueError("sampling_rate must greater 0.0")
+        elif sampling_rate is not None:
+            raise TypeError("sampling_rate must be type float.")
+
+        # check parameter shift
+        if (not isinstance(shift, (float, int))) and (shift is not None):
+            raise TypeError("shift must be type float.")
+
+        # initialize local parameters
+        ch_range = []
+        delta_time_tot = 0
+
+        # calculate the all parameterstime range for each data set
+        for count, channel_dataset in enumerate(channel_datasets):
+            # check if dataset has got minimum 2 entries
+            if len(channel_dataset.time) < 2:
+                raise ValueError(f"input channel no.{count+1} has got less than 2 sample points. Minimum 2 sample points are required")
+            # time range
+            ch_range.append([np.min(channel_dataset.time), np.max(channel_dataset.time)])
+            # sum of time range
+            delta_time_tot = delta_time_tot + (ch_range[count][1] - ch_range[count][0])
+
+        # user defined sampling rate
+        if sm_calc_mode == 0:
+            period = 1/sampling_rate
+        # average mode
+        if sm_calc_mode == 1:
+            # initialize local parameters
+            delta_time = (ch_range[0][1] - ch_range[0][0])
+            counts = len(channel_datasets[0].time) - 1
+            # in case of master mode is true calculate the minimum of the remaining channels
+            if not mastermode:
+                # overtake total delta time
+                delta_time = delta_time_tot
+                # for loop over remaining channels to add the samples
+                for channel_dataset in channel_datasets[1:]:
+                    # add the number of counts
+                    counts = counts + len(channel_dataset.time)-1
+
+            # calculate the sampling rate
+            period = delta_time/counts
+        # minimum mode
+        elif sm_calc_mode == 2:
+            # initialize local parameters
+            period = np.min(np.diff(channel_datasets[0].time))
+            # in case of master mode is true calculate the minimum of the remaining channels
+            if not mastermode:
+                # for loop over remaining channels
+                for channel_dataset in channel_datasets[1:]:
+                    # minimum time between 2 sample points
+                    ch_delta = np.min(np.diff(channel_dataset.time))
+                    period = np.minimum(ch_delta, period)
+        # maximum mode
+        elif sm_calc_mode == 3:
+            # initialize local parameters
+            period = np.max(np.diff(channel_datasets[0].time))
+            # in case of master mode is true calculate the minimum of the remaining channels
+            if not mastermode:
+                # for loop over all channels
+                for channel_dataset in channel_datasets[1:]:
+                    # minimum time between 2 sample points
+                    ch_delta = np.max(np.diff(channel_dataset.time))
+                    period = np.maximum(ch_delta, period)
+
+        # check if the period is too high for each data set (Limit is 100E6 sample points
+        if delta_time_tot/period > 100E6:
+            raise ValueError("sampling_rate is too high and exeed memory capacity.")
+
+        # check if shift is not set
+        if not isinstance(shift, (float, int)):
+            # Initialize shift
+            shift = 0
+
+        # result list
+        unified_datasets = []
+
+        # adjust sample point origin to the start point of first channel
+        adj_period = np.mod((channel_datasets[0].time[0] + shift), period)
+
+        # for loop over all channels
+        for dataset_id, channel_dataset in enumerate(channel_datasets):
+            # calculate the first sample point
+            d_sm_point = np.mod((channel_dataset.time[0] - adj_period), period)
+            # check if period matches
+            if d_sm_point == 0:
+                d_sm_point = period
+            # calculate the first sample point
+            sm_point = channel_dataset.time[0] - d_sm_point + period
+            # create new scope object as copy from origin dataset, but with empty time and data arrays
+            unified_dataset = copy.deepcopy(channel_dataset)
+            unified_dataset.time = np.array([])
+            unified_dataset.data = np.array([])
+
+            # for loop over all elements of the data set
+            for count, time_value in enumerate(channel_dataset.time):
+                # check if time point outside the range
+                if sm_point > ch_range[dataset_id][1]:
+                    break
+                while sm_point <= time_value:
+                    if sm_point == time_value:
+                        data_value = channel_dataset.data[count]
+                    else:  # sm_point < time_value: Approximate y= y1 + (x-x1) * (y2-y1)/(x2-x1)
+                        data_value = channel_dataset.data[count-1]\
+                            + (channel_dataset.data[count] - channel_dataset.data[count-1])\
+                            / (channel_dataset.time[count] - channel_dataset.time[count-1])\
+                            * (sm_point - channel_dataset.time[count-1])
+                    # overtake entries
+                    unified_dataset.data = np.append(unified_dataset.data, data_value)
+                    unified_dataset.time = np.append(unified_dataset.time, sm_point)
+                    # increment sample point
+                    sm_point = sm_point + period
+
+            # overtake unified_dataset to list
+            unified_datasets.append(unified_dataset)
+
+        # check if a dataset is empty
+        # for loop over all elements of the data set
+        for data_set_id, unified_dataset in enumerate(unified_datasets):
+            # check if the data set is empty
+            if len(unified_dataset.time) == 0:
+                logging.warning(f"Dataset : {data_set_id} is empty.")
+
+        # Log flow control
+        logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are provided={len(unified_datasets)}")
+
+        return unified_datasets
+
+    @staticmethod
     def compare_channels(*channels: 'Channel', shift: Optional[List[Union[None, float]]] = None,
                          scale: Optional[List[Union[None, float]]] = None, offset: Optional[List[Union[None, float]]] = None,
                          timebase: str = 's'):

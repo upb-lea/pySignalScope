@@ -3,7 +3,7 @@
 from matplotlib import pyplot as plt
 
 
-def global_plot_settings_font_latex() -> None:
+def global_plot_settings_font_latex():
     """Set the plot fonts to LaTeX-font."""
     plt.rcParams.update({
         "text.usetex": True,
@@ -12,17 +12,17 @@ def global_plot_settings_font_latex() -> None:
     })
 
 
-def global_plot_settings_font_sansserif() -> None:
+def global_plot_settings_font_sansserif():
     """Set the plot fonts to Sans-Serif-Font."""
     plt.rcParams.update({
         "text.usetex": True,
         "font.family": "sans-serif",
         "font.sans-serif": ["Helvetica"]})
 
-def update_font_size(font_size: int = 11) -> None:
+def update_font_size(font_size: int = 11):
     """Update the figure font size.
 
-    :param font_size: font size
+    :param font_size: font sitze
     :type font_size: int
     """
     plt.rcParams.update({'font.size': font_size})
