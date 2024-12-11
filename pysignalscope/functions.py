@@ -38,29 +38,29 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
     >>> out = pss.fft(example_waveform, plot=True, mode='rad', f0=25000, title='ffT input current')
 
     :param period_vector_t_i: numpy-array [[time-vector[,[current-vector]]. One period only
-    :type period_vector_t_i: np.array
-    :param sample_factor: f_sampling/f_period, defaults to 1000
+    :type period_vector_t_i: np.array or List[List[float]
+    :param sample_factor: f_sampling/f_period with default = 1000 (optional parameter)
     :type sample_factor: int
-    :param plot: insert anything else than "no" or 'False' to show a plot to visualize input and output
+    :param plot: insert anything else than "no" or 'False' to show a plot to visualize input and output (optional parameter)
     :type plot: str
-    :param mode: 'rad'[default]: full period is 2*pi, 'deg': full period is 360°, 'time': time domain.
+    :param mode: 'rad'[default]: full period is 2*pi, 'deg': full period is 360°, 'time': time domain. (optional parameter)
     :type mode: str
-    :param f0: fundamental frequency. Needs to be set in 'rad'- or 'deg'-mode
+    :param f0: fundamental frequency. Needs to be set in 'rad'- or 'deg'-modewith (optional parameter)
     :type f0: float
-    :param title: plot window title, defaults to 'ffT'
+    :param title: plot window title, defaults to 'ffT' (optional parameter)
     :type title: str
-    :param filter_type: 'factor'[default] or 'harmonic' or 'disabled'.
+    :param filter_type: 'factor'[default] or 'harmonic' or 'disabled'. (optional parameter)
     :type filter_type: str
-    :param filter_value_factor: filters out amplitude-values below a certain factor of max. input amplitude.
+    :param filter_value_factor: filters out amplitude-values below a certain factor of max. input amplitude. (optional parameter)
         Should be 0...1, default to 0.01 (1%)
     :type filter_value_factor: float
-    :param filter_value_harmonic: filters out harmonics up to a certain number. Default value is 100.
+    :param filter_value_harmonic: filters out harmonics up to a certain number with default = 100 (optional parameter)
         Note: count 1 is DC component, count 2 is the fundamental frequency
     :type filter_value_harmonic: int
-    :param figure_directory: full path with file extension
-    :type figure_directory: Tuple
-    :param figure_size: None for auto-fit; fig_size for matplotlib (width, length)
+    :param figure_size: None for auto-fit; fig_size for matplotlib (width, length) (optional parameter)
     :type figure_size: Tuple
+    :param figure_directory: full path with file extension  (optional parameter)
+    :type figure_directory: Tuple
 
     :return: numpy-array [[frequency-vector],[amplitude-vector],[phase-vector]]
     :rtype: npt.NDArray[list]
