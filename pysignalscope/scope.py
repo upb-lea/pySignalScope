@@ -1245,7 +1245,7 @@ class Scope:
         # type of parameter channel
         for channel_dataset in channel_datasets:
             if not isinstance(channel_dataset, Channel):
-                raise TypeError("channel_dataset must be type Scope.")
+                raise TypeError("channel_dataset must be type Channel.")
         # check if channel_datasets contains minimum 1 channel
         if len(channel_datasets) == 0:
             raise TypeError("channel_datasets must contain minimum one channel.")
