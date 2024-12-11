@@ -16,9 +16,10 @@ from pysignalscope.impedance_dataclass import ImpedanceChannel
 
 supported_measurement_devices = ['waynekerr', 'agilent']
 
-
 class Impedance:
     """Class to share scope figures in a special format, to keep labels, units and voltages belonging to a certain curve."""
+
+    unit_separator_plot = "/"
 
     @staticmethod
     def generate_impedance_object(frequency: Union[List, npt.ArrayLike], impedance: Union[List, npt.ArrayLike],
@@ -133,10 +134,10 @@ class Impedance:
             linestyle=linestyle)
 
     @staticmethod
-    def modify(channel: ImpedanceChannel, impedance_factor: float = None, impedance_offset: float = None,
-               label: str = None, unit: str = None, color: str = None,
-               source: str = None, linestyle: str = None,
-               frequency_cut_min: float = None, frequency_cut_max: float = None) -> ImpedanceChannel:
+    def modify(channel: ImpedanceChannel, impedance_factor: Optional[float] = None, impedance_offset: Optional[float] = None,
+               label: Optional[str] = None, unit: Optional[str] = None, color: Union[str, Tuple, None] = None,
+               source: Optional[str] = None, linestyle: Optional[str] = None,
+               frequency_cut_min: Optional[float] = None, frequency_cut_max: Optional[float] = None) -> ImpedanceChannel:
         """
         Modify channel data like metadata or add a factor or offset to channel data.
 
@@ -278,10 +279,10 @@ class Impedance:
 
         ax1.grid()
         ax1.legend()
-        ax1.set(xlabel='Frequency in Hz', ylabel=r'Impedance in $\Omega$')
+        ax1.set(xlabel=f'Frequency {Impedance.unit_separator_plot} Hz', ylabel=rf'Impedance {Impedance.unit_separator_plot} $\Omega$')
 
         ax2.grid()
-        ax2.set(xlabel='Frequency in Hz', ylabel='Phase in °')
+        ax2.set(xlabel=f'Frequency {Impedance.unit_separator_plot} Hz', ylabel=f'Phase {Impedance.unit_separator_plot} °')
         ax2.legend()
         plt.tight_layout()
         plt.show()
@@ -305,10 +306,10 @@ class Impedance:
 
         ax1.grid()
         ax1.legend()
-        ax1.set(xlabel='Frequency in Hz', ylabel=r'Inductance in $\rm{\mu}$H')
+        ax1.set(xlabel=f'Frequency {Impedance.unit_separator_plot} Hz', ylabel=f'Inductance {Impedance.unit_separator_plot} ' + r'$\rm{\mu}$H')
 
         ax2.grid()
-        ax2.set(xlabel='Frequency in Hz', ylabel=r'AC Resistance in $\Omega$')
+        ax2.set(xlabel=f'Frequency {Impedance.unit_separator_plot} Hz', ylabel=rf'AC Resistance {Impedance.unit_separator_plot} $\Omega$')
         ax2.legend()
         plt.show()
 
@@ -666,29 +667,29 @@ class Impedance:
         # type resistor
         if np.array_equal(channel.phase_deg, np.zeros_like(channel.phase_deg)):
             ax1.semilogx(channel.frequency, channel.impedance)
-            ax1.set_ylabel(r"Resistance / $\Omega$")
+            ax1.set_ylabel(fr"Resistance {Impedance.unit_separator_plot} $\Omega$")
 
         # type capacitance
         elif np.array_equal(channel.phase_deg, -90 * np.ones_like(channel.phase_deg)):
             capacitance = 1 / channel.impedance / 2 / np.pi / channel.frequency
             capacitance[capacitance <= 0] = np.nan
             ax1.semilogx(channel.frequency, capacitance)
-            ax1.set_ylabel(r"Capacitance / F")
+            ax1.set_ylabel(rf"Capacitance {Impedance.unit_separator_plot} F")
 
         # type inductance
         elif np.array_equal(channel.phase_deg, 90 * np.ones_like(channel.phase_deg)):
             inductance = channel.impedance / 2 / np.pi / channel.frequency
             inductance[inductance <= 0] = np.nan
             ax1.semilogx(channel.frequency, inductance)
-            ax1.set_ylabel(r"Inductance / H")
+            ax1.set_ylabel(fr"Inductance {Impedance.unit_separator_plot} H")
         else:
             raise ValueError("Can not detect type of component. Phase must be -90°, 0°, +90° for all entries.")
 
-        ax1.set_xlabel("Frequency / Hz")
+        ax1.set_xlabel(f"Frequency {Impedance.unit_separator_plot} Hz")
         ax1.grid()
         ax2.semilogx(channel.frequency, channel.phase_deg)
         ax2.grid()
-        ax2.set_xlabel("Frequency / Hz")
-        ax2.set_ylabel("Phase / °")
+        ax2.set_xlabel(f"Frequency {Impedance.unit_separator_plot} Hz")
+        ax2.set_ylabel(f"Phase {Impedance.unit_separator_plot} °")
 
         plt.show()

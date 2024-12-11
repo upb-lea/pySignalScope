@@ -1,16 +1,27 @@
 Scope toolbox for documentation purposes and comparisons
 ========================================================
-Processing and comparison of time domain data similar to oscilloscopes in electronics. Typically used for technical comparisons in
- * Bachelor / Master / Ph.D. theses,
- * Scientific papers, 
- * Technical manuals, and
- * Measurement reports.
+pySignalScope processes and compares time domain data similar to oscilloscopes in electronics.
+Signals can be filtered, derived, integrated or evaluated.
+Furthermore, pySignalScope includes a module for evaluating and editing the impedance curves of an impedance analyzer or comparing them with the simulation.
+The main purpose is the quick and easy evaluation of signals, as well as the targeted generation of images for technical documentation.
+Some examples are:
+
+- Bachelor / Master / Ph.D. theses,
+- Scientific papers,
+- Technical manuals, and
+- Measurement reports.
 
 Overview
 --------
-Bring measurements from the oscilloscope and the circuit simulator into a standardized format. Edit the signals by shifting them in time (different zero points) or define the zero point for measuring equipment that can only record AC. Calculate the FFT or important values such as RMS, mean etc. Bring the originally different input formats into common plots to make comparisons easy.
+Bring measurements from the oscilloscope and the circuit simulator into a standardized ``Channel`` format.
+Edit the signals by using the ``Scope functionality``: shifting them in time (different zero points) or define the zero point for measuring equipment that can only record AC.
+Calculate the FFT or important values such as RMS, mean etc.
+Bring the originally different input formats into common plots to make comparisons easy.
 
-.. image:: docs/source/figures/introduction.png
+With the ``Impedance functionality``, ``ImpedanceChannels`` can be read in, edited and compared.
+A conversion to e.g. the inductance value is possible with just one command.
+
+.. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/introduction.png
 
 
 Getting started
@@ -30,13 +41,17 @@ Use the toolbox in your python program:
 
 Example usage
 -------------
-pySignalScope helps to load, edit, display and analyze the signals. The following application example loads a noisy measurement signal, which is first filtered. To simplify the display, colors, linestyle and the label can be attached to the object. This is shown in the plot above.
+pySignalScope helps to load, edit, display and analyze the signals.
+The following application example loads a noisy measurement signal, which is first filtered.
+To simplify the display, colors, linestyle and the label can be attached to the object.
+This is shown in the plot above.
 
+The lower plot shows the post-processing of the filtered signal.
+This is multiplied by a small gain, provided with an offset and shortened to a period duration.
+The label, color and line style are changed.
+The signals are then plotted with just one plot command.
 
-The lower plot shows the post-processing of the filtered signal. This is multiplied by a small gain, provided with an offset and shortened to a period duration. The label, color and line style are changed. The signals are then plotted with just one plot command.
-
-
-.. image:: docs/source/figures/function_overview.png
+.. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/function_overview.png
 
 Have a look at the `Scope example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__ and at the `Impedance example <https://github.com/upb-lea/pySignalScope/blob/main/examples/impedance_example.py>`__ to see what you can do with this toolbox.
 
