@@ -3,6 +3,23 @@ from matplotlib import pyplot as plt
 from typing import Union, Tuple, Optional, List
 import numpy as np
 
+def save_figure(figure: plt.figure, fig_name: str):
+    """
+    Save the given figure object as pdf.
+
+    :param figure: figure object
+    :type figure: matplotlib.pyplot.figure
+    :param fig_name: figure name for pdf file naming
+    :type fig_name: str
+    """
+    if isinstance(fig_name, str):
+        if fig_name.endswith(".pdf"):
+            figure.savefig(f"{fig_name}")
+        else:
+            figure.savefig(f"{fig_name}.pdf")
+    else:
+        raise TypeError("figure name must be of type str.")
+
 
 def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: int = 1000, plot: bool = True, mode: str = 'rad',
         f0: Optional[float] = None, title: str = 'ffT', filter_type: str = 'factor',

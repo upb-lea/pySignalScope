@@ -261,7 +261,7 @@ class Impedance:
                                                    source='https://ksim3.kemet.com/capacitor-simulation')
 
     @staticmethod
-    def plot_impedance(channel_list: List, figure_size: Tuple = None) -> None:
+    def plot_impedance(channel_list: List, figure_size: Tuple = None) -> plt.figure:
         """
         Plot and compare impedance channels.
 
@@ -269,6 +269,8 @@ class Impedance:
         :type channel_list: List
         :param figure_size: figure size as tuple in mm, e.g. (80, 80)
         :type figure_size: Tuple
+        :return: matplotlib figure
+        :rtype: plt.figure
         """
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=[x / 25.4 for x in figure_size] if figure_size is not None else None)
         for channel in channel_list:
@@ -286,6 +288,7 @@ class Impedance:
         ax2.legend()
         plt.tight_layout()
         plt.show()
+        return fig
 
     @staticmethod
     def plot_inductance_and_ac_resistance(channel_list: List) -> None:
@@ -419,7 +422,7 @@ class Impedance:
                        color=color_calculation, label='recalculated data')
             ax1.grid()
             ax1.legend()
-            ax1.set(xlabel='Frequency in Hz', ylabel=r'Impedance in $\Omega$')
+            ax1.set(xlabel=f'Frequency {Impedance.unit_separator_plot} Hz', ylabel=rf'Impedance {Impedance.unit_separator_plot} $\Omega$')
             ax1.plot(f_calc_c, z_calc_c, marker=markerstyle, color=color_measurement)
             ax1.plot(f_calc_r, z_calc_r, marker=markerstyle, color=color_measurement)
             ax1.plot(f_calc_l, z_calc_l, marker=markerstyle, color=color_measurement)
@@ -429,7 +432,7 @@ class Impedance:
             ax2.semilogx(recalculated_curve.frequency, recalculated_curve.phase_deg, linestyle=linestyle_calculation, color=color_calculation,
                          label='recalculated data')
             ax2.grid()
-            ax2.set(xlabel='Frequency in Hz', ylabel='Phase in degree')
+            ax2.set(xlabel=f'Frequency {Impedance.unit_separator_plot} Hz', ylabel=f'Phase {Impedance.unit_separator_plot} °')
             ax2.legend()
             ax2.plot(f_calc_c, phase_calc_c, marker=markerstyle, color=color_measurement)
             ax2.plot(f_calc_r, phase_calc_r, marker=markerstyle, color=color_measurement)

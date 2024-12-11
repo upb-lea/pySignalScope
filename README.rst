@@ -43,6 +43,37 @@ Example usage
 -------------
 pySignalScope helps to load, edit, display and analyze the signals.
 The following application example loads a noisy measurement signal, which is first filtered.
+
+
+::
+
+    import pysignalscope as pss
+
+    # Read curves from scope csv file
+    [voltage_prim, voltage_sec, current_prim, current_sec] = pss.Scope.from_tektronix('scope_example_data_tek.csv')
+
+    # Add labels and units to channel: This example considers the Channel 'current_prim' only
+    current_prim = pss.Scope.modify(current_prim, label='current measured', unit='A', color='red')
+
+    # Low pass filter the noisy current signal, modify the Channel attributes label, color and linestyle
+    current_prim_filtered = pss.Scope.low_pass_filter(current_prim)
+    current_prim_filtered = pss.Scope.modify(current_prim_filtered, label='current filtered', linestyle='--', color='green')
+
+    # Make some modifications on the signal itself: data offset, time offset and factor to the data.
+    # Short the channel to one period and add label, color and linestyle to the Channel
+    current_prim_filtered_mod = pss.Scope.modify(current_prim_filtered, data_factor=1.3, data_offset=11, time_shift=2.5e-6)
+    current_prim_filtered_mod = pss.Scope.short_to_period(current_prim_filtered_mod, f0=200000)
+    current_prim_filtered_mod = pss.Scope.modify(current_prim_filtered_mod, label='current modified', linestyle='-', color='orange')
+
+    # Plot channels, save as pdf
+    fig1 = pss.Scope.plot_channels([current_prim, current_prim_filtered], [current_prim_filtered_mod], timebase='us')
+    pss.save_figure(fig1, 'figure.pdf')
+
+    # short channels to a single period, perform FFT for current waveforms
+    current_prim = pss.Scope.short_to_period(current_prim, f0=200000)
+    current_prim = pss.Scope.modify(current_prim, time_shift=5e-6)
+    pss.Scope.fft(current_prim)
+
 To simplify the display, colors, linestyle and the label can be attached to the object.
 This is shown in the plot above.
 
@@ -52,6 +83,9 @@ The label, color and line style are changed.
 The signals are then plotted with just one plot command.
 
 .. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/function_overview.png
+
+
+
 
 Have a look at the `Scope example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__ and at the `Impedance example <https://github.com/upb-lea/pySignalScope/blob/main/examples/impedance_example.py>`__ to see what you can do with this toolbox.
 
