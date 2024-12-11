@@ -331,7 +331,7 @@ class Scope:
 
         # Log user error Empty csv-file
         if channel_count == 0:
-            logging.info(f"{class_modulename} : Invalid file or file without content")
+            logging.warning(f"{class_modulename} : Invalid file or file without content")
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Channel counts {channel_counts}, File {csv_file}")
@@ -372,7 +372,7 @@ class Scope:
 
             # Log user error Empty csv-file
             if not ch1_data:
-                logging.info(f"{class_modulename} : file {csv_file}->Invalid file or file without content")
+                logging.warning(f"{class_modulename} : file {csv_file}->Invalid file or file without content")
 
             tektronix_channels.append(Scope.generate_channel(
                 time, ch1_data, source=channel_source, label=os.path.basename(csv_file).replace('.csv', ''),
@@ -380,7 +380,7 @@ class Scope:
 
         # Log user error Empty csv-file
         if not tektronix_channels:
-            logging.info(f"{class_modulename} : file {csv_files}-> Invalid file list or files without content")
+            logging.warning(f"{class_modulename} : file {csv_files}-> Invalid file list or files without content")
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl {csv_files}")
@@ -421,7 +421,7 @@ class Scope:
 
         # Log user error Empty csv-file
         if channel_count == 0:
-            logging.info(f"{class_modulename} : Invalid file or file without content", class_modulename)
+            logging.warning(f"{class_modulename} : Invalid file or file without content", class_modulename)
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl Channel counts {channel_count},File {csv_file}")
@@ -467,7 +467,7 @@ class Scope:
 
         # Log user error Empty csv-file
         if not lecroy_channel:
-            logging.info(f"{class_modulename} : {csv_files} Invalid file list or files without content")
+            logging.warning(f"{class_modulename} : {csv_files} Invalid file list or files without content")
 
         # Log flow control
         logging.debug(f"{class_modulename} :FlCtl {csv_file}")
@@ -518,7 +518,7 @@ class Scope:
         else:  # "else-case"
             channel = None
             # Log user info
-            logging.info(f"{class_modulename} : Requested channel number {scope_channel_number} is out of range (1-8)")
+            logging.warning(f"{class_modulename} : Requested channel number {scope_channel_number} is out of range (1-8)")
             print("No fitting channel found!")
 
         # Log flow control
@@ -736,7 +736,7 @@ class Scope:
 
         # Log missing channel input, if amount of channels is one
         if len(channels) == 1:
-            logging.info(f"{class_modulename} :Only on channel was provided. No channel was added.")
+            logging.info(f"{class_modulename} :Only one channel was provided. No channel was added.")
             # Log flow control
 
         logging.debug(f"{class_modulename} :FlCtl Amount of channels, which are added={len(channels)}")
@@ -778,7 +778,7 @@ class Scope:
 
         # Log missing channel input, if amount of channels is one
         if len(channels) == 1:
-            logging.info(f"{class_modulename} :Only on channel was provided. No channel was subtracted.")
+            logging.info(f"{class_modulename} :Only one channel was provided. No channel was subtracted.")
             # Log flow control
 
         # Log flow control
