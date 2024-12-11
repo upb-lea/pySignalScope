@@ -19,12 +19,12 @@ voltage_sec = pss.Scope.modify(voltage_sec, label='voltage secondary', unit='V')
 current_prim = pss.Scope.modify(current_prim, label='current primary', unit='A')
 current_sec = pss.Scope.modify(current_sec, label='current secondary', unit='A')
 
-# Show gain and DC-offset
+# Gain and DC-offset for the secondary current
 current_sec = pss.Scope.modify(current_sec, data_factor=1.3, data_offset=10)
 
 # Plot channels
 fig1 = pss.Scope.plot_channels([voltage_prim, voltage_sec], [current_prim, current_sec], timebase='us')
-pss.Scope.save_figure(fig1, 'test')
+pss.save_figure(fig1, 'scope_fig.pdf')
 
 # Shift first two channels and plot the shift of these channels
 shiftlist = pss.Scope.plot_shiftchannels([voltage_prim, voltage_sec])

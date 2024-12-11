@@ -19,7 +19,8 @@ print(f"{recalculated_l=}")
 print(f"{recalculated_c=}")
 
 # plot multiple channel data
-pss.Impedance.plot_impedance([example_data_0mm5, example_data_1mm5, example_data_rlc])
+impedance_figure = pss.Impedance.plot_impedance([example_data_0mm5, example_data_1mm5, example_data_rlc])
+pss.save_figure(impedance_figure, "impedance_fig.pdf")
 
 # save and load an impedance object
 pss.Impedance.save(example_data_rlc, "example")

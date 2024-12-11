@@ -1708,24 +1708,6 @@ class Scope:
         return channel_modified
 
     @staticmethod
-    def save_figure(figure: plt.figure, fig_name: str):
-        """
-        Save the given figure object as pdf.
-
-        :param figure: figure object
-        :type figure: matplotlib.pyplot.figure
-        :param fig_name: figure name for pdf file naming
-        :type fig_name: str
-        """
-        if isinstance(fig_name, str):
-            figure.savefig(f"{fig_name}.pdf")
-        else:
-            raise TypeError("figure name must be of type str.")
-
-        # Log flow control
-        logging.debug(f"{class_modulename} :Name of file to save={fig_name}.pdf")
-
-    @staticmethod
     def save(channel: Channel, filepath: str) -> None:
         """
         Save a Channel object to hard disk.
