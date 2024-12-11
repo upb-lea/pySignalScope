@@ -29,20 +29,11 @@ def setup_logging():
     You can adjust (suppress logging) of signal files by setting a higher level for this particular file.
     """
     # Set logging level for all imported modules
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(funcName)s - %(message)s')
+    logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(name)s - %(levelname)s - %(funcName)s - %(message)s')
 
-    # Set logging level for my modules
+    # Set logging level for my modules (only valid if basic config is set less equal selected loglevel)
     # Logger for scope
     Lm_logger = logging.getLogger('scope')
-    Lm_logger.setLevel(logging.DEBUG)
-    # Logger for color
-    ts_logger = logging.getLogger('color')
-    ts_logger.setLevel(logging.DEBUG)
-    # Logger for generalplotsettings
-    tf_logger = logging.getLogger('generalplotsettings')
-    tf_logger.setLevel(logging.DEBUG)
-    # Logger for function
-    Lm_logger = logging.getLogger('function')
     Lm_logger.setLevel(logging.DEBUG)
 
     ###############################################################################################
