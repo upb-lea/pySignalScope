@@ -687,8 +687,8 @@ class ScopeChShift:
                 # Log flow control
                 logging.debug(f"Confirmed with left mouse button release at x,y: {event.xdata},{event.ydata}.")
         # Check if left button was released and Zoomstate was NoZoom and it was within area
-        elif (event.button == 3 and event.inaxes and ScopeChShift.shiftfigbox.contains(event.x, event.y) and
-              ScopeChShift.zoom_state is not ScopeChShift.Zoom_State.ZoomSelect):
+        elif (event.button == 3 and event.inaxes and ScopeChShift.shiftfigbox.contains(event.x, event.y) \
+              and ScopeChShift.zoom_state is not ScopeChShift.Zoom_State.ZoomSelect):
             # Check, if zoom state is conform
             if ScopeChShift.zoom_state == ScopeChShift.Zoom_State.ZoomConfirm:
                 # Remove rectangle and reset zoom state

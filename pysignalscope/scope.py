@@ -55,7 +55,7 @@ class Scope:
         :param unit: channel unit
         :type unit: Optional[str]
         :param color: channel color
-        :type color: Optional[str]
+        :type color: Union[str, tuple, None]
         :param source: channel source
         :type source: Optional[str]
         :param linestyle: channel linestyle
