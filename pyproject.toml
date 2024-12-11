@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pysignalscope"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
   { name="LEA - Paderborn University", email="upblea@mail.upb.de" },
 ]

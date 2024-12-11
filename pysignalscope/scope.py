@@ -1258,11 +1258,12 @@ class Scope:
         If the mastermode is 'True' (default), only the first data set is used for  sampling rate calculation.
         This parameter is ignored, if the sample_calc_mode approach is set to 'user'
         For the calculation of the data rate following approaches can be select by parameter 'sample_calc_mode':
-        'avg' = Average sampling rate: The sampling rate shall be calculated by the average distance of the sampling rate.
-        'max' = Maximal sampling rate: The sampling rate shall be calculated by the minimum distance between two sample points.
-        'min' = Minimal sampling rate: The sampling rate shall be calculated by the maximal distance between two sample points.
-        'user' = Sampling rate is defined by the user. This selection raises an error, if the parameter 'sampling_rate'
-                 isn't a valid float value, which corresponds to the sampling frequency.
+
+        * 'avg' = Average sampling rate: The sampling rate shall be calculated by the average distance of the sampling rate.
+        * 'max' = Maximal sampling rate: The sampling rate shall be calculated by the minimum distance between two sample points.
+        * 'min' = Minimal sampling rate: The sampling rate shall be calculated by the maximal distance between two sample points.
+        * 'user' = Sampling rate is defined by the user. This selection raises an error, if the parameter 'sampling_rate' \
+        isn't a valid float value, which corresponds to the sampling frequency.
         """
         # check the parameter
         # type of parameter channel

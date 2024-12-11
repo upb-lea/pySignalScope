@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2024-12-11
+Many improvements have been included in the update. 
+This has changed the API. Please check the documentation and the new examples.
+### Added
+ - `unify_sampling_rate` method to unify the sampling rate of scope channel objects
+ - Impedance `to_` functions to calculate R, L, C from a given impedance channel
+### Updated
+ - Documentation
+
 
 ## [0.2.0] - 2024-12-09
 Many improvements have been included in the update. 
@@ -25,6 +34,7 @@ Initial toolbox functionality
  - Basic functions for modifying data
  - Basic plotting functions
 
-[unreleased]: https://github.com/upb-lea/pySignalScope/compare/0.2.0...HEAD
+[unreleased]: https://github.com/upb-lea/pySignalScope/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/upb-lea/pySignalScope/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/upb-lea/pySignalScope/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/upb-lea/pySignalScope/releases/tag/0.1.0
