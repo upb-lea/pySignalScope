@@ -84,8 +84,11 @@ The signals are then plotted with just one plot command.
 
 .. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/function_overview.png
 
+The functionality for the Impedance module is similar to the Scope module.
+In here, ``ImpedanceChannel`` objects can be loaded from different sources, which can be a ``.csv`` measurement file from an impedance analyzer or a computer generated curve.
+``ImpedanceChannel`` objects can be modified in attributes and data, plotted and equivalent circuit parameters can be obtained from measurements.
 
-
+.. image:: https://raw.githubusercontent.com/upb-lea/pySignalScope/main/docs/source/figures/impedance_function_overview.png
 
 Have a look at the `Scope example <https://github.com/upb-lea/pySignalScope/blob/main/examples/scope_example.py>`__ and at the `Impedance example <https://github.com/upb-lea/pySignalScope/blob/main/examples/impedance_example.py>`__ to see what you can do with this toolbox.
 
