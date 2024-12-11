@@ -2,7 +2,8 @@
 
 # python libraries
 import dataclasses
-from typing import Optional
+from typing import Optional, Union, Tuple
+
 
 # 3rd party libraries
 import numpy as np
@@ -18,7 +19,7 @@ class Channel:
     # optional data
     label: Optional[str]  #: channel label displayed in a plot (optional)
     unit: Optional[str]  #: channel unit displayed in a plot (optional)
-    color: Optional[str]  #: channel color in a plot (optional)
+    color: Union[str, Tuple, None]  #: channel color in a plot (optional)
     linestyle: Optional[str]  #: channel linestyle in a plot (optional)
 
     # meta data

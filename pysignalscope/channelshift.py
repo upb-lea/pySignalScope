@@ -60,14 +60,13 @@ class ScopeChShift:
     shiftstep_x = None
     shiftstep_y = None
     # Limits of shift steps
-    shiftstep_x: List[float] = [0, 0]
     min_shiftstep_x = None
     max_shiftstep_x = None
     min_shiftstep_y = None
     max_shiftstep_y = None
 
     # Maximal values
-    display_min_y = None
+    display_min_x = None
     display_max_x = None
     display_min_y = None
     display_max_y = None
@@ -96,16 +95,18 @@ class ScopeChShift:
     zoom_state = Zoom_State.NoZoom
 
     @staticmethod
-    def channel_shift(channels: List['Channel'], shiftstep_x: float, shiftstep_y: float, \
-                      displayrange_x: Tuple[float, float], displayrange_y: Tuple[float, float]):
+    def channel_shift(channels: List['Channel'], shiftstep_x: float, shiftstep_y: float,
+                      displayrange_x: [float, float], displayrange_y: [float, float]):
         """
         Interactive plot of channel datasets.
 
         Examples:
-        >>> import channelshift as chshift
-        >>> scopechannels=generate_scope_object([[0, 5e-4, 10e-4, 15e-4, 20e-4],[20,150,130,140,2]],[[10e-4, 12e-4, 21-4, 35e-4, 40e-4],[-20,130,-30,100,40]])
+        >>> import pysignalscope as pss
+        >>> chshift : ScopeChShift()
+        >>> ch1=pss.Scope.generate_channel([0, 5e-4, 10e-4, 15e-4, 20e-4],[20,150,130,140,2])
+        >>> ch2=pss.Scope.generate_channel([10e-4, 12e-4, 21-4, 35e-4, 40e-4],[-20,130,-30,100,40])
         >>> chshift.init_shiftstep_limits((1e-6,5e-5),(1,20))
-        >>> chshift.ScopeChShift.plot_shiftchannels(scopechannels, 1e-5,10,[0,40e-4],[-100,200])
+        >>> chshift.channel_shift([ch1,ch2], 1e-5,10,[0,40e-4],[-100,200])
         Plots the channels ch1 and ch2. You can zoom into by selecting the zoom area with help of
         left mouse button. By moving the mouse while pressing the button  the area is marked by a red rectangle.
         If you release the left mouse button the area is marked. By moving the mouse within the area an perform
@@ -272,7 +273,8 @@ class ScopeChShift:
         Initialize the minimal and maximal shift step.
 
         Examples:
-        >>> import channelshift as chshift
+        >>> import pysignalscope as pss
+        >>> chshift : ScopeChShift()
         >>> chshift.init_shiftstep_limits((1e-6,5e-5),(1,20))
         Set the limit of the shift step
 
@@ -511,7 +513,7 @@ class ScopeChShift:
                     # Overtake values
                     ScopeChShift.zoom_start_x, ScopeChShift.zoom_start_y = event.xdata, event.ydata
                     # Create rectangle
-                    ScopeChShift.zoom_rect = patches.Rectangle((ScopeChShift.zoom_start_x, ScopeChShift.zoom_start_y), \
+                    ScopeChShift.zoom_rect = patches.Rectangle((ScopeChShift.zoom_start_x, ScopeChShift.zoom_start_y),
                                                                0, 0, linewidth=1, edgecolor='red', facecolor='none')
                     # Set Zoomstate
                     ScopeChShift.zoom_state = ScopeChShift.Zoom_State.ZoomSelect
@@ -616,7 +618,7 @@ class ScopeChShift:
                             ScopeChShift.zoom_start_x = ScopeChShift.zoom_start_x - (ScopeChShift.zoom_delta_x - cur_zoom_delta) / 2
                         # Check, if minimum limit is exceed
                         if ScopeChShift.zoom_start_x < ScopeChShift.display_min_x:
-                            ScopeChShift.zoom_start_x = ScopeChShift.display_mix_x
+                            ScopeChShift.zoom_start_x = ScopeChShift.display_min_x
                             ScopeChShift.zoom_end_x = ScopeChShift.zoom_end_x + ScopeChShift.zoom_delta_x
                         # Log flow control
                         logging.debug(f"Range in x-direction is corrected to {ScopeChShift.zoom_start_x} to {ScopeChShift.zoom_end_x}.")
@@ -643,7 +645,7 @@ class ScopeChShift:
                                 ScopeChShift.zoom_start_y - (ScopeChShift.zoom_delta_y - cur_zoom_delta) / 2)
                         # Check, if minimum limit is exceed
                         if ScopeChShift.zoom_start_y < ScopeChShift.display_min_y:
-                            ScopeChShift.zoom_start_y = ScopeChShift.display_mix_y
+                            ScopeChShift.zoom_start_y = ScopeChShift.display_min_y
                             ScopeChShift.zoom_end_y = ScopeChShift.zoom_end_y + ScopeChShift.zoom_delta_y
                             # Log flow control
                             logging.debug(f"Range in y-direction is corrected to {ScopeChShift.zoom_start_y} to {ScopeChShift.zoom_end_y}.")
@@ -672,9 +674,9 @@ class ScopeChShift:
                     if (event.xdata > ScopeChShift.zoom_start_x) and (event.ydata > ScopeChShift.zoom_start_y) and \
                        (event.xdata < ScopeChShift.zoom_end_x) and (event.ydata < ScopeChShift.zoom_end_y):
                         # Zoom into area
-                        ScopeChShift.zoom_ax.set_xlim(min(ScopeChShift.zoom_start_x, ScopeChShift.zoom_end_x), \
+                        ScopeChShift.zoom_ax.set_xlim(min(ScopeChShift.zoom_start_x, ScopeChShift.zoom_end_x),
                                                       max(ScopeChShift.zoom_start_x, ScopeChShift.zoom_end_x))
-                        ScopeChShift.zoom_ax.set_ylim(min(ScopeChShift.zoom_start_y, ScopeChShift.zoom_end_y), \
+                        ScopeChShift.zoom_ax.set_ylim(min(ScopeChShift.zoom_start_y, ScopeChShift.zoom_end_y),
                                                       max(ScopeChShift.zoom_start_y, ScopeChShift.zoom_end_y))
                 # Remove rectangle and reset zoom state
                 ScopeChShift.zoom_rect.remove()
@@ -685,7 +687,7 @@ class ScopeChShift:
                 # Log flow control
                 logging.debug(f"Confirmed with left mouse button release at x,y: {event.xdata},{event.ydata}.")
         # Check if left button was released and Zoomstate was NoZoom and it was within area
-        elif (event.button == 3 and event.inaxes and ScopeChShift.shiftfigbox.contains(event.x, event.y) and \
+        elif (event.button == 3 and event.inaxes and ScopeChShift.shiftfigbox.contains(event.x, event.y) and
               ScopeChShift.zoom_state is not ScopeChShift.Zoom_State.ZoomSelect):
             # Check, if zoom state is conform
             if ScopeChShift.zoom_state == ScopeChShift.Zoom_State.ZoomConfirm:

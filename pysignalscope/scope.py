@@ -171,6 +171,9 @@ class Scope:
         """
         channel_modified = copy.deepcopy(channel)
 
+        # init modify flag
+        modify_flag = False
+
         if isinstance(label, str):
             channel_modified.label = label
             modify_flag = True
@@ -324,6 +327,7 @@ class Scope:
         time = file[:, 0]
 
         channel_list = []
+        channel_count = 0
         for channel_count in range(1, channel_counts + 1):
             channel_list.append(Scope.generate_channel(
                 time=time, data=file[:, channel_count], source=channel_source,
@@ -414,6 +418,7 @@ class Scope:
         time = file[:, 0]
 
         channel_list = []
+        channel_count = 0
         for channel_count in range(1, channel_counts + 1):
             channel_list.append(Scope.generate_channel(
                 time, file[:, channel_count], source=channel_source, color=None, linestyle=None,
@@ -452,7 +457,10 @@ class Scope:
         """
         channel_source = 'LeCroy scope'
 
+        # init local variables
         lecroy_channel = []
+        csv_file = ""
+
         for csv_file in csv_files:
             if not isinstance(csv_file, str):
                 raise TypeError("csv_file must be type str to show the full filepath.")
@@ -617,8 +625,11 @@ class Scope:
             channel_data_last_period = txt_data
             time_modified = txt_data[:, 0]
 
+        # init local variables
         list_simulation_data = []
         list_return_dataset = []
+        count_var = 0
+
         for count_var, variable in enumerate(variables):
             list_simulation_data.append(channel_data_last_period[:, count_var])
 
@@ -680,6 +691,9 @@ class Scope:
         :return: returns a Channel-class, what integrates the input values
         :rtype: Channel
         """
+        # init local variable
+        count = 0
+
         if not isinstance(channel, Channel):
             raise TypeError("channel_power must be type Channel.")
         if not isinstance(label, str):
@@ -993,7 +1007,7 @@ class Scope:
 
     @staticmethod
     def plot_shiftchannels(channels: List['Channel'], shiftstep_x: Optional[float] = None, shiftstep_y: Optional[float] = None,
-                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None) -> list[list[float]]:
+                           displayrange_x: Optional[Tuple[float, float]] = None, displayrange_y: Optional[Tuple[float, float]] = None) -> list[float]:
         """
         Plot channel datasets.
 
@@ -1044,7 +1058,7 @@ class Scope:
         :type displayrange_y: tuple of float
 
         :return: List of x and y-shifts per channel
-        :rtype: list[list[float]]
+        :rtype: list[float]
         """
         # Init minimum and maximum values
         global_min_x = float(np.min(channels[0].time))
