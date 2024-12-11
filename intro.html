@@ -98,6 +98,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.short_to_period"><code class="docutils literal notranslate"><span class="pre">Scope.short_to_period()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.square"><code class="docutils literal notranslate"><span class="pre">Scope.square()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.subtract"><code class="docutils literal notranslate"><span class="pre">Scope.subtract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pysignalscope.Scope.unify_sampling_rate"><code class="docutils literal notranslate"><span class="pre">Scope.unify_sampling_rate()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#pysignalscope.ImpedanceChannel"><code class="docutils literal notranslate"><span class="pre">ImpedanceChannel</span></code></a><ul>
@@ -938,6 +939,45 @@ and displayrange_y[1]-displayrange_y[0]&gt;=delta_min_y*50</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="pysignalscope.Scope.unify_sampling_rate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unify_sampling_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">channel_datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.scope_dataclass.Channel"><span class="pre">Channel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_calc_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastermode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><span class="pre">Channel</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pysignalscope.Scope.unify_sampling_rate" title="Link to this definition"></a></dt>
+<dd><p>unifies the sampling rate of datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch1</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">generate_channel</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                                 <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">10.5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch2</span> <span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">generate_channel</span><span class="p">([</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                                 <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result_list</span><span class="o">=</span> <span class="n">pss</span><span class="o">.</span><span class="n">Scope</span><span class="o">.</span><span class="n">unify_sampling_rate</span><span class="p">(</span><span class="n">ch1</span><span class="p">,</span><span class="n">ch2</span><span class="p">,</span><span class="n">sample_calc_mode</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_datasets</strong> (<a class="reference internal" href="#pysignalscope.Channel" title="pysignalscope.Channel"><em>Channel</em></a>) – dataset according to Channel</p></li>
+<li><p><strong>sample_calc_mode</strong> (<em>str</em>) – keyword, which define the sampling rate calculation ‘avg’, ‘max’, ‘min’ ‘user’</p></li>
+<li><p><strong>sampling_rate</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – sampling rate defined by the user (only valid, if sample_calc_mode is set to ‘user’</p></li>
+<li><p><strong>shift</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – shift of the sample rate from origin. None corresponds to a shift to first time point of first channel</p></li>
+<li><p><strong>mastermode</strong> (<em>bool</em>) – Indicate, if only the first data set or all data sets are used for sampling rate calculation</p></li>
+</ul>
+</dd>
+</dl>
+<p>If the mastermode is ‘True’ (default), only the first data set is used for  sampling rate calculation.
+This parameter is ignored, if the sample_calc_mode approach is set to ‘user’
+For the calculation of the data rate following approaches can be select by parameter ‘sample_calc_mode’:
+‘avg’ = Average sampling rate: The sampling rate shall be calculated by the average distance of the sampling rate.
+‘max’ = Maximal sampling rate: The sampling rate shall be calculated by the minimum distance between two sample points.
+‘min’ = Minimal sampling rate: The sampling rate shall be calculated by the maximal distance between two sample points.
+‘user’ = Sampling rate is defined by the user. This selection raises an error, if the parameter ‘sampling_rate’</p>
+<blockquote>
+<div><p>isn’t a valid float value, which corresponds to the sampling frequency.</p>
+</div></blockquote>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1386,7 +1426,7 @@ to true.</p>
 <dd><p>Calculate the FFT for a given input signal. Input signal is in vector format and should include one period.</p>
 <p>Output vector includes only frequencies with amplitudes &gt; 1% of input signal</p>
 <dl class="field-list simple">
-<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dt class="field-odd">Minimal Example<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pysignalscope</span> <span class="k">as</span> <span class="nn">pss</span>
@@ -1425,23 +1465,23 @@ Note: count 1 is DC component, count 2 is the fundamental frequency</p></li>
 <p id="module-pysignalscope.generalplotsettings">Set general plot settings, like LaTeX font.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pysignalscope.generalplotsettings.global_plot_settings_font_latex">
-<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">global_plot_settings_font_latex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.generalplotsettings.global_plot_settings_font_latex" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">global_plot_settings_font_latex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.generalplotsettings.global_plot_settings_font_latex" title="Link to this definition"></a></dt>
 <dd><p>Set the plot fonts to LaTeX-font.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysignalscope.generalplotsettings.global_plot_settings_font_sansserif">
-<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">global_plot_settings_font_sansserif</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.generalplotsettings.global_plot_settings_font_sansserif" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">global_plot_settings_font_sansserif</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.generalplotsettings.global_plot_settings_font_sansserif" title="Link to this definition"></a></dt>
 <dd><p>Set the plot fonts to Sans-Serif-Font.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pysignalscope.generalplotsettings.update_font_size">
-<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">update_font_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pysignalscope.generalplotsettings.update_font_size" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pysignalscope.generalplotsettings.</span></span><span class="sig-name descname"><span class="pre">update_font_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pysignalscope.generalplotsettings.update_font_size" title="Link to this definition"></a></dt>
 <dd><p>Update the figure font size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>font_size</strong> (<em>int</em>) – font size</p>
+<dd class="field-odd"><p><strong>font_size</strong> (<em>int</em>) – font sitze</p>
 </dd>
 </dl>
 </dd></dl>
