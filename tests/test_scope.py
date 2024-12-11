@@ -338,6 +338,151 @@ def test_derivative(tst_vector, tst_order, exp_result_or_error, error_flag: bool
             sample_scope_object_1st_derivative = pss.Scope.derivative(tst_vector, tst_order)
 
 #########################################################################################################
+# test of unify_sampling_rate
+#########################################################################################################
+
+
+# definition of the scope objects for test vector and result vector
+ch1 = pss.Scope.generate_channel([-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                 [-8, -2, 10.5, 11, 13, 14, 16, 20, 17, 14, 9, 1])
+ch2 = pss.Scope.generate_channel([-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5],
+                                 [10, 2, 7.5, -2.5, 4, 8, 4, 10, 2, 20, 5])
+ch3 = pss.Scope.generate_channel([13, 14, 15, 16, 17, 18, 19, 21],
+                                 [13, 14, 16, 20, 17, 14, 9, 1])
+ch4 = pss.Scope.generate_channel([10], [1.4])
+
+# min mastermode is false
+uch11 = pss.Scope.generate_channel([-1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5,
+                                    6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0],
+                                   [-8.0, -5.0, -2.0, 4.25, 10.5, 10.75, 11.0, 12.0, 13.0, 13.5, 14.0,
+                                    15.0, 16.0, 18.0, 20.0, 18.5, 17.0, 15.5, 14.0, 11.5, 9.0, 5.0, 1.0])
+uch12 = pss.Scope.generate_channel([-0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5],
+                                   [10.0, 2.0, 7.5, -2.5, 4.0, 8.0, 4.0, 10.0, 2.0, 20.0, 5.0])
+
+uch13 = pss.Scope.generate_channel([13.0, 13.5, 14.0, 14.5, 15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0,
+                                    18.5, 19.0, 19.5, 20.0, 20.5, 21],
+                                   [13.0, 13.5, 14.0, 15.0, 16.0, 18.0, 20.0, 18.5, 17.0, 15.5, 14.0, 11.5,
+                                    9.0, 7.0, 5.0, 3.0, 1.0])
+
+# max mastermode is false
+uch21 = pss.Scope.generate_channel([-1, 1, 3, 5, 7, 9], [-8, 10.5, 13, 16, 17, 9])
+uch22 = pss.Scope.generate_channel([1.0, 3.0], [-2.5, 10.0])
+uch23 = pss.Scope.generate_channel([13, 15, 17, 19, 21], [13, 16, 17, 9, 1])
+
+# avg mastermode is true
+uch31 = pss.Scope.generate_channel([-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                                   [-8, -2, 10.5, 11, 13, 14, 16, 20, 17, 14, 9, 1])
+
+uch32 = pss.Scope.generate_channel([0, 1, 2, 3, 4], [2, -2.5, 8, 10, 20])
+uch33 = pss.Scope.generate_channel([13, 14, 15, 16, 17, 18, 19, 20, 21],
+                                   [13, 14, 16, 20, 17, 14, 9, 5.0, 1])
+
+# avg + shift= 0.5 mastermode is true
+uch41 = pss.Scope.generate_channel([-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5],
+                                   [-5.0, 4.25, 10.75, 12.0, 13.5, 15.0, 18.0, 18.5, 15.5, 11.5, 5.0])
+uch42 = pss.Scope.generate_channel([-0.5, 0.5, 1.5, 2.5, 3.5, 4.5], [10.0, 7.5, 4.0, 4.0, 2.0, 5.0])
+uch43 = pss.Scope.generate_channel([13.5, 14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5],
+                                   [13.5, 15.0, 18.0, 18.5, 15.5, 11.5, 7.0, 3.0])
+
+# user sample rate=1/3  shift= -0.5 mastermode is true
+uch51 = pss.Scope.generate_channel([1.5, 4.5, 7.5], [10.75, 15.0, 15.5])
+uch52 = pss.Scope.generate_channel([1.5, 4.5], [4., 5.])
+uch53 = pss.Scope.generate_channel([13.5, 16.5, 19.5], [13.5, 18.5, 7.0])
+
+# avg mastermode is False shift=-0.5
+uch61 = pss.Scope.generate_channel([-0.64285714, 0.21428571, 1.07142857, 1.92857143, 2.78571429, 3.64285714,
+                                    4.5, 5.35714286, 6.21428571, 7.07142857, 7.92857143, 8.78571429, 9.64285714],
+                                   [-5.85714286, 0.67857143, 10.53571429, 10.96428571, 12.57142857,
+                                    13.64285714, 15., 17.42857143, 19.35714286, 16.78571429, 14.21428571, 10.07142857,
+                                    3.85714286])
+uch62 = pss.Scope.generate_channel([0.21428571, 1.07142857, 1.92857143, 2.78571429, 3.64285714, 4.5],
+                                   [4.35714286, -1.57142857, 7.42857143, 7.42857143, 7.14285714, 5.0])
+uch63 = pss.Scope.generate_channel([13.07142857, 13.92857143, 14.78571429, 15.64285714, 16.5, 17.35714286,
+                                    18.21428571, 19.07142857, 19.92857143, 20.78571429],
+                                   [13.07142857, 13.92857143, 15.57142857, 18.57142857, 18.5, 15.92857143,
+                                    12.92857143, 8.71428571, 5.28571429, 1.85714286])
+
+# testvectors and resultvector
+# valid vector
+tst_vector1 = [ch1, ch2, ch3]
+# invalid vector
+tst_vector2 = [ch1, 2, ch3]
+tst_vector3 = [ch1, ch2, ch4]
+# resultvectors
+# min mastermode is false
+result_vec1 = [uch11, uch12, uch13]
+# max mastermode is false
+result_vec2 = [uch21, uch22, uch23]
+# avg mastermode is true
+result_vec3 = [uch31, uch32, uch33]
+# avg + shift= 0.5 mastermode is true
+result_vec4 = [uch41, uch42, uch43]
+# user sample rate=1/3  shift= -0.5 mastermode is true
+result_vec5 = [uch51, uch52, uch53]
+# avg mastermode is False shift=-5.5
+result_vec6 = [uch61, uch62, uch63]
+
+# parameterset for values
+@pytest.mark.parametrize("tst_vector, tst_sample_calc_mode, tst_sampling_rate, tst_shift, tst_mastermode, exp_scope_obj_or_err, error_flag", [
+    # --invalid inputs----
+    # no input or missing input channel_time and channel_data - raise type error
+    # Wrong  or invalid sample_calc_mode-keyword
+    (tst_vector1, "murx", None, 0, False, ValueError, True),
+    (tst_vector1, 4, None, 0, False, TypeError, True),
+    # invalid channel
+    (tst_vector2, "min", None, 0, False, TypeError, True),
+    (tst_vector3, "min", None, 0, False, ValueError, True),
+    ([], 4, None, "min", False, TypeError, True),
+    # invalid or too high or missing sampling rate
+    # (tst_vector1, "min", True, 0, False, TypeError, True),
+    (tst_vector1, "user", -10, 0, False, ValueError, True),
+    (tst_vector1, "user", 1E9, 0, False, ValueError, True),
+    (tst_vector1, "user", None, 0, False, TypeError, True),
+    # --valid inputs----
+    (tst_vector1, "min", None, 0, False, result_vec1, False),
+    (tst_vector1, "max", None, 0, False, result_vec2, False),
+    (tst_vector1, "avg", None, 0, True, result_vec3, False),
+    (tst_vector1, "avg", None, 0.5, True, result_vec4, False),
+    (tst_vector1, "user", (1/3), -0.5, True, result_vec5, False),
+    (tst_vector1, "avg", None, -0.5, False, result_vec6, False),
+    # test default values
+    (tst_vector1, "min", None, None, None, result_vec1, False),
+])
+# testfunction
+def test_of_unify_sampling_rate(tst_vector, tst_sample_calc_mode, tst_sampling_rate, tst_shift, tst_mastermode, exp_scope_obj_or_err, error_flag: bool):
+    """Test generate_channel() method according values.
+
+    :param tst_vector: test variable for parameter channel_datasets
+    :type tst_vector: any
+    :param tst_sample_calc_mode: test variable for parameter sample_calc_mode
+    :type tst_sample_calc_mode: any
+    :param tst_sampling_rate: sampling rate defined by the user (only valid, if granularity is set to 'user'
+    :type tst_sampling_rate: any
+    :param tst_shift: shift of the sample rate from origin. None corresponds to a shift to first time point of first channel
+    :type tst_shift: any
+    :param tst_mastermode: Indicate, if only the first data set or all data sets are used for sampling rate calculation
+    :type tst_mastermode: any
+    :param exp_scope_obj_or_err: expected channel time data and value data or expected error
+    :type exp_scope_obj_or_err: any
+    :param error_flag: flag to indicate, if an error or a valid result is expected
+    :type error_flag: bool
+
+    """
+    # Check if expected test result is no error
+    if error_flag is False:
+        # channel_time: non-equidistant values and negative valid values
+        result_list = pss.Scope.unify_sampling_rate(*tst_vector, sample_calc_mode=tst_sample_calc_mode,
+                                                    sampling_rate=tst_sampling_rate, shift=tst_shift, mastermode=tst_mastermode)
+        for count, result in enumerate(result_list):
+            numpy.testing.assert_array_almost_equal(result.time, exp_scope_obj_or_err[count].time)
+            numpy.testing.assert_array_almost_equal(result.data, exp_scope_obj_or_err[count].data)
+    else:  # generate_channel raises an error
+        with pytest.raises(exp_scope_obj_or_err):
+            pss.Scope.unify_sampling_rate(*tst_vector, sample_calc_mode=tst_sample_calc_mode,
+                                          sampling_rate=tst_sampling_rate, shift=tst_shift, mastermode=tst_mastermode)
+
+
+#########################################################################################################
 # test of eq-operator (alternative stype)
 #########################################################################################################
 
