@@ -1228,7 +1228,7 @@ class Scope:
     def unify_sampling_rate(*channel_datasets: 'Channel', sample_calc_mode: str, sampling_rate: Optional[float] = None,
                             shift: Optional[float] = None, mastermode: bool = True) -> list['Channel']:
         """
-        unifies the sampling rate of datasets.
+        Unifies the sampling rate of datasets.
 
         :Examples:
 
