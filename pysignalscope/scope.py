@@ -604,7 +604,9 @@ class Scope:
         """
         if not isinstance(txt_datafile, str):
             raise TypeError("txt_datafile must be type str to show the full filepath.")
-        if not isinstance(f0, (float, int)) != f0 is not None:
+        elif os.path.exists(txt_datafile) is False:
+            raise ValueError("invalid file name or file does not exist.")
+        if not isinstance(f0, (float, int)) and f0 is not None:
             raise TypeError("f0 must be type float/int/None.")
 
         channel_source = 'GeckoCIRCUITS simulation'
@@ -1531,11 +1533,11 @@ class Scope:
         :param start_time: start time in seconds (optional parameter)
         :type start_time: float
         """
-        if not isinstance(f0, (float, int)) != f0 is not None:
+        if not isinstance(f0, (float, int)) and f0 is not None:
             raise TypeError("f0 must be type float/int/None.")
-        if not isinstance(time_period, (float, int)) != f0 is not None:
+        if not isinstance(time_period, (float, int)) and f0 is not None:
             raise TypeError("time_period must be type float/int/None.")
-        if not isinstance(start_time, (float, int)) != f0 is not None:
+        if not isinstance(start_time, (float, int)) and f0 is not None:
             raise TypeError("start_time must be type float/int/None.")
 
         if start_time is None:

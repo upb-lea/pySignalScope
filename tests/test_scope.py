@@ -222,6 +222,96 @@ def test_from_numpy(valid_input_flag: bool, tst_mode, tst_f0, exp_factor_or_erro
                 scope_object = pss.Scope.from_numpy(period_vector_t_i_invalid, mode=tst_mode, f0=tst_f0,
                                                     label=tst_label, unit=tst_unit)
 
+
+#########################################################################################################
+# test of from_geckocircuits
+#########################################################################################################
+
+# test frequency
+frequency1 = 20e-1
+frequency2 = 1
+
+# parameterset for values
+@pytest.mark.parametrize("valid_file_name_flag, tst_datafile_name, tst_f0, exp_result_or_error, error_flag", [
+    # --invalid inputs----
+    # wrong type for one attribute
+    (False, "wrong_file_name", None, ValueError, True),
+    (False, 2, None, TypeError, True),
+    (False, None, None, TypeError, True),
+    (True, "test_data_gecko", "Freq", TypeError, True),
+    # --valid inputs----
+    (True, "test_data_gecko", None, 0, False),
+    (True, "test_data_gecko", frequency1, 1, False),
+    (True, "test_data_gecko", frequency2, 2, False)
+])
+# definition of the testfunction
+def test_from_geckocircuits(valid_file_name_flag: bool, tst_datafile_name, tst_f0, exp_result_or_error, error_flag: bool):
+    """Test for the method test_from_geckocircuits().
+
+    :param valid_file_name_flag: flag to indicate if the file name is valid
+    :type valid_file_name_flag: bool
+    :param tst_datafile_name: string, which contains the test file name
+    :type tst_datafile_name: any
+    :param tst_f0: test variable for the frequency
+    :type tst_f0: any
+    :param exp_result_or_error: result vector index or expected error
+    :type exp_result_or_error: any
+    :param error_flag: flag to indicate, if an error or a valid result is expected
+    :type error_flag: bool
+    """
+    # Define value input
+    res_label_lst = ['u1', 'u2']
+    res_source = 'GeckoCIRCUITS simulation'
+    tst_header = "# t " + res_label_lst[0] + " " + res_label_lst[1] + " "
+    tst_time = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2]
+    tst_data0 = [-1, -2.1, -3.2, -4.4, -2.2, -0.2, 0, 2.1, 4.4, 2.1, 0.2]
+    tst_data1 = [1, 2.1, 3.2, 4.4, 3.2, 0.2, 0, -2.1, -4.4, -2.1, -0.2]
+
+    # Check if file name is valid
+    if valid_file_name_flag is True:
+        # generate a valid file
+        with open(tst_datafile_name, "w") as file:
+            # write the header
+            file.write(tst_header + "\n")
+            # write data
+            for act_time, act_data1, act_data2 in zip(tst_time, tst_data0, tst_data1):
+                file.write(f"{act_time} {act_data1} {act_data2}\n")
+
+    # Check if expected test result is no error
+    if error_flag is False:
+
+        # Resultvector definition
+        if exp_result_or_error == 0:
+            resvector = [tst_time, tst_data0, tst_data1]
+        elif exp_result_or_error == 1:
+            resvector = [np.linspace(0, 1 / tst_f0, 3), tst_data0[-3:], tst_data1[-3:]]
+        elif exp_result_or_error == 2:
+            resvector = [np.linspace(0, 1 / tst_f0, 6), tst_data0[-6:], tst_data1[-6:]]
+
+        # Perform command
+        scope_object_lst = pss.Scope.from_geckocircuits(tst_datafile_name, f0=tst_f0)
+
+        # verification of attributes
+        numpy.testing.assert_equal(scope_object_lst[0].label, res_label_lst[0])
+        numpy.testing.assert_equal(scope_object_lst[1].label, res_label_lst[1])
+        numpy.testing.assert_equal(scope_object_lst[0].source, res_source)
+        numpy.testing.assert_equal(scope_object_lst[1].source, res_source)
+
+        # verification of data
+        np.testing.assert_array_almost_equal(scope_object_lst[0].time, np.array(resvector[0]))
+        np.testing.assert_array_almost_equal(scope_object_lst[1].time, np.array(resvector[0]))
+        np.testing.assert_array_almost_equal(scope_object_lst[0].data, np.array(resvector[1]))
+        np.testing.assert_array_almost_equal(scope_object_lst[1].data, np.array(resvector[2]))
+        # delete the file
+    else:  # generate_channel raises an error
+        with pytest.raises(exp_result_or_error):
+            scope_object_lst = pss.Scope.from_geckocircuits(tst_datafile_name, f0=tst_f0)
+
+    # delete the file if exists
+    if valid_file_name_flag is True:
+        if os.path.exists(tst_datafile_name):
+            os.remove(tst_datafile_name)
+
 #########################################################################################################
 # test of low_pass_filter
 #########################################################################################################
