@@ -382,8 +382,10 @@ def test_low_pass_filter(tst_vector, tst_order, tst_angular_freq, exp_result_or_
 # channel values
 test_vec1 = pss.Scope.generate_channel([0, 1, 2, 3, 4, 5, 6], [1, 4, 2, 3, 7, 3, 2])
 
+# Remark: findiff v0.12.0 works with "test_res1 = [6, 1, 0, 2, 0, -2, 0]".
+# Bugfix in v0.12.1 leads to update of the result vector test_res1
 # result values
-test_res1 = [6, 1, 0, 2, 0, -2, 0]
+test_res1 = [5.5, 0.5, -0.5, 2.5, 0.0, -2.5, 0.5]
 
 # parameterset for values
 @pytest.mark.parametrize("tst_vector, tst_order, exp_result_or_error, error_flag", [
