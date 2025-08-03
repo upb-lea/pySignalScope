@@ -119,7 +119,7 @@ class ScopeChShift:
         Y-axis labels are set according to the channel_unit, presented in the last curve for the subplot.
         For own axis labeling, use as channel_unit for the last channel your label, e.g. r"$i_T$ in A".
         Note, that the r before the string gives the command to accept LaTeX formulas, like $$.
-        The parameters has to fullfill conditions:
+        The parameters has to fulfill conditions:
         Minimal shift step in x-direction is the minimal difference of 2 points of all provided channels
 
         :param channels: list of datasets
@@ -278,7 +278,7 @@ class ScopeChShift:
         >>> chshift.init_shiftstep_limits((1e-6,5e-5),(1,20))
         Set the limit of the shift step
 
-        :param shiftsteprange_x: Default shift step, in calsLimits of shift steps in x-direction (min_x, max_x)
+        :param shiftsteprange_x: Default shift step, in Limits of shift steps in x-direction (min_x, max_x)
         :type shiftsteprange_x: tuple of float    :param shiftsteprange_x: Limits of shift steps in x-direction (min_x, max_x)
         :type shiftsteprange_x: tuple of float
         :param shiftsteprange_y: Limits of shift steps in y-direction (min_y, max_y)
@@ -476,7 +476,7 @@ class ScopeChShift:
     @staticmethod
     def __reset_slider(event: any):
         """
-        Recalibrate the slider position to zero without movement of the channel.
+        Re-calibrate the slider position to zero without movement of the channel.
 
         This method is private (only for internal usage)
         Called by matplotlib-Event and assigned to a button

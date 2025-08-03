@@ -207,11 +207,11 @@ class Impedance:
     @staticmethod
     def copy(channel: ImpedanceChannel) -> ImpedanceChannel:
         """
-        Create a deepcopy of ImpedanceChannel.
+        Create a deep copy of ImpedanceChannel.
 
         :param channel: Impedance object
         :type channel: ImpedanceChannel
-        :return: Deepcopy of the impedance object
+        :return: Deep copy of the impedance object
         :rtype: ImpedanceChannel
         """
         if not isinstance(channel, ImpedanceChannel):
@@ -293,7 +293,7 @@ class Impedance:
     @staticmethod
     def plot_inductance_and_ac_resistance(channel_list: List) -> None:
         """
-        Plot and compare inductance (in uH) and ac_resistance (Ohm) of impedance channels.
+        Plot and compare inductance (in µH) and ac_resistance (Ohm) of impedance channels.
 
         :param channel_list: List with impedances
         :type channel_list: List

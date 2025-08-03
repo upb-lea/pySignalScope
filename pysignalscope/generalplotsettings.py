@@ -43,7 +43,7 @@ def global_plot_settings_font_sansserif():
 def update_font_size(font_size: int = 11):
     """Update the figure font size.
 
-    :param font_size: font sitze
+    :param font_size: font size
     :type font_size: int
     """
     plt.rcParams.update({'font.size': font_size})

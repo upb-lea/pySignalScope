@@ -45,7 +45,7 @@ def fft(period_vector_t_i: Union[List[List[float]], np.ndarray], sample_factor: 
     :type plot: str
     :param mode: 'rad'[default]: full period is 2*pi, 'deg': full period is 360°, 'time': time domain. (optional parameter)
     :type mode: str
-    :param f0: fundamental frequency. Needs to be set in 'rad'- or 'deg'-modewith (optional parameter)
+    :param f0: fundamental frequency. Needs to be set in 'rad'- or 'deg'-mode (optional parameter)
     :type f0: float
     :param title: plot window title, defaults to 'ffT' (optional parameter)
     :type title: str

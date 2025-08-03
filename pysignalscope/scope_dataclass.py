@@ -1,4 +1,4 @@
-"""Definition of the channel dataclass."""
+"""Definition of the channel data class."""
 
 # python libraries
 import dataclasses
@@ -10,7 +10,7 @@ import numpy as np
 
 @dataclasses.dataclass(eq=False)
 class Channel:
-    """Dataclass for Channel objects in a special format, to keep labels, units and voltages belonging to a certain curve."""
+    """Data class for Channel objects in a special format, to keep labels, units and voltages belonging to a certain curve."""
 
     # mandatory measurement data
     time: np.array  #: time series of the channel (mandatory)

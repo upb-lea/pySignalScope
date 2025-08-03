@@ -11,7 +11,7 @@ gnome_colors = {"blue": (28 / color_combinations, 113 / color_combinations, 216 
                 "orange": (230 / color_combinations, 97 / color_combinations, 0 / color_combinations),
                 "purple": (129 / color_combinations, 61 / color_combinations, 156 / color_combinations),
                 "brown": (134 / color_combinations, 94 / color_combinations, 60 / color_combinations),
-                "grey": (119 / color_combinations, 118 / color_combinations, 123 / color_combinations),
+                "gray": (119 / color_combinations, 118 / color_combinations, 123 / color_combinations),
                 "yellow": (245 / color_combinations, 194 / color_combinations, 17 / color_combinations),
                 "black": (0, 0, 0),
                 "white": (255 / color_combinations, 255 / color_combinations, 255 / color_combinations)
@@ -23,6 +23,6 @@ gnome_colors_list = [gnome_colors["blue"],
                      gnome_colors["orange"],
                      gnome_colors["purple"],
                      gnome_colors["brown"],
-                     gnome_colors["grey"],
+                     gnome_colors["gray"],
                      gnome_colors["yellow"],
                      gnome_colors["black"]]

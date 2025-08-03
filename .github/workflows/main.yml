@@ -36,6 +36,9 @@ jobs:
           
             pip install pylint 
             pylint $(git ls-files '*.py')
+          
+            pip install pyspelling
+            pyspelling
       - name: tkinter
         run: |
           # try to install tkinter

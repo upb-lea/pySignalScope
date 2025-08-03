@@ -351,7 +351,7 @@ ch3 = pss.Scope.generate_channel([13, 14, 15, 16, 17, 18, 19, 21],
                                  [13, 14, 16, 20, 17, 14, 9, 1])
 ch4 = pss.Scope.generate_channel([10], [1.4])
 
-# min mastermode is false
+# min master_mode is false
 uch11 = pss.Scope.generate_channel([-1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5,
                                     6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0],
                                    [-8.0, -5.0, -2.0, 4.25, 10.5, 10.75, 11.0, 12.0, 13.0, 13.5, 14.0,
@@ -364,12 +364,12 @@ uch13 = pss.Scope.generate_channel([13.0, 13.5, 14.0, 14.5, 15.0, 15.5, 16.0, 16
                                    [13.0, 13.5, 14.0, 15.0, 16.0, 18.0, 20.0, 18.5, 17.0, 15.5, 14.0, 11.5,
                                     9.0, 7.0, 5.0, 3.0, 1.0])
 
-# max mastermode is false
+# max master_mode is false
 uch21 = pss.Scope.generate_channel([-1, 1, 3, 5, 7, 9], [-8, 10.5, 13, 16, 17, 9])
 uch22 = pss.Scope.generate_channel([1.0, 3.0], [-2.5, 10.0])
 uch23 = pss.Scope.generate_channel([13, 15, 17, 19, 21], [13, 16, 17, 9, 1])
 
-# avg mastermode is true
+# avg master_mode is true
 uch31 = pss.Scope.generate_channel([-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                                    [-8, -2, 10.5, 11, 13, 14, 16, 20, 17, 14, 9, 1])
 
@@ -377,19 +377,19 @@ uch32 = pss.Scope.generate_channel([0, 1, 2, 3, 4], [2, -2.5, 8, 10, 20])
 uch33 = pss.Scope.generate_channel([13, 14, 15, 16, 17, 18, 19, 20, 21],
                                    [13, 14, 16, 20, 17, 14, 9, 5.0, 1])
 
-# avg + shift= 0.5 mastermode is true
+# avg + shift= 0.5 master_mode is true
 uch41 = pss.Scope.generate_channel([-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5],
                                    [-5.0, 4.25, 10.75, 12.0, 13.5, 15.0, 18.0, 18.5, 15.5, 11.5, 5.0])
 uch42 = pss.Scope.generate_channel([-0.5, 0.5, 1.5, 2.5, 3.5, 4.5], [10.0, 7.5, 4.0, 4.0, 2.0, 5.0])
 uch43 = pss.Scope.generate_channel([13.5, 14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5],
                                    [13.5, 15.0, 18.0, 18.5, 15.5, 11.5, 7.0, 3.0])
 
-# user sample rate=1/3  shift= -0.5 mastermode is true
+# user sample rate=1/3  shift= -0.5 master_mode is true
 uch51 = pss.Scope.generate_channel([1.5, 4.5, 7.5], [10.75, 15.0, 15.5])
 uch52 = pss.Scope.generate_channel([1.5, 4.5], [4., 5.])
 uch53 = pss.Scope.generate_channel([13.5, 16.5, 19.5], [13.5, 18.5, 7.0])
 
-# avg mastermode is False shift=-0.5
+# avg master_mode is False shift=-0.5
 uch61 = pss.Scope.generate_channel([-0.64285714, 0.21428571, 1.07142857, 1.92857143, 2.78571429, 3.64285714,
                                     4.5, 5.35714286, 6.21428571, 7.07142857, 7.92857143, 8.78571429, 9.64285714],
                                    [-5.85714286, 0.67857143, 10.53571429, 10.96428571, 12.57142857,
@@ -409,17 +409,17 @@ tst_vector1 = [ch1, ch2, ch3]
 tst_vector2 = [ch1, 2, ch3]
 tst_vector3 = [ch1, ch2, ch4]
 # resultvectors
-# min mastermode is false
+# min master_mode is false
 result_vec1 = [uch11, uch12, uch13]
-# max mastermode is false
+# max master_mode is false
 result_vec2 = [uch21, uch22, uch23]
-# avg mastermode is true
+# avg master_mode is true
 result_vec3 = [uch31, uch32, uch33]
-# avg + shift= 0.5 mastermode is true
+# avg + shift= 0.5 master_mode is true
 result_vec4 = [uch41, uch42, uch43]
-# user sample rate=1/3  shift= -0.5 mastermode is true
+# user sample rate=1/3  shift= -0.5 master_mode is true
 result_vec5 = [uch51, uch52, uch53]
-# avg mastermode is False shift=-5.5
+# avg master_mode is False shift=-5.5
 result_vec6 = [uch61, uch62, uch63]
 
 # parameterset for values
@@ -472,14 +472,14 @@ def test_of_unify_sampling_rate(tst_vector, tst_sample_calc_mode, tst_sampling_r
     if error_flag is False:
         # channel_time: non-equidistant values and negative valid values
         result_list = pss.Scope.unify_sampling_rate(*tst_vector, sample_calc_mode=tst_sample_calc_mode,
-                                                    sampling_rate=tst_sampling_rate, shift=tst_shift, mastermode=tst_mastermode)
+                                                    sampling_rate=tst_sampling_rate, shift=tst_shift, master_mode=tst_mastermode)
         for count, result in enumerate(result_list):
             numpy.testing.assert_array_almost_equal(result.time, exp_scope_obj_or_err[count].time)
             numpy.testing.assert_array_almost_equal(result.data, exp_scope_obj_or_err[count].data)
     else:  # generate_channel raises an error
         with pytest.raises(exp_scope_obj_or_err):
             pss.Scope.unify_sampling_rate(*tst_vector, sample_calc_mode=tst_sample_calc_mode,
-                                          sampling_rate=tst_sampling_rate, shift=tst_shift, mastermode=tst_mastermode)
+                                          sampling_rate=tst_sampling_rate, shift=tst_shift, master_mode=tst_mastermode)
 
 
 #########################################################################################################

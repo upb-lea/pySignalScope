@@ -24,3 +24,4 @@ gpgit/
 build/
 dist/
 .eggs/
+dictionary.dic
