@@ -1224,7 +1224,7 @@ class Scope:
 
     @staticmethod
     def unify_sampling_rate(*channel_datasets: 'Channel', sample_calc_mode: str, sampling_rate: Optional[float] = None,
-                            shift: Optional[float] = None, master_mode: bool = True) -> list['Channel']:
+                            shift: Optional[float] = None, mastermode: bool = True) -> list['Channel']:
         """
         Unifies the sampling rate of datasets.
 
@@ -1248,14 +1248,14 @@ class Scope:
         :param shift: shift of the sample rate from origin (optional parameter)
                       None corresponds to a shift to first time point of first channel
         :type shift: float
-        :param master_mode: Indicates the channels, which are used for sampling rate calculation (optional parameter)
+        :param mastermode: Indicates the channels, which are used for sampling rate calculation (optional parameter)
                            True (default): Only the first channel is used for sampling rate calculation
                            False: All channels are used for sampling rate calculation
-        :type master_mode: bool
+        :type mastermode: bool
         :return: List of channels
         :rtype: list['Channel']
 
-        If the mastermode is 'True' (default), only the first data set is used for  sampling rate calculation.
+        If the master mode is 'True' (default), only the first data set is used for  sampling rate calculation.
         This parameter is ignored, if the sample_calc_mode approach is set to 'user'
         For the calculation of the data rate following approaches can be select by parameter 'sample_calc_mode':
 
@@ -1328,7 +1328,7 @@ class Scope:
             delta_time = (ch_range[0][1] - ch_range[0][0])
             counts = len(channel_datasets[0].time) - 1
             # in case of master mode is true calculate the minimum of the remaining channels
-            if not master_mode:
+            if not mastermode:
                 # overtake total delta time
                 delta_time = delta_time_tot
                 # for loop over remaining channels to add the samples
@@ -1343,7 +1343,7 @@ class Scope:
             # initialize local parameters
             period = np.min(np.diff(channel_datasets[0].time))
             # in case of master mode is true calculate the minimum of the remaining channels
-            if not master_mode:
+            if not mastermode:
                 # for loop over remaining channels
                 for channel_dataset in channel_datasets[1:]:
                     # minimum time between 2 sample points
@@ -1354,7 +1354,7 @@ class Scope:
             # initialize local parameters
             period = np.max(np.diff(channel_datasets[0].time))
             # in case of master mode is true calculate the minimum of the remaining channels
-            if not master_mode:
+            if not mastermode:
                 # for loop over all channels
                 for channel_dataset in channel_datasets[1:]:
                     # minimum time between 2 sample points
