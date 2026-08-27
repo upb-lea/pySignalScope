@@ -648,6 +648,49 @@ class Scope:
         return list_return_dataset
 
     @staticmethod
+    def _validate_compatible_timebases(*channels: 'Channel') -> None:
+        """
+        Check channel type, data shape and time values before calculations.
+
+        :param channels: Input channels
+        :type channels: Channel
+        """
+        # check if at least one channel is provided
+        if len(channels) == 0:
+            raise ValueError("Minimum one channel input necessary!")
+
+        # check input type and channel data shape for every channel
+        for channel in channels:
+            # check input type
+            if not isinstance(channel, Channel):
+                raise TypeError("channel must be type Channel.")
+
+            # convert time and data to numpy arrays for the following checks
+            channel_time = np.asarray(channel.time)
+            channel_data = np.asarray(channel.data)
+
+            # time and data must be one-dimensional vectors
+            if channel_time.ndim != 1 or channel_data.ndim != 1:
+                raise ValueError("Channel.time and Channel.data must be one-dimensional.")
+
+            # each time data point must have one corresponding value data point
+            if channel_time.shape != channel_data.shape:
+                raise ValueError("Channel.time and Channel.data must have the same shape.")
+
+        # use the first channel time data as reference for all following channels
+        reference_time = np.asarray(channels[0].time)
+        for channel in channels[1:]:
+            channel_time = np.asarray(channel.time)
+
+            # different vector lengths can not be calculated element by element
+            if channel_time.shape != reference_time.shape:
+                raise ValueError("Channel time bases must have the same shape.")
+
+            # all channels must contain the same time data points
+            if not np.array_equal(channel_time, reference_time):
+                raise ValueError("Channel time bases must contain identical values.")
+
+    @staticmethod
     def multiply(channel_1: 'Channel', channel_2: 'Channel', label: Optional[str] = None) -> 'Channel':
         """
         Multiply two datasets, e.g. to calculate the power from voltage and current.
@@ -661,17 +704,22 @@ class Scope:
         :return: Multiplication of two datasets, e.g. power from voltage and current
         :rtype: Channel
         """
-        if not isinstance(channel_1, Channel):
-            raise TypeError("channel_voltage must be type Channel.")
-        if not isinstance(channel_2, Channel):
-            raise TypeError("channel_current must be type Channel.")
-        if not isinstance(label, str) != label is not None:
+        # check input type and time data points
+        Scope._validate_compatible_timebases(channel_1, channel_2)
+
+        # check label for a valid type
+        if label is not None and not isinstance(label, str):
             raise TypeError("label must be type str or None.")
 
+        # multiply corresponding data points of both channels
         channel_data = channel_1.data * channel_2.data
+
+        # generate a label from both input labels, if no label is provided
         if label is None and channel_1.label is not None \
                 and channel_2.label is not None:
             label = f"{channel_1.label} * {channel_2.label}"
+
+        # generate output channel containing the calculated power data
         channel_power = Channel(channel_1.time, channel_data, label=label,
                                 unit='W', color=None, linestyle=None, source=None, modulename=class_modulename)
 
@@ -698,19 +746,36 @@ class Scope:
         # init local variable
         count = 0
 
-        if not isinstance(channel, Channel):
-            raise TypeError("channel_power must be type Channel.")
-        if not isinstance(label, str):
-            raise TypeError("label must be type str.")
+        # check input type and channel data shape
+        Scope._validate_compatible_timebases(channel)
+
+        # check label for a valid type
+        if label is not None and not isinstance(label, str):
+            raise TypeError("label must be type str or None.")
+
+        # at least two data points are necessary to calculate one time interval
+        if len(channel.time) < 2:
+            raise ValueError("Minimum two channel data points necessary!")
+
+        # init result vector for the integrated energy values
         channel_energy = np.array([])
-        timestep = channel.time[2] - channel.time[1]
         for count, _ in enumerate(channel.time):
             if count == 0:
-                # set first energy value to zero
+                # set first energy value to zero because no previous data point exists
                 channel_energy = np.append(channel_energy, 0)
             else:
-                # using euler method
+                # calculate the individual timestep between the current and previous data point
+                # this also supports non-equidistant sampled input data
+                timestep = channel.time[count] - channel.time[count - 1]
+
+                # reject invalid time data before calculating the integral
+                if timestep <= 0:
+                    raise ValueError("Channel.time must be strictly increasing.")
+
+                # integrate the two neighbouring data points with the trapezoidal method
                 energy = (np.nan_to_num(channel.data[count]) + np.nan_to_num(channel.data[count - 1])) / 2 * timestep
+
+                # add the current interval energy to the cumulative energy value
                 channel_energy = np.append(channel_energy, channel_energy[-1] + energy)
         if label is None:
             # Log missing user input
@@ -737,13 +802,7 @@ class Scope:
             raise ValueError("Minimum two channel inputs necessary!")
 
         # check input type and time data points
-        for channel in channels:
-            if not isinstance(channel, Channel):
-                raise TypeError("channel must be type Channel.")
-            if channel.time.all() != channels[0].time.all():
-                raise ValueError("Can not add data. Different Channel.time length!")
-            if not (channel.time == channels[0].time).all():
-                raise ValueError("Can not add data. Different Channel.time values!")
+        Scope._validate_compatible_timebases(*channels)
 
         channel_data_result = np.zeros_like(channels[0].data)
         channel_label_result = ''
@@ -776,13 +835,7 @@ class Scope:
             raise ValueError("Minimum two channel inputs necessary!")
 
         # check input type and time data points
-        for channel in channels:
-            if not isinstance(channel, Channel):
-                raise TypeError("channel must be type Channel.")
-            if channel.time.all() != channels[0].time.all():
-                raise ValueError("Can not add data. Different Channel.time length!")
-            if not (channel.time == channels[0].time).all():
-                raise ValueError("Can not add data. Different Channel.time values!")
+        Scope._validate_compatible_timebases(*channels)
 
         channel_data_result = np.zeros_like(channels[0].data)
         channel_label_result = ''
